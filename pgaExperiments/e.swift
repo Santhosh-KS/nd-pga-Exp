@@ -8,7 +8,11 @@ public extension e {
   }
 }
 
-extension e:Equatable { }
+extension e:Equatable, Comparable {
+  public static func < (lhs: e, rhs: e) -> Bool {
+    lhs.index < rhs.index
+  }
+}
 
 extension e:CustomStringConvertible {
   public var description: String {
