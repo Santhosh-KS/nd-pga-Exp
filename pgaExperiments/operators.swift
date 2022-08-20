@@ -16,6 +16,15 @@ public func |*|(_ es:e,_ coeff:Float) -> GeometricNumber {
   GeometricNumber(e: es,coefficient: coeff)
 }
 
+public func |*|(_ e1:e,_ e2:e) -> BasisElements {
+  if e1 == e2 {
+    return .scalar(currentDomain.rawValue)
+  } else {
+    return .vectors([GeometricNumber(e1,1),
+                     GeometricNumber(e2,1)].sorted(by: <))
+  }
+}
+
 public func |*|(_ val:Float, _ g1:GeometricNumber) -> GeometricNumber {
   (val*g1.coefficient)|*|g1.e
 }
@@ -24,8 +33,8 @@ public func |*|(_ g1:GeometricNumber, _ val:Float) -> GeometricNumber {
   (val*g1.coefficient)|*|g1.e
 }
 
-public func |*|(_ lhs:Float,_ rhs:Float) -> BasisElements {
-  return .scalar(lhs*rhs)
+public func |*|(_ lhs:Float,_ rhs:Float) -> GeometricNumber {
+  return (lhs*rhs)|*|e(0)
 }
 
 public func |*|(_ e1:e,_ g1:GeometricNumber) -> BasisElements {
@@ -36,19 +45,9 @@ public func |*|(_ g1:GeometricNumber, _ e1:e) -> BasisElements {
   return evaluate(g1, 1|*|e1)
 }
 
-public func |*|(_ e1:e,_ e2:e) -> BasisElements {
-  if e1 == e2 {
-    return .scalar(localDomain(e1,e2))
-  } else {
-    return .vectors([GeometricNumber(e1,1),
-                     GeometricNumber(e2,1)].sorted(by: <))
-  }
-}
-
-
 public func |*|(_ g1:GeometricNumber,_ g2:GeometricNumber) -> BasisElements {
   if g1.e == g2.e {
-    return .scalar(localDomain(g1.e,g2.e)*g1.coefficient*g2.coefficient)
+    return .scalar(currentDomain.rawValue*g1.coefficient*g2.coefficient)
   }
   else {
     return .vectors([(g1.coefficient*g2.coefficient)|*|g1.e, (1|*|g2.e)])
@@ -130,72 +129,68 @@ precedencegroup geometricExpressions {
 
 infix operator |+|:geometricExpressions
 
-//public func |+| (_ lhs:Float, _ rhs:Float) -> GeometricNumber {
-//  (lhs+rhs)|*|1
-//}
-
-public func |+| (_ lhs:Float, _ rhs:Float) -> BasisElements {
-  .scalar(lhs+rhs)
+public func |+| (_ lhs:Float, _ rhs:Float) -> GeometricNumber {
+  GeometricNumber(e(0), lhs+rhs)
 }
 
 //public func |+| (_ lhs:Float, _ rhs:GeometricNumber) -> GeometricExpression {
-//  (1|*|lhs) |+| rhs
+//  
 //}
 //
 //public func |+| (_ lhs:GeometricNumber, _ rhs:Float) -> GeometricExpression {
 //  (rhs|*|1) |+| lhs
 //}
 
-public func |+| (_ lhs:GeometricNumber, _ rhs:GeometricNumber) -> GeometricExpression {
-  var exp = [(String, GeometricNumber)]()
-  if lhs.e.index == rhs.e.index {
-    exp.append(add(lhs.coefficient, rhs.coefficient, lhs.e))
-  } else {
-    exp.append(add(lhs.coefficient, 0, lhs.e))
-    exp.append(add(0, rhs.coefficient, rhs.e))
-  }
-  return GeometricExpression(expression: exp)
-}
+//public func |+| (_ lhs:GeometricNumber, _ rhs:GeometricNumber) -> GeometricExpression {
+//  var exp = [(String, GeometricNumber)]()
+//  if lhs.e.index == rhs.e.index {
+//    exp.append(add(lhs.coefficient, rhs.coefficient, lhs.e))
+//  } else {
+//    exp.append(add(lhs.coefficient, 0, lhs.e))
+//    exp.append(add(0, rhs.coefficient, rhs.e))
+//  }
+//  return GeometricExpression(expression: exp)
+//}
 
-public func |+| (_ lhs:GeometricExpression, _ rhs:GeometricNumber) -> GeometricExpression {
-  var exp = [(String, GeometricNumber)]()
-  var found:Bool = false
-  lhs.expression.forEach { (_, gn:GeometricNumber) in
-    if gn.e.index == rhs.e.index {
-      exp.append(add(gn.coefficient, rhs.coefficient, gn.e))
-      found.toggle()
-    }
-    else {
-      exp.append(add(gn.coefficient, 0, gn.e))
-    }
-  }
-  if !found {
-    exp.append(add(0,rhs.coefficient, rhs.e))
-  }
-  return GeometricExpression(expression: exp)
-}
+//public func |+| (_ lhs:GeometricExpression, _ rhs:GeometricNumber) -> GeometricExpression {
+//  var exp = [(String, GeometricNumber)]()
+//  var found:Bool = false
+//  lhs.expression.forEach { (_, gn:GeometricNumber) in
+//    if gn.e.index == rhs.e.index {
+//      exp.append(add(gn.coefficient, rhs.coefficient, gn.e))
+//      found.toggle()
+//    }
+//    else {
+//      exp.append(add(gn.coefficient, 0, gn.e))
+//    }
+//  }
+//  if !found {
+//    exp.append(add(0,rhs.coefficient, rhs.e))
+//  }
+//  return GeometricExpression(expression: exp)
+//}
 
-public func |+| (_ lhs:GeometricNumber, _ rhs:GeometricExpression) -> GeometricExpression {
-  return rhs |+| lhs
-}
+//public func |+| (_ lhs:GeometricNumber, _ rhs:GeometricExpression) -> GeometricExpression {
+//  return rhs |+| lhs
+//}
 
-public func |+| (_ lhs:GeometricExpression, _ rhs:GeometricExpression) -> GeometricExpression {
-  var exp = [(String, GeometricNumber)]()
-
-  rhs.expression.forEach { (_, rgn:GeometricNumber) in
-    var lfound:Bool = false
-    lhs.expression.forEach { (_, lgn: GeometricNumber) in
-      if lgn.e.index == rgn.e.index {
-        exp.append(add(lgn.coefficient,rgn.coefficient,lgn.e))
-        lfound = true
-      }
-    }
-    if (!lfound) {
-      exp.append(add(0,rgn.coefficient,rgn.e))
-    }
-  }
-  return GeometricExpression(expression: exp)
-}
+//public func |+| (_ lhs:GeometricExpression, _ rhs:GeometricExpression) -> GeometricExpression {
+//  var exp = [(String, GeometricNumber)]()
+//
+//  rhs.expression.forEach { (_, rgn:GeometricNumber) in
+//    var lfound:Bool = false
+//    lhs.expression.forEach { (_, lgn: GeometricNumber) in
+//      if lgn.e.index == rgn.e.index {
+//        exp.append(add(lgn.coefficient,rgn.coefficient,lgn.e))
+//        lfound = true
+//      }
+//    }
+//    if (!lfound) {
+//      exp.append(add(0,rgn.coefficient,rgn.e))
+//    }
+//  }
+//  return GeometricExpression(expression: exp)
+//}
 
 infix operator |-|:geometricExpressions
 
@@ -257,9 +252,11 @@ fileprivate let sub = uncurry(curry(reduce(with:_:_:_:))(-))
 
 fileprivate func evaluate(_ g1:GeometricNumber, _ g2:GeometricNumber) -> BasisElements {
   if g1.e == g2.e {
-    return .scalar(localDomain(g1.e, g2.e)*(g1.coefficient*g2.coefficient))
+    return .scalar(currentDomain.rawValue*(g1.coefficient*g2.coefficient))
   } else if g1.e > g2.e {
       // This flipping of -1 and 1 is important here.
+    // e1 ^ e2 = - e2 ^ e1
+    // TODO:Validate this hypothesis in unittests
     return .vectors([-1*g2.coefficient|*|g2.e, g1])
   }else {
     return .vectors([g1,g2])

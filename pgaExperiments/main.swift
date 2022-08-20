@@ -8,6 +8,7 @@ let g1 = -2/10|*|e(1)
 let g2 = 10|*|e(2)
 let g3 = 10|*|e(3)
 
+print("\(1 |+| 2 |+| 3)")
 print(g1)
 print(g2)
 print(g1|*|g2)
