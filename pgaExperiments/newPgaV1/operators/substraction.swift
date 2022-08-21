@@ -3,32 +3,32 @@
 //
 //infix operator |-|:geometricExpressions
 //
-//public func |-| (_ lhs:Float, _ rhs:Float)  -> GeometricNumber {
-//  GeometricNumber(e(0), lhs-rhs)
+//public func |-| (_ lhs:Float, _ rhs:Float)  -> BasisVector {
+//  BasisVector(e(0), lhs-rhs)
 //}
 //
-//public func |-| (_ lhs:Float, _ rhs:GeometricNumber) -> [GeometricNumber] {
+//public func |-| (_ lhs:Float, _ rhs:BasisVector) -> [BasisVector] {
 //  if rhs.e.index == 0 {
-//    return [GeometricNumber(e(0), lhs-rhs.coefficient)]
+//    return [BasisVector(e(0), lhs-rhs.coefficient)]
 //  }
-//  return [GeometricNumber(e(0), lhs), rhs]
+//  return [BasisVector(e(0), lhs), rhs]
 //}
 //
-//public func |-| (_ lhs:GeometricNumber, _ rhs:Float) -> [GeometricNumber] {
+//public func |-| (_ lhs:BasisVector, _ rhs:Float) -> [BasisVector] {
 //  if lhs.e.index == 0 {
-//    return [GeometricNumber(e(0), lhs.coefficient-rhs)]
+//    return [BasisVector(e(0), lhs.coefficient-rhs)]
 //  }
-//  return [GeometricNumber(e(0), rhs), lhs]
+//  return [BasisVector(e(0), rhs), lhs]
 //}
 //
-//public func |-| (_ lhs:GeometricNumber, _ rhs:GeometricNumber) -> [GeometricNumber] {
+//public func |-| (_ lhs:BasisVector, _ rhs:BasisVector) -> [BasisVector] {
 //  if lhs.e == rhs.e {
-//    return [GeometricNumber(lhs.e, lhs.coefficient-rhs.coefficient)]
+//    return [BasisVector(lhs.e, lhs.coefficient-rhs.coefficient)]
 //  }
 //  return [lhs, rhs]
 //}
 //
-//public func |-| (_ lhs:Float, _ rhs:[GeometricNumber]) -> [GeometricNumber] {
+//public func |-| (_ lhs:Float, _ rhs:[BasisVector]) -> [BasisVector] {
 //  var eSum:Float = 0
 //  var rhs = rhs
 //  rhs.forEach { gn in
@@ -39,14 +39,14 @@
 //  rhs.removeAll { gn in
 //    gn.e.index == 0
 //  }
-//  return [GeometricNumber(e(0), eSum-lhs)] + rhs
+//  return [BasisVector(e(0), eSum-lhs)] + rhs
 //}
 //
-//public func |-| (_ lhs:[GeometricNumber], _ rhs:Float) -> [GeometricNumber] {
+//public func |-| (_ lhs:[BasisVector], _ rhs:Float) -> [BasisVector] {
 //  rhs |-| lhs
 //}
 //
-//public func |-| (_ lhs:[GeometricNumber], _ rhs:GeometricNumber) -> [GeometricNumber] {
+//public func |-| (_ lhs:[BasisVector], _ rhs:BasisVector) -> [BasisVector] {
 //  var eSum:Float = 0
 //  var lhs = lhs
 //  lhs.forEach { lgn in
@@ -59,16 +59,16 @@
 //    gn.e == rhs.e
 //  }
 //  
-//  lhs.append(GeometricNumber(rhs.e,eSum-rhs.coefficient))
+//  lhs.append(BasisVector(rhs.e,eSum-rhs.coefficient))
 //  return lhs
 //}
 //
-//public func |-| (_ lhs:GeometricNumber, _ rhs:[GeometricNumber]) -> [GeometricNumber] {
+//public func |-| (_ lhs:BasisVector, _ rhs:[BasisVector]) -> [BasisVector] {
 //  rhs |-| lhs
 //}
 //
-//public func |-| (_ lhs:[GeometricNumber], _ rhs:[GeometricNumber]) -> [GeometricNumber] {
-//  var retVals = [GeometricNumber]()
+//public func |-| (_ lhs:[BasisVector], _ rhs:[BasisVector]) -> [BasisVector] {
+//  var retVals = [BasisVector]()
 //  lhs.forEach { lgn in
 //    rhs.forEach { rgn in
 //      retVals.append(contentsOf: lgn |+| rgn)
@@ -77,9 +77,9 @@
 //  return retVals
 //}
 //
-//public func |-| (_ lhs:e, _ rhs:e) -> [GeometricNumber] {
+//public func |-| (_ lhs:e, _ rhs:e) -> [BasisVector] {
 //  if lhs == rhs {
-//    return [GeometricNumber(lhs, 2)]
+//    return [BasisVector(lhs, 2)]
 //  }
-//  return [GeometricNumber(lhs,1), GeometricNumber(rhs,1)]
+//  return [BasisVector(lhs,1), BasisVector(rhs,1)]
 //}

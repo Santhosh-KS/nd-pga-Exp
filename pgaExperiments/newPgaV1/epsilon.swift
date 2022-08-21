@@ -21,3 +21,7 @@ extension e:CustomStringConvertible {
     "e(\(self.index))"
   }
 }
+
+//public struct epsilon<R:Numeric, A> {
+//  let apply:(R) -> A
+//}

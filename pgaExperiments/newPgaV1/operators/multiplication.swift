@@ -14,19 +14,19 @@ infix operator |*|:geometricVectorProcessingOrder
 infix operator |||:geometricVectorProcessingOrder
 infix operator |^|:geometricVectorProcessingOrder
 
-func ||| (_ lhs:GeometricNumber, _ rhs:GeometricNumber) -> BiVector {
+func ||| (_ lhs:BasisVector, _ rhs:BasisVector) -> BiVector {
   if lhs.e > rhs.e {
     return BiVector(-1*lhs.coefficient*rhs.coefficient, (rhs.e, lhs.e))
   }
   return BiVector(1*lhs.coefficient*rhs.coefficient, (lhs.e, rhs.e))
 }
 
-func ||| (_ lhs:[GeometricNumber], _ rhs:[GeometricNumber]) -> [BiVector] {
+func ||| (_ lhs:[BasisVector], _ rhs:[BasisVector]) -> [BiVector] {
   zip2(with: |||) (lhs, rhs)
 }
 
 
-func |^| (_ lhs:GeometricNumber, _ rhs:GeometricNumber) -> BiVector {
+func |^| (_ lhs:BasisVector, _ rhs:BasisVector) -> BiVector {
   if (lhs.e == rhs.e) {
     // example: e(1) ^ e(1) = 0
     // here we are assuming Grossmann algebra
@@ -39,6 +39,6 @@ func |^| (_ lhs:GeometricNumber, _ rhs:GeometricNumber) -> BiVector {
 }
 
 
-func |^| (_ lhs:[GeometricNumber], _ rhs:[GeometricNumber]) -> [BiVector] {
+func |^| (_ lhs:[BasisVector], _ rhs:[BasisVector]) -> [BiVector] {
   zip2(with: |^|) (lhs, rhs)
 }
