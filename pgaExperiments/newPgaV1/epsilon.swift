@@ -1,7 +1,7 @@
 import Foundation
 
 public struct e {
-  let index:UInt8
+  var index:UInt8
 }
 
 public extension e {
@@ -22,6 +22,8 @@ extension e:CustomStringConvertible {
   }
 }
 
-//public struct epsilon<R:Numeric, A> {
-//  let apply:(R) -> A
-//}
+internal var e0 = e(0)
+internal var e1 = e0 |> set(^\e.index, 1)
+//internal var e2 = E0 |> set(^\e.index, 2)
+//internal var e3 = E0 |> set(^\e.index, 3)
+//internal var e4 = E0 |> set(^\e.index, 4)

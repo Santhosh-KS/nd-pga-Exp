@@ -1,44 +1,69 @@
 import Foundation
 
-precedencegroup geometricVectorProcessingOrder {
+precedencegroup multiplicationProcessingOrder {
   associativity:left
-//  higherThan: AdditionPrecedence
-//  lowerThan: MultiplicationPrecedence
+  higherThan: additionEvaluation
+  lowerThan: MultiplicationPrecedence, AdditionPrecedence
 }
-
 
 // a  *  b = a . b + a ^ b -- (1)
 // a |*| b = a|||b + a|^|b --> Notation Convention equivalent of eq(1)
 
-infix operator |*|:geometricVectorProcessingOrder
-infix operator |||:geometricVectorProcessingOrder
-infix operator |^|:geometricVectorProcessingOrder
+infix operator |*|:multiplicationProcessingOrder
 
-func ||| (_ lhs:BasisVector, _ rhs:BasisVector) -> BiVector {
-  if lhs.e > rhs.e {
-    return BiVector(-1*lhs.coefficient*rhs.coefficient, (rhs.e, lhs.e))
-  }
-  return BiVector(1*lhs.coefficient*rhs.coefficient, (lhs.e, rhs.e))
+
+public func |*| (_ lhs:Float, _ rhs:Float) -> (Float, [e]) {
+  (lhs*rhs, [])
 }
 
-func ||| (_ lhs:[BasisVector], _ rhs:[BasisVector]) -> [BiVector] {
-  zip2(with: |||) (lhs, rhs)
+public func |*| (_ lhs:[Float], _ rhs:[Float]) -> (Float, [e]) {
+  var prod:Float = 1
+  zip2(with: |*|)(lhs, rhs).forEach { (val:Float, _) in
+    prod *= val
+  }
+  return (prod, [])
 }
 
-
-func |^| (_ lhs:BasisVector, _ rhs:BasisVector) -> BiVector {
-  if (lhs.e == rhs.e) {
-    // example: e(1) ^ e(1) = 0
-    // here we are assuming Grossmann algebra
-    return BiVector(0, (lhs.e, rhs.e))
-  }
-  if lhs.e > rhs.e {
-    return BiVector(-1*lhs.coefficient*rhs.coefficient, (rhs.e, lhs.e))
-  }
-  return BiVector(1*lhs.coefficient*rhs.coefficient, (lhs.e, rhs.e))
+public func |*| (_ lhs:Float, _ rhs:(Float, e)) -> (Float, [e]) {
+  (lhs*rhs.0, [rhs.1])
 }
 
+public func |*| (_ lhs:[Float], _ rhs:[(Float, e)]) -> [(Float, [e])] {
+  zip2(with: |*|) (lhs, rhs)
+}
 
-func |^| (_ lhs:[BasisVector], _ rhs:[BasisVector]) -> [BiVector] {
-  zip2(with: |^|) (lhs, rhs)
+public func |*| (_ lhs:(Float, e), _ rhs:Float) -> (Float, [e]) {
+  rhs |*| lhs
+}
+
+public func |*| (_ lhs:[(Float, e)], _ rhs:[Float]) -> [(Float, [e])] {
+  rhs |*| lhs
+}
+
+public func |*| (_ lhs:e, _ rhs:(Float, e)) -> (Float, [e]) {
+  (rhs.0, [lhs, rhs.1])
+}
+
+public func |*| (_ lhs:(Float, e), _ rhs:e) -> (Float, [e]) {
+  (lhs.0, [lhs.1, rhs])
+}
+
+public func |*| (_ lhs:[(Float, e)], _ rhs:[e]) -> [(Float, [e])] {
+  zip2(with: |*|)(lhs,rhs)
+}
+
+public func |*| (_ lhs:e, _ rhs:e) -> (Float, [e]) {
+  (1, [lhs,rhs])
+}
+
+public func |*| (_ lhs:[e], _ rhs:[e]) -> [(Float, [e])] {
+  zip2(with: |*|)(lhs,rhs)
+}
+
+public func |*| (_ lhs:(Float, e), _ rhs:(Float, e)) -> (Float, [e]) {
+  (lhs.0*rhs.0, [lhs.1, rhs.1])
+}
+
+public func |*| (_ lhs:[(Float, e)], _ rhs:[(Float, e)]) -> [(Float, [e])] {
+  zip2(with: |*|)(lhs,rhs)
 }

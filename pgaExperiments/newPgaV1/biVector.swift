@@ -3,8 +3,8 @@ import Foundation
 import Foundation
 
 public struct BiVector {
-  let coefficient:Float
-  let e:(e,e)
+  var coefficient:Float
+  var e:(e,e)
 }
 
 public extension BiVector {
@@ -34,3 +34,5 @@ extension BiVector:Equatable, Comparable {
     lhs.e == rhs.e
   }
 }
+
+public let biVector = zip2(with: BiVector.init(coefficient:e:))

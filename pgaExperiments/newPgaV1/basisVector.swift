@@ -1,8 +1,8 @@
 import Foundation
 
 public struct BasisVector {
-  let coefficient:Float
-  let e:e
+  var coefficient:Float
+  var e:e
 }
 
 public extension BasisVector {
@@ -31,4 +31,11 @@ extension BasisVector: Equatable, Comparable {
   }
 }
 
-public let basisVector = zip2(with: BasisVector.init(coefficient:e:))
+internal let basisVector = zip2(with: BasisVector.init(coefficient:e:))
+
+internal var bv0 = BasisVector(coefficient: 1, e: e(0))
+internal var bv1 = bv0 |> set(^\.e.index, 1)
+//internal var bv2 = bv0 |> set(^\.e.index, 2)
+//internal var bv3 = bv0 |> set(^\.e.index, 3)
+//internal var bv4 = bv0 |> set(^\.e.index, 4)
+//internal var bv5 = bv0 |> set(^\.e.index, 5)
