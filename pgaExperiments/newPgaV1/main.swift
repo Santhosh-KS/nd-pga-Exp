@@ -27,9 +27,9 @@ let n1:Float = 2
 let n2:Float = .pi
 let numbers:[UInt8] = [1,2,3,]
 let es = numbers |> map(e.init(index:))
-let coeffs = numbers.map { Float($0) * 0.3 }
+let coeffs = numbers.map { Float($0) }
 let arrayPairs = zip2(coeffs, es)
-let coeffs1 = numbers.map { Float($0) * 0.55 }
+let coeffs1 = numbers.map { 1/Float($0) }
 let arrayPairs1 = zip2(coeffs1, es)
 
 print("numbers: \(numbers)")

@@ -121,19 +121,19 @@ public func |^| (_ lhs:[(Float, e)], _ rhs:[(Float, e)]) -> [(Float, [e])] {
   } else {
     fatalError("Don't know how to do this math yet ☹️")
   }
-  return result 
-//  var result1 = [(Float, [e])]()
-//  var trunkResult = result.dropFirst()
-//  result.forEach { outerPair in
-//    let localE = Array(outerPair.1.reversed())
-//    trunkResult.forEach { innerPair in
-//      if localE == innerPair.1 {
-//        result1.append(((outerPair.0 - innerPair.0), outerPair.1 ))
-//      }
-//    }
-//    trunkResult = trunkResult.dropFirst()
-//  }
-//  return result1
+//  return result
+  var result1 = [(Float, [e])]()
+  var trunkResult = result.dropFirst()
+  result.forEach { outerPair in
+    let localE = Array(outerPair.1.reversed())
+    trunkResult.forEach { innerPair in
+      if localE == innerPair.1 {
+        result1.append(((outerPair.0 - innerPair.0), outerPair.1 ))
+      }
+    }
+    trunkResult = trunkResult.dropFirst()
+  }
+  return result1 |> compact
 }
 
 public func antiCommute(_ lhs:(Float,e), _ rhs:(Float,e)) -> (Float,[e]) {
