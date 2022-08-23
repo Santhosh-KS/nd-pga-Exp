@@ -22,6 +22,8 @@ extension e:CustomStringConvertible {
   }
 }
 
+extension e:Hashable { }
+
 internal var e0 = e(0)
 internal var e1 = e0 |> set(^\e.index, 1)
 //internal var e2 = E0 |> set(^\e.index, 2)

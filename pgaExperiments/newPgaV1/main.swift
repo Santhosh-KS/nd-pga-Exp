@@ -25,21 +25,27 @@ import Foundation
 //let bvc:[Float] = [1,2,3]
 let n1:Float = 2
 let n2:Float = .pi
-let numbers:[UInt8] = [1,2,3,]
+let numbers:[UInt8] = [1,1,3]
 let es = numbers |> map(e.init(index:))
-let coeffs = numbers.map { Float($0) }
+let coeffs = numbers.map { Float($0) * Float.random(in: 1...10) }
 let arrayPairs = zip2(coeffs, es)
 let coeffs1 = numbers.map { 1/Float($0) }
 let arrayPairs1 = zip2(coeffs1, es)
+let coeffs2 = numbers.map { 1/(Float($0)*Float($0)) }
+let arrayPairs2 = zip2(coeffs2, es)
 
 print("numbers: \(numbers)")
 print("es: \(es)")
 print("coefss: \(coeffs)")
 print("arrayPairs: \(arrayPairs)")
-print("coefss1: \(coeffs1)")
-print("arrayPairs1: \(arrayPairs1)")
+
+//print("grade: \(grade((10,es)))")
+//print(es.max())
+//print("coefss1: \(coeffs1)")
+//print("arrayPairs1: \(arrayPairs1)")
 
 print(arrayPairs |^| arrayPairs1)
+print(arrayPairs |^| arrayPairs1 |^| arrayPairs2)
 
 //let appendedArray = arrayPairs + arrayPairs1
 //

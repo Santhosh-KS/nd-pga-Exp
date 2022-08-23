@@ -19,6 +19,23 @@ fileprivate func reduce(_ xs: [(Float, [e])]) -> (Float, [e]) {
   return (prod, [])
 }
 
+fileprivate func reduce(_ xs: [(Float, [e])]) -> [(Float, [e])] {
+  var compactResult = [(Float,[e])]()
+  if xs.isEmpty { return compactResult }
+  var previousPairs:(Float,[e]) = xs.first!
+  var prod = previousPairs.0
+  xs.dropFirst().forEach { currentPairs in
+    if currentPairs.1 == previousPairs.1 {
+      prod *= currentPairs.0
+    } else {
+      compactResult.append(previousPairs)
+    }
+    previousPairs = currentPairs
+  }
+  compactResult.append(previousPairs)
+  return compactResult
+}
+
 public func |^| (_ lhs:[Float], _ rhs:[Float]) -> (Float, [e]) {
   zip2(with: |^|)(lhs, rhs) |> reduce
 }
@@ -29,7 +46,7 @@ public func |^| (_ lhs:Float, _ rhs:(Float, e)) -> (Float, [e]) {
 }
 
 public func |^| (_ lhs:[Float], _ rhs:[(Float, e)]) -> [(Float, [e])] {
-  zip2(with: |^|)(lhs, rhs)
+  zip2(with: |^|)(lhs, rhs) |> (compact >>> reduce)
 }
 
 public func |^| (_ lhs:(Float, e), _ rhs:Float) -> (Float, [e]) {
@@ -48,7 +65,7 @@ public func |^| (_ lhs:Float, rhs:e) -> (Float, [e]) {
 }
 
 public func |^| (_ lhs:[Float], rhs:[e]) -> [(Float, [e])] {
- zip2(with: |^|)(lhs, rhs)
+ zip2(with: |^|)(lhs, rhs) |> (compact >>> reduce)
 }
 
 public func |^| (_ lhs:e, rhs:Float) -> (Float, [e]) {
@@ -77,7 +94,7 @@ fileprivate func compact(_ xs:[(Float, [e])]) -> [(Float, [e])] {
 }
 
 public func |^| (_ lhs:[e], _ rhs:[(Float, e)]) -> [(Float, [e])] {
-  zip2(with: |^|)(lhs, rhs) |> compact
+  zip2(with: |^|)(lhs, rhs) |> (compact >>> reduce )
 }
 
 public func |^| (_ lhs:(Float, e), _ rhs:e) -> (Float, [e]) {
@@ -88,7 +105,7 @@ public func |^| (_ lhs:(Float, e), _ rhs:e) -> (Float, [e]) {
 }
 
 public func |^| (_ lhs:[(Float, e)], _ rhs:[e]) -> [(Float, [e])] {
-  zip2(with: |^|)(lhs, rhs) |> compact
+  zip2(with: |^|)(lhs, rhs) |> (compact >>> reduce)
 }
 
 public func |^| (_ lhs:e, _ rhs:e) -> (Float, [e]) {
@@ -99,7 +116,7 @@ public func |^| (_ lhs:e, _ rhs:e) -> (Float, [e]) {
 }
 
 public func |^| (_ lhs:[e], _ rhs:[e]) -> [(Float, [e])] {
-  zip2(with: |^|)(lhs,rhs) |> compact
+  zip2(with: |^|)(lhs,rhs) |> (compact >>> reduce)
 }
 
 public func |^| (_ lhs:(Float, e), _ rhs:(Float, e)) -> (Float, [e]) {
@@ -133,15 +150,19 @@ public func |^| (_ lhs:[(Float, e)], _ rhs:[(Float, e)]) -> [(Float, [e])] {
     }
     trunkResult = trunkResult.dropFirst()
   }
-  return result1 |> compact
+  return result1 |> (compact >>> reduce)
 }
+// (10, e(1)^e(2)) |^| (5, e(1))
+//public func |^| (_ lhs:(Float, [e]), _ rhs:(Float, e)) -> (Float, [e]) {
+//
+//}
 
 public func antiCommute(_ lhs:(Float,e), _ rhs:(Float,e)) -> (Float,[e]) {
   (-1*rhs.0, rhs.1) |^| lhs
 }
 
 public func antiCommute(_ lhs:[(Float,e)], _ rhs:[(Float,e)]) -> [(Float,[e])] {
-  zip2(with: antiCommute)(lhs, rhs)
+  zip2(with: antiCommute)(lhs, rhs) |> (compact >>> reduce)
 }
 
 // a = a_x*e(1) + a_y*e(2) + a_z*e(3) --> (a_x, e(1)) + (a_y, e(2)) + (a_z, e(3))
@@ -158,35 +179,45 @@ public func antiCommute(_ lhs:[(Float,e)], _ rhs:[(Float,e)]) -> [(Float,[e])] {
 //           (a_x*b_z - a_z*b_x)*e(1)^e(3) +
 //           (a_y*b_z - a_z*b_y)*e(2) e(3)
 public func |^| (_ lhs:(Float,[e]), _ rhs:(Float,[e])) -> (Float,[e]) {
-  fatalError()
+  fatalError("Not supported yet")
 }
 
 // 10e(1) |^| (2e(2)^3e(3)) = 10e(1) |^| (6(e(2)^e(3))) = 60((e(1)^e(2)^e(3)))
-//public func |^| (_ lhs:(Float, e), _ rhs:(Float, [e])) -> (Float, [e]) {
-//  // TODO: What should happen lhs.0 = 0?
-//  // should we append or not with 0 coefficient?
-//  var arrayE = [e]()
-//  arrayE.append(lhs.1)
-//  arrayE.append(contentsOf: rhs.1)
-//  return (lhs.0*rhs.0, arrayE)
-//}
-//
-//public func |^| (_ lhs:[(Float, e)], _ rhs:[(Float, [e])]) -> [(Float, [e])] {
-//  zip2(with: |^|)(lhs,rhs)
-//}
-//
-//public func |^| (_ lhs:(Float, [e]), _ rhs:(Float, e)) -> (Float, [e]) {
-//    // TODO: What should happen lhs.0 = 0?
-//    // should we append or not with 0 coefficient?
-//  var arrayE = [e]()
-//  arrayE.append(contentsOf: lhs.1)
-//  arrayE.append(rhs.1)
-//  return (lhs.0*rhs.0, arrayE)
-//}
-//
-//public func |^| (_ lhs:[(Float, [e])], _ rhs:[(Float, e)]) -> [(Float, [e])] {
-//  zip2(with: |^|)(lhs,rhs)
-//}
+public func |^| (_ lhs:(Float, e), _ rhs:(Float, [e])) -> (Float, [e]) {
+  if lhs.0 == 0 || rhs.0 == 0 {
+    return wedge0
+  }
+  if rhs.1.contains(where: { localE in localE == lhs.1 }) {
+    return wedge0
+  }
+  var arrayE = [e]()
+  arrayE.append(lhs.1)
+  arrayE.append(contentsOf: rhs.1)
+  if grade((0,arrayE)) != grade(rhs) {
+    return wedge0
+  }
+  return (lhs.0*rhs.0, arrayE)
+}
+
+public func |^| (_ lhs:[(Float, e)], _ rhs:[(Float, [e])]) -> [(Float, [e])] {
+  zip2(with: |^|)(lhs,rhs) |> (compact >>> reduce)
+}
+
+public func |^| (_ lhs:(Float, [e]), _ rhs:(Float, e)) -> (Float, [e]) {
+  rhs |^| lhs
+}
+
+public func |^| (_ lhs:[(Float, [e])], _ rhs:[(Float, e)]) -> [(Float, [e])] {
+  zip2(with: |^|)(lhs,rhs) |> (compact >>> reduce)
+}
+
+
+public func grade(_ mvs:(Float, [e])) -> UInt8 {
+  if mvs.1.isEmpty { return 0}
+  return mvs.1.max()!.index
+}
+
+//https://www.euclideanspace.com/maths/algebra/vectors/related/bivector/index.htm
 //
 //public func |^| (_ lhs:(Float, [e]), _ rhs:(Float, [e])) -> (Float, [e]) {
 //  var arrayE = [e]()
