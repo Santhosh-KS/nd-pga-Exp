@@ -102,6 +102,10 @@ public func |+| (_ lhs:[(Float,e)], _ rhs:(Float,e)) -> [(Float,e)] {
   }
 }
 
+public func |+| (_ lhs:(Float,e), _ rhs:[(Float,e)]) -> [(Float,e)] {
+  rhs |+| lhs
+}
+
 public func |+| (_ lhs:[[(Float,e)]], _ rhs:[(Float,e)]) -> [(Float,e)] {
   zip2(with: |+|)(lhs, rhs) |> flatmap
 }
@@ -109,7 +113,7 @@ public func |+| (_ lhs:[[(Float,e)]], _ rhs:[(Float,e)]) -> [(Float,e)] {
 // 10e(1) |+| (2e(2)^3e(3) = 10(e(1)^e(0)) |+| (6(e(2)^e(3)))
 // [(10,[e(1),e(0)]), (6(e(2)^e(3)))]
 public func |+| (_ lhs:(Float, e), _ rhs:(Float,[e])) -> [(Float,[e])] {
-  [(lhs.0,[e0, lhs.1]), rhs]
+  [(lhs.0,[lhs.1]), rhs]
 }
 
 public func |+| (_ lhs:[(Float, e)], _ rhs:[(Float,[e])]) -> [(Float,[e])] {
@@ -117,7 +121,7 @@ public func |+| (_ lhs:[(Float, e)], _ rhs:[(Float,[e])]) -> [(Float,[e])] {
 }
 
 public func |+| (_ lhs:(Float, [e]), _ rhs:(Float,e)) -> [(Float,[e])] {
-  [lhs, (rhs.0, [e0, rhs.1])]
+   rhs |+| lhs
 }
 
 public func |+| (_ lhs:[(Float, [e])], _ rhs:[(Float,e)]) -> [(Float,[e])] {
@@ -125,7 +129,10 @@ public func |+| (_ lhs:[(Float, [e])], _ rhs:[(Float,e)]) -> [(Float,[e])] {
 }
 
 public func |+| (_ lhs:(Float, [e]), _ rhs:(Float,[e])) -> [(Float,[e])] {
-  [lhs, rhs]
+  if lhs.1 == rhs.1 {
+    return [ ((lhs.0 + rhs.0), lhs.1)]
+  }
+  return [lhs, rhs]
 }
 
 public func |+| (_ lhs:[(Float, [e])], _ rhs:[(Float,[e])]) -> [(Float,[e])] {

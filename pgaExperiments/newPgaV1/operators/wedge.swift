@@ -1,39 +1,28 @@
 import Foundation
 
-fileprivate let wedge0:(Float,[e]) = (0,[])
+
 // a  *  b = a . b + a ^ b -- (1)
 // a |*| b = a|||b + a|^|b --> Notation Convention equivalent of eq(1)
+
+  // a = a_x*e(1) + a_y*e(2) + a_z*e(3) --> (a_x, e(1)) + (a_y, e(2)) + (a_z, e(3))
+  // b = b_x*e(1) + b_y*e(2) + b_z*e(3) --> (b_x, e(1)) + (b_y, e(2)) + (b_z, e(3))
+
+  // a |^| b = (a_x*e(1) + a_y*e(2) + a_z*e(3)) |^| (b_x*e(1) + b_y*e(2) + b_z*e(3))
+  //         = 0 + a_y*b_x e(2)^e(1) + a_z*b_x e(3)^e(1)
+  //             + a_x*b_y e(1)^e(2) +         0         + a_z*b_y e(3)^e(2)
+  //                                 + a_x*b_z e(1)^e(3) + a_y*b_z e(2)^e(3) + 0
+  //         = 0 - a_y*b_x e(1)^e(2) - a_z*b_x e(1)^e(3)
+  //             + a_x*b_y e(1)^e(2) +         0         - a_z*b_y e(2)^e(3)
+  //                                 + a_x*b_z e(1)^e(3) + a_y*b_z e(2)^e(3) + 0
+  //         = (a_x*b_y - a_y*b_x)*e(1)^e(2) +
+  //           (a_x*b_z - a_z*b_x)*e(1)^e(3) +
+  //           (a_y*b_z - a_z*b_y)*e(2) e(3)
 
 infix operator |^|:multiplicationProcessingOrder
 
 //s ^ t = t ^ s = st  // Wedge product between scalars.
 public func |^| (_ lhs:Float, _ rhs:Float) -> (Float, [e]) {
   (lhs*rhs, [])
-}
-
-fileprivate func reduce(_ xs: [(Float, [e])]) -> (Float, [e]) {
-  var prod:Float = 1
-  xs.forEach { (val:Float, _) in
-    prod *= val
-  }
-  return (prod, [])
-}
-
-fileprivate func reduce(_ xs: [(Float, [e])]) -> [(Float, [e])] {
-  var compactResult = [(Float,[e])]()
-  if xs.isEmpty { return compactResult }
-  var previousPairs:(Float,[e]) = xs.first!
-  var prod = previousPairs.0
-  xs.dropFirst().forEach { currentPairs in
-    if currentPairs.1 == previousPairs.1 {
-      prod *= currentPairs.0
-    } else {
-      compactResult.append(previousPairs)
-    }
-    previousPairs = currentPairs
-  }
-  compactResult.append(previousPairs)
-  return compactResult
 }
 
 public func |^| (_ lhs:[Float], _ rhs:[Float]) -> (Float, [e]) {
@@ -81,16 +70,6 @@ public func |^| (_ lhs:e, _ rhs:(Float, e)) -> (Float, [e]) {
     return wedge0
   }
   return (rhs.0, [lhs, rhs.1])
-}
-
-fileprivate func compact(_ xs:[(Float, [e])]) -> [(Float, [e])] {
-  var retVal = [(Float,[e])]()
-  xs.forEach { pair in
-    if pair != wedge0 {
-      retVal.append(pair)
-    }
-  }
-  return retVal
 }
 
 public func |^| (_ lhs:[e], _ rhs:[(Float, e)]) -> [(Float, [e])] {
@@ -152,34 +131,10 @@ public func |^| (_ lhs:[(Float, e)], _ rhs:[(Float, e)]) -> [(Float, [e])] {
   }
   return result1 |> (compact >>> reduce)
 }
+
 // (10, e(1)^e(2)) |^| (5, e(1))
-//public func |^| (_ lhs:(Float, [e]), _ rhs:(Float, e)) -> (Float, [e]) {
-//
-//}
-
-public func antiCommute(_ lhs:(Float,e), _ rhs:(Float,e)) -> (Float,[e]) {
-  (-1*rhs.0, rhs.1) |^| lhs
-}
-
-public func antiCommute(_ lhs:[(Float,e)], _ rhs:[(Float,e)]) -> [(Float,[e])] {
-  zip2(with: antiCommute)(lhs, rhs) |> (compact >>> reduce)
-}
-
-// a = a_x*e(1) + a_y*e(2) + a_z*e(3) --> (a_x, e(1)) + (a_y, e(2)) + (a_z, e(3))
-// b = b_x*e(1) + b_y*e(2) + b_z*e(3) --> (b_x, e(1)) + (b_y, e(2)) + (b_z, e(3))
-
-// a |^| b = (a_x*e(1) + a_y*e(2) + a_z*e(3)) |^| (b_x*e(1) + b_y*e(2) + b_z*e(3))
-//         = 0 + a_y*b_x e(2)^e(1) + a_z*b_x e(3)^e(1)
-//             + a_x*b_y e(1)^e(2) +         0         + a_z*b_y e(3)^e(2)
-//                                 + a_x*b_z e(1)^e(3) + a_y*b_z e(2)^e(3) + 0
-//         = 0 - a_y*b_x e(1)^e(2) - a_z*b_x e(1)^e(3)
-//             + a_x*b_y e(1)^e(2) +         0         - a_z*b_y e(2)^e(3)
-//                                 + a_x*b_z e(1)^e(3) + a_y*b_z e(2)^e(3) + 0
-//         = (a_x*b_y - a_y*b_x)*e(1)^e(2) +
-//           (a_x*b_z - a_z*b_x)*e(1)^e(3) +
-//           (a_y*b_z - a_z*b_y)*e(2) e(3)
 public func |^| (_ lhs:(Float,[e]), _ rhs:(Float,[e])) -> (Float,[e]) {
-  fatalError("Not supported yet")
+  fatalError("Not implemented yet")
 }
 
 // 10e(1) |^| (2e(2)^3e(3)) = 10e(1) |^| (6(e(2)^e(3))) = 60((e(1)^e(2)^e(3)))
@@ -211,11 +166,6 @@ public func |^| (_ lhs:[(Float, [e])], _ rhs:[(Float, e)]) -> [(Float, [e])] {
   zip2(with: |^|)(lhs,rhs) |> (compact >>> reduce)
 }
 
-
-public func grade(_ mvs:(Float, [e])) -> UInt8 {
-  if mvs.1.isEmpty { return 0}
-  return mvs.1.max()!.index
-}
 
 //https://www.euclideanspace.com/maths/algebra/vectors/related/bivector/index.htm
 //
