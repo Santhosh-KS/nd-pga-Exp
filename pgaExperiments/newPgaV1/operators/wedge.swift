@@ -38,30 +38,30 @@ public func |^|<A:Numeric> (_ lhs:[A], _ rhs:[(A, e)]) -> [(A, [e])] {
   zip2(with: |^|)(lhs, rhs) |> compact
 }
 
-public func |^| (_ lhs:(Float, e), _ rhs:Float) -> (Float, [e]) {
+public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:A) -> (A, [e]) {
   rhs |^| lhs
 }
 
-public func |^| (_ lhs:[(Float, e)], _ rhs:[Float]) -> [(Float, [e])] {
+public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[A]) -> [(A, [e])] {
   rhs |^| lhs
 }
 
-public func |^| (_ lhs:Float, rhs:e) -> (Float, [e]) {
+public func |^|<A:Numeric> (_ lhs:A, rhs:e) -> (A, [e]) {
   if rhs == e0 {
     return (lhs, [])
   }
   return (lhs, [rhs])
 }
 
-public func |^| (_ lhs:[Float], rhs:[e]) -> [(Float, [e])] {
+public func |^|<A:Numeric> (_ lhs:[A], rhs:[e]) -> [(A, [e])] {
  zip2(with: |^|)(lhs, rhs) |> (compact >>> reduce)
 }
 
-public func |^| (_ lhs:e, rhs:Float) -> (Float, [e]) {
+public func |^|<A:Numeric> (_ lhs:e, rhs:A) -> (A, [e]) {
   rhs |^| lhs
 }
 
-public func |^| (_ lhs:[e], rhs:[Float]) -> [(Float, [e])] {
+public func |^|<A:Numeric> (_ lhs:[e], rhs:[A]) -> [(A, [e])] {
   rhs |^| lhs
 }
 
