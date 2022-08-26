@@ -21,21 +21,21 @@ import Foundation
 infix operator |^|:multiplicationProcessingOrder
 
 //s ^ t = t ^ s = st  // Wedge product between scalars.
-public func |^| (_ lhs:Float, _ rhs:Float) -> (Float, [e]) {
+public func |^|<A:Numeric> (_ lhs:A, _ rhs:A) -> (A, [e]) {
   (lhs*rhs, [])
 }
 
-public func |^| (_ lhs:[Float], _ rhs:[Float]) -> (Float, [e]) {
-  zip2(with: |^|)(lhs, rhs) |> reduce
+public func |^|<A:Numeric> (_ lhs:[A], _ rhs:[A]) -> (A, [e]) {
+  zip2(with: |^|)(lhs, rhs) |> reduce(toBasisVector:)
 }
 
 //(ta)^b = a^(tb) = t(a^b) // Scalar factorization for the wedge product.
-public func |^| (_ lhs:Float, _ rhs:(Float, e)) -> (Float, [e]) {
+public func |^|<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> (A, [e]) {
   (lhs*rhs.0, [rhs.1])
 }
 
-public func |^| (_ lhs:[Float], _ rhs:[(Float, e)]) -> [(Float, [e])] {
-  zip2(with: |^|)(lhs, rhs) |> (compact >>> reduce)
+public func |^|<A:Numeric> (_ lhs:[A], _ rhs:[(A, e)]) -> [(A, [e])] {
+  zip2(with: |^|)(lhs, rhs) |> compact
 }
 
 public func |^| (_ lhs:(Float, e), _ rhs:Float) -> (Float, [e]) {
@@ -65,49 +65,49 @@ public func |^| (_ lhs:[e], rhs:[Float]) -> [(Float, [e])] {
   rhs |^| lhs
 }
 
-public func |^| (_ lhs:e, _ rhs:(Float, e)) -> (Float, [e]) {
+public func |^|<A:Numeric> (_ lhs:e, _ rhs:(A, e)) -> (A, [e]) {
   if lhs == rhs.1 {
-    return wedge0
+    return wedge0()
   }
   return (rhs.0, [lhs, rhs.1])
 }
 
-public func |^| (_ lhs:[e], _ rhs:[(Float, e)]) -> [(Float, [e])] {
-  zip2(with: |^|)(lhs, rhs) |> (compact >>> reduce )
+public func |^|<A:Numeric> (_ lhs:[e], _ rhs:[(A, e)]) -> [(A, [e])] {
+  zip2(with: |^|)(lhs, rhs) |> compact
 }
 
-public func |^| (_ lhs:(Float, e), _ rhs:e) -> (Float, [e]) {
+public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:e) -> (A, [e]) {
   if lhs.1 == rhs {
-    return wedge0
+    return wedge0()
   }
   return (lhs.0, [lhs.1, rhs])
 }
 
-public func |^| (_ lhs:[(Float, e)], _ rhs:[e]) -> [(Float, [e])] {
-  zip2(with: |^|)(lhs, rhs) |> (compact >>> reduce)
+public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[e]) -> [(A, [e])] {
+  zip2(with: |^|)(lhs, rhs) |> compact
 }
 
-public func |^| (_ lhs:e, _ rhs:e) -> (Float, [e]) {
+public func |^|<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
   if lhs == rhs {
-    return wedge0
+    return wedge0()
   }
   return (1,[lhs,rhs])
 }
 
-public func |^| (_ lhs:[e], _ rhs:[e]) -> [(Float, [e])] {
-  zip2(with: |^|)(lhs,rhs) |> (compact >>> reduce)
+public func |^|<A:Numeric> (_ lhs:[e], _ rhs:[e]) -> [(A, [e])] {
+  zip2(with: |^|)(lhs,rhs) |> compact
 }
 
-public func |^| (_ lhs:(Float, e), _ rhs:(Float, e)) -> (Float, [e]) {
+public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, e)) -> (A, [e]) {
   if lhs.1 == rhs.1 {
-    return wedge0
+    return wedge0()
   }
   return (lhs.0*rhs.0, [lhs.1, rhs.1])
 }
 
-public func |^| (_ lhs:[(Float, e)], _ rhs:[(Float, e)]) -> [(Float, [e])] {
+public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[(A, e)]) -> [(A, [e])] {
 //  zip2(with: |^|)(lhs,rhs) |> compact
-  var result = [(Float, [e])]()
+  var result = [(A, [e])]()
   if lhs.count == rhs.count {
     lhs.forEach { lpair in
       rhs.forEach { rpair in
@@ -118,7 +118,7 @@ public func |^| (_ lhs:[(Float, e)], _ rhs:[(Float, e)]) -> [(Float, [e])] {
     fatalError("Don't know how to do this math yet ☹️")
   }
 //  return result
-  var result1 = [(Float, [e])]()
+  var result1 = [(A, [e])]()
   var trunkResult = result.dropFirst()
   result.forEach { outerPair in
     let localE = Array(outerPair.1.reversed())
@@ -129,40 +129,40 @@ public func |^| (_ lhs:[(Float, e)], _ rhs:[(Float, e)]) -> [(Float, [e])] {
     }
     trunkResult = trunkResult.dropFirst()
   }
-  return result1 |> (compact >>> reduce)
+  return result1 |> compact
 }
 
 // (10, e(1)^e(2)) |^| (5, e(1))
-public func |^| (_ lhs:(Float,[e]), _ rhs:(Float,[e])) -> (Float,[e]) {
+public func |^|<A:Numeric> (_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A,[e]) {
   fatalError("Not implemented yet")
 }
 
 // 10e(1) |^| (2e(2)^3e(3)) = 10e(1) |^| (6(e(2)^e(3))) = 60((e(1)^e(2)^e(3)))
-public func |^| (_ lhs:(Float, e), _ rhs:(Float, [e])) -> (Float, [e]) {
+public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, [e])) -> (A, [e]) {
   if lhs.0 == 0 || rhs.0 == 0 {
-    return wedge0
+    return wedge0()
   }
   if rhs.1.contains(where: { localE in localE == lhs.1 }) {
-    return wedge0
+    return wedge0()
   }
   var arrayE = [e]()
   arrayE.append(lhs.1)
   arrayE.append(contentsOf: rhs.1)
   if grade((0,arrayE)) != grade(rhs) {
-    return wedge0
+    return wedge0()
   }
   return (lhs.0*rhs.0, arrayE)
 }
 
-public func |^| (_ lhs:[(Float, e)], _ rhs:[(Float, [e])]) -> [(Float, [e])] {
+public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[(A, [e])]) -> [(A, [e])] {
   zip2(with: |^|)(lhs,rhs) |> (compact >>> reduce)
 }
 
-public func |^| (_ lhs:(Float, [e]), _ rhs:(Float, e)) -> (Float, [e]) {
+public func |^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, e)) -> (A, [e]) {
   rhs |^| lhs
 }
 
-public func |^| (_ lhs:[(Float, [e])], _ rhs:[(Float, e)]) -> [(Float, [e])] {
+public func |^|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, e)]) -> [(A, [e])] {
   zip2(with: |^|)(lhs,rhs) |> (compact >>> reduce)
 }
 

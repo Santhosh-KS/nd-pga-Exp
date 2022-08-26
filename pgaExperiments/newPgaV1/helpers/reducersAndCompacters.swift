@@ -1,19 +1,21 @@
 import Foundation
 
-internal let wedge0:(Float,[e]) = (0,[])
+internal func wedge0<A:Numeric>() -> (A,[e]) { (A.zero, []) }
 
-internal func reduce(_ xs: [(Float, [e])]) -> (Float, [e]) {
-  var prod:Float = 1
-  xs.forEach { (val:Float, _) in
+
+
+internal func reduce<A:Numeric>(toBasisVector xs: [(A, [e])]) -> (A, [e]) {
+  var prod:A = 1
+  xs.forEach { (val:A, _) in
     prod *= val
   }
   return (prod, [])
 }
 
-internal func reduce(_ xs: [(Float, [e])]) -> [(Float, [e])] {
-  var compactResult = [(Float,[e])]()
+internal func reduce<A:Numeric>(toMultivector xs: [(A, [e])]) -> [(A, [e])] {
+  var compactResult = [(A,[e])]()
   if xs.isEmpty { return compactResult }
-  var previousPairs:(Float,[e]) = xs.first!
+  var previousPairs:(A,[e]) = xs.first!
   var prod = previousPairs.0
   xs.dropFirst().forEach { currentPairs in
     if currentPairs.1 == previousPairs.1 {
@@ -27,26 +29,26 @@ internal func reduce(_ xs: [(Float, [e])]) -> [(Float, [e])] {
   return compactResult
 }
 
-internal func compact(_ xs:[(Float, [e])]) -> [(Float, [e])] {
-  var retVal = [(Float,[e])]()
+internal func compact<A:Numeric>(_ xs:[(A, [e])]) -> [(A, [e])] {
+  var retVal = [(A,[e])]()
   xs.forEach { pair in
-    if pair != wedge0 {
+    if pair != wedge0() {
       retVal.append(pair)
     }
   }
   return retVal
 }
 
-internal func grade(_ mvs:(Float, [e])) -> UInt8 {
+internal func grade<A:Numeric>(_ mvs:(A, [e])) -> UInt8 {
   if mvs.1.isEmpty { return 0}
   return mvs.1.max()!.index
 }
 
 
-fileprivate func antiCommute(_ lhs:(Float,e), _ rhs:(Float,e)) -> (Float,[e]) {
+fileprivate func antiCommute<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> (A,[e]) {
   (-1*rhs.0, rhs.1) |^| lhs
 }
 
-fileprivate func antiCommute(_ lhs:[(Float,e)], _ rhs:[(Float,e)]) -> [(Float,[e])] {
+fileprivate func antiCommute<A:Numeric>(_ lhs:[(A,e)], _ rhs:[(A,e)]) -> [(A,[e])] {
   zip2(with: antiCommute)(lhs, rhs) |> (compact >>> reduce)
 }

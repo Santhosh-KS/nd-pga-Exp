@@ -131,28 +131,28 @@ class pgaAdditionOperations: XCTestCase {
   // START: Test: |+| (_ lhs:e, _ rhs:e)  -> [(Float, e)]
   func testBasiVectorCreationUsing2Epsilons() {
     
-    let result = e(1) |+| e(2)
+    let result:[(Double, e)] = e(1) |+| e(2)
     
     XCTAssertEqual(result.count, 2)
-    XCTAssertEqual(result.first!.0, Float(1))
+    XCTAssertEqual(result.first!.0, Double(1))
     XCTAssertEqual(result.first!.1, e(1))
     
-    XCTAssertEqual(result.last!.0, Float(1))
+    XCTAssertEqual(result.last!.0, Double(1))
     XCTAssertEqual(result.last!.1, e(2))
   }
   
   // START: Test: |+| (_ lhs:[e], _ rhs:[e])  -> [(Float, e)]
   func testBasiVectorCreationUsing2ArraysOfEpsilons() {
     
-    let result = [e(0), e(1)] |+| [e(2), e(3)]
+    let result:[(Double, e)] = [e(0), e(1)] |+| [e(2), e(3)]
     
-    let validateResults = zip2(with: |+|)([e(0), e(1)], [e(2), e(3)]) |> flatmap
+    let validateResults:[(Double, e)] = zip2(with: |+|)([e(0), e(1)], [e(2), e(3)]) |> flatmap
     
     XCTAssertEqual(result.count, validateResults.count)
     
     let _ = zip2(validateResults, result).map { pairs in
-      let validating:(coef:Float, E:e) = pairs.0
-      let result:(coef:Float, E:e) = pairs.1
+      let validating:(coef:Double, E:e) = pairs.0
+      let result:(coef:Double, E:e) = pairs.1
       XCTAssertEqual(validating.coef, result.coef)
       XCTAssertEqual(validating.E, result.E)
     }
@@ -162,12 +162,12 @@ class pgaAdditionOperations: XCTestCase {
     
     XCTAssertEqual(epsilons1.count, epsilons2.count)
     
-    let result1 = epsilons1 |+| epsilons2
+    let result1:[(Double,e)] = epsilons1 |+| epsilons2
     
-    let validateResults1 = zip2(with: |+|)(epsilons1, epsilons2) |> flatmap
+    let validateResults1:[(Double,e)] = zip2(with: |+|)(epsilons1, epsilons2) |> flatmap
     let _ = zip2(validateResults1, result1).map { pairs in
-      let validating:(coef:Float, E:e) = pairs.0
-      let result:(coef:Float, E:e) = pairs.1
+      let validating:(coef:Double, E:e) = pairs.0
+      let result:(coef:Double, E:e) = pairs.1
       XCTAssertEqual(validating.coef, result.coef)
       XCTAssertEqual(validating.E, result.E)
     }
@@ -179,10 +179,10 @@ class pgaAdditionOperations: XCTestCase {
     let result = 10 |+| (1.1, e1)
     
     XCTAssertEqual(result.count, 2)
-    XCTAssertEqual(result.first!.0, Float(10))
+    XCTAssertEqual(result.first!.0, Double(10))
     XCTAssertEqual(result.first!.1, e(0))
     
-    XCTAssertEqual(result.last!.0, Float(1.1))
+    XCTAssertEqual(result.last!.0, Double(1.1))
     XCTAssertEqual(result.last!.1, e(1))
   }
   
@@ -192,10 +192,10 @@ class pgaAdditionOperations: XCTestCase {
     let result = (2.1, e1) |+| 10
     
     XCTAssertEqual(result.count, 2)
-    XCTAssertEqual(result.first!.0, Float(10))
+    XCTAssertEqual(result.first!.0, Double(10))
     XCTAssertEqual(result.first!.1, e(0))
     
-    XCTAssertEqual(result.last!.0, Float(2.1))
+    XCTAssertEqual(result.last!.0, Double(2.1))
     XCTAssertEqual(result.last!.1, e(1))
   }
   
@@ -270,8 +270,8 @@ class pgaAdditionOperations: XCTestCase {
   // START: Test: |+| (_ lhs:(Float,e), _ rhs:(Float,e)) -> [(Float,e)]
   func testBasisVectorCreationUsing2BasisVectors() {
     
-    let result = e(1) |+| e(2)
-    let result1 = (1, e(1)) |+| (1, e(2))
+    let result:[(Double,e)] = e(1) |+| e(2)
+    let result1:[(Double,e)] = (1, e(1)) |+| (1, e(2))
     
     XCTAssertEqual(result.count, result1.count)
     
