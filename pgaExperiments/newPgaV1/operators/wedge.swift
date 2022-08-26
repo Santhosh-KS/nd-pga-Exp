@@ -21,28 +21,28 @@ import Foundation
 infix operator |^|:multiplicationProcessingOrder
 
 //s ^ t = t ^ s = st  // Wedge product between scalars.
-public func |^|<A:Numeric> (_ lhs:A, _ rhs:A) -> (A, [e]) {
-  (lhs*rhs, [])
+public func |^|<A:Numeric> (_ lhs:A, _ rhs:A) -> A {
+  lhs*rhs
 }
 
-public func |^|<A:Numeric> (_ lhs:[A], _ rhs:[A]) -> (A, [e]) {
-  zip2(with: |^|)(lhs, rhs) |> reduce(toBasisVector:)
+public func |^|<A:Numeric> (_ lhs:[A], _ rhs:[A]) -> A {
+  zip2(with: |^|)(lhs, rhs).reduce(1, |^|)
 }
 
 //(ta)^b = a^(tb) = t(a^b) // Scalar factorization for the wedge product.
-public func |^|<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> (A, [e]) {
-  (lhs*rhs.0, [rhs.1])
+public func |^|<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> (A, e) {
+  (lhs*rhs.0, rhs.1)
 }
 
-public func |^|<A:Numeric> (_ lhs:[A], _ rhs:[(A, e)]) -> [(A, [e])] {
-  zip2(with: |^|)(lhs, rhs) |> compact
+public func |^|<A:Numeric> (_ lhs:[A], _ rhs:[(A, e)]) -> [(A, e)] {
+  zip2(with: |^|)(lhs, rhs)
 }
 
-public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:A) -> (A, [e]) {
+public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:A) -> (A, e) {
   rhs |^| lhs
 }
 
-public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[A]) -> [(A, [e])] {
+public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[A]) -> [(A, e)] {
   rhs |^| lhs
 }
 
@@ -54,7 +54,7 @@ public func |^|<A:Numeric> (_ lhs:A, rhs:e) -> (A, [e]) {
 }
 
 public func |^|<A:Numeric> (_ lhs:[A], rhs:[e]) -> [(A, [e])] {
- zip2(with: |^|)(lhs, rhs) |> (compact >>> reduce)
+ zip2(with: |^|)(lhs, rhs)
 }
 
 public func |^|<A:Numeric> (_ lhs:e, rhs:A) -> (A, [e]) {
@@ -73,7 +73,7 @@ public func |^|<A:Numeric> (_ lhs:e, _ rhs:(A, e)) -> (A, [e]) {
 }
 
 public func |^|<A:Numeric> (_ lhs:[e], _ rhs:[(A, e)]) -> [(A, [e])] {
-  zip2(with: |^|)(lhs, rhs) |> compact
+  zip2(with: |^|)(lhs, rhs)
 }
 
 public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:e) -> (A, [e]) {
@@ -84,7 +84,7 @@ public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:e) -> (A, [e]) {
 }
 
 public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[e]) -> [(A, [e])] {
-  zip2(with: |^|)(lhs, rhs) |> compact
+  zip2(with: |^|)(lhs, rhs)
 }
 
 public func |^|<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
@@ -95,7 +95,7 @@ public func |^|<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
 }
 
 public func |^|<A:Numeric> (_ lhs:[e], _ rhs:[e]) -> [(A, [e])] {
-  zip2(with: |^|)(lhs,rhs) |> compact
+  zip2(with: |^|)(lhs,rhs)
 }
 
 public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, e)) -> (A, [e]) {
@@ -129,7 +129,7 @@ public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[(A, e)]) -> [(A, [e])] {
     }
     trunkResult = trunkResult.dropFirst()
   }
-  return result1 |> compact
+  return result1
 }
 
 // (10, e(1)^e(2)) |^| (5, e(1))
@@ -155,7 +155,7 @@ public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, [e])) -> (A, [e]) {
 }
 
 public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[(A, [e])]) -> [(A, [e])] {
-  zip2(with: |^|)(lhs,rhs) |> (compact >>> reduce)
+  zip2(with: |^|)(lhs,rhs)
 }
 
 public func |^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, e)) -> (A, [e]) {
@@ -163,7 +163,7 @@ public func |^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, e)) -> (A, [e]) {
 }
 
 public func |^|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, e)]) -> [(A, [e])] {
-  zip2(with: |^|)(lhs,rhs) |> (compact >>> reduce)
+  zip2(with: |^|)(lhs,rhs) 
 }
 
 

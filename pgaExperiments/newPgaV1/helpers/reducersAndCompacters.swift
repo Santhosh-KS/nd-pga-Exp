@@ -2,16 +2,6 @@ import Foundation
 
 internal func wedge0<A:Numeric>() -> (A,[e]) { (A.zero, []) }
 
-
-
-internal func reduce<A:Numeric>(toBasisVector xs: [(A, [e])]) -> (A, [e]) {
-  var prod:A = 1
-  xs.forEach { (val:A, _) in
-    prod *= val
-  }
-  return (prod, [])
-}
-
 internal func reduce<A:Numeric>(toMultivector xs: [(A, [e])]) -> [(A, [e])] {
   var compactResult = [(A,[e])]()
   if xs.isEmpty { return compactResult }
@@ -29,15 +19,15 @@ internal func reduce<A:Numeric>(toMultivector xs: [(A, [e])]) -> [(A, [e])] {
   return compactResult
 }
 
-internal func compact<A:Numeric>(_ xs:[(A, [e])]) -> [(A, [e])] {
-  var retVal = [(A,[e])]()
-  xs.forEach { pair in
-    if pair != wedge0() {
-      retVal.append(pair)
-    }
-  }
-  return retVal
-}
+//internal func compact<A:Numeric>(_ xs:[(A, [e])]) -> [(A, [e])] {
+//  var retVal = [(A,[e])]()
+//  xs.forEach { pair in
+//    if pair != wedge0() {
+//      retVal.append(pair)
+//    }
+//  }
+//  return retVal
+//}
 
 internal func grade<A:Numeric>(_ mvs:(A, [e])) -> UInt8 {
   if mvs.1.isEmpty { return 0}
@@ -45,10 +35,10 @@ internal func grade<A:Numeric>(_ mvs:(A, [e])) -> UInt8 {
 }
 
 
-fileprivate func antiCommute<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> (A,[e]) {
-  (-1*rhs.0, rhs.1) |^| lhs
-}
+//fileprivate func antiCommute<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> (A,[e]) {
+//  (-1*rhs.0, rhs.1) |^| lhs
+//}
 
-fileprivate func antiCommute<A:Numeric>(_ lhs:[(A,e)], _ rhs:[(A,e)]) -> [(A,[e])] {
-  zip2(with: antiCommute)(lhs, rhs) |> (compact >>> reduce)
-}
+//fileprivate func antiCommute<A:Numeric>(_ lhs:[(A,e)], _ rhs:[(A,e)]) -> [(A,[e])] {
+//  zip2(with: antiCommute)(lhs, rhs) |> (compact >>> reduce)
+//}
