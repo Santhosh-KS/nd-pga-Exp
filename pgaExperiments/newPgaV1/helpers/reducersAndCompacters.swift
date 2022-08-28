@@ -39,30 +39,16 @@ internal func reduce<A:Numeric>(_ xs:[(A,e)]) -> [(A,e)] {
 
 internal func removeDuplicates(_ xs:[e]) -> [e] {
   var retVal = [e]()
-  var duplicatesFound = false
-  xs.forEach { outerE in
-    if retVal.contains(where: { $0 != outerE }) {
-      retVal.append(outerE)
+  for x in xs {
+    if retVal.contains(where: { $0 == x }) {
+      return []
     } else {
-      duplicatesFound = true
+      retVal.append(x)
     }
-  }
-  if duplicatesFound {
-    return []
   }
   return retVal
 }
 
-
-//internal func compact<A:Numeric>(_ xs:[(A, [e])]) -> [(A, [e])] {
-//  var retVal = [(A,[e])]()
-//  xs.forEach { pair in
-//    if pair != wedge0() {
-//      retVal.append(pair)
-//    }
-//  }
-//  return retVal
-//}
 
 internal func grade<A:Numeric>(_ mvs:(A, [e])) -> UInt8 {
   if mvs.1.isEmpty { return 0}

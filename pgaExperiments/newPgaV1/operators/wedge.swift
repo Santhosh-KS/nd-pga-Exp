@@ -65,6 +65,20 @@ public func |^|<A:Numeric> (_ lhs:[e], rhs:[A]) -> [(A, e)] {
   rhs |^| lhs
 }
 
+public func |^|(_ lhs:[e], rhs:e) -> [e] {
+  var retVal = [e]()
+  retVal.append(contentsOf: lhs)
+  retVal.append(rhs)
+  return retVal |> removeDuplicates
+}
+
+public func |^|(_ lhs:e, rhs:[e]) -> [e] {
+  var retVal = [e]()
+  retVal.append(lhs)
+  retVal.append(contentsOf: rhs)
+  return retVal |> removeDuplicates
+}
+
 public func |^|<A:Numeric> (_ lhs:e, _ rhs:(A, e)) -> (A, [e]) {
   if lhs == rhs.1 {
     return wedge0()

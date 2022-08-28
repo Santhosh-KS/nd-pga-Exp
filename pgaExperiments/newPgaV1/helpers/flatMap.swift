@@ -31,6 +31,17 @@ internal func compactMap<A>(_ a:[[A]]) -> [[A]] {
 }
 
 
+internal func compactMap<A:Numeric>(_ xs:[(A, [e])]) -> [(A, [e])] {
+  var retVal = [(A,[e])]()
+  xs.forEach { pair in
+    if pair != wedge0() {
+      retVal.append(pair)
+    }
+  }
+  return retVal
+}
+
+
 //internal func removeDuplicates<A>(_ xs:[A], with predicate: @escaping (A,A) -> Bool) -> [A] {
 //  var result = [A]()
 //  xs.forEach { x in

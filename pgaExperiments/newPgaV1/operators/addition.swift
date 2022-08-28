@@ -15,18 +15,18 @@ public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[A])  -> A {
   zip2(with: |+|)(lhs, rhs).reduce(0, |+|)
 }
 
-public func |+|<A:Numeric> (_ lhs:A, _ rhs:e)  -> [(A, e)] {
+public func |+|<A:Numeric> (_ lhs:A, _ rhs:e)  -> (A, e) {
   if rhs.index == 0 {
-    return [(lhs,rhs)]
+    return (lhs, e(0))
   }
-  return [(lhs,e0), (1, rhs)]
+  return (lhs, rhs)
 }
 
 public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[e]) -> [(A,e)] {
-  zip2(with: |+|)(lhs, rhs) |> flatmap
+  zip2(with: |+|)(lhs, rhs)
 }
 
-public func |+|<A:Numeric> (_ lhs:e, _ rhs:A)  -> [(A, e)] {
+public func |+|<A:Numeric> (_ lhs:e, _ rhs:A)  -> (A, e) {
   rhs |+| lhs
 }
 

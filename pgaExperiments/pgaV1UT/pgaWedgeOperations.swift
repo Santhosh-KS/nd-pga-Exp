@@ -7,8 +7,8 @@
 
 import XCTest
 
+
 class pgaWedgeOperations: XCTestCase {
-  
   
     // START: Test:|^| (_ lhs:Float, _ rhs:Float) -> (Float, [e])
   func testBVCUsing2Floats() {
@@ -759,6 +759,7 @@ class pgaWedgeOperations: XCTestCase {
     XCTAssertEqual(result3.last!.1, [e(1), e(3), e(2)])
     XCTAssertEqual(result4.last!.1, [e(1), e(3), e(2)])
   }
+  
 }
 
 

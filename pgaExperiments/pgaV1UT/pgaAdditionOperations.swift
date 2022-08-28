@@ -44,32 +44,22 @@ class pgaAdditionOperations: XCTestCase {
   
   // START: Test: |+| (_ lhs:Float, _ rhs:e)  -> [(Float, e)]
   func testBasisVectorCreationUsingFloatAndepsilon() {
-    let lhs:[(Float, e)] =  10 |+| e(1)
+    let lhs =  10 |+| e(1)
     
-    XCTAssertEqual(lhs.count, 2)
-    
-    XCTAssertEqual(lhs.first!.0, 10)
-    XCTAssertEqual(lhs.first!.1, e(0))
-    XCTAssertEqual(lhs.last!.0, 1)
-    XCTAssertEqual(lhs.last!.1, e(1))
+    XCTAssertEqual(lhs.0, 10)
+    XCTAssertEqual(lhs.1, e(1))
   }
   
   // START: Test: |+| (_ lhs:e, _ rhs:Float)  -> [(Float, e)]
   func testAdditionCommutativity() {
-    let lhs: [(Float, e)] =   10  |+| e(1)
-    let lhs1:[(Float, e)] =  e(1) |+|  10
+    let lhs =   10  |+| e(1)
+    let lhs1 =  e(1) |+|  10
     
-    XCTAssertEqual(lhs.count, 2)
-    XCTAssertEqual(lhs.first!.0, 10)
-    XCTAssertEqual(lhs.first!.1, e(0))
-    XCTAssertEqual(lhs.last!.0, 1)
-    XCTAssertEqual(lhs.last!.1, e(1))
+    XCTAssertEqual(lhs.0, 10)
+    XCTAssertEqual(lhs.1, e(1))
     
-    XCTAssertEqual(lhs1.count, 2)
-    XCTAssertEqual(lhs1.first!.0, 10)
-    XCTAssertEqual(lhs1.first!.1, e(0))
-    XCTAssertEqual(lhs1.last!.0, 1)
-    XCTAssertEqual(lhs1.last!.1, e(1))
+    XCTAssertEqual(lhs1.0, 10)
+    XCTAssertEqual(lhs1.1, e(1))
     
   }
   
@@ -81,7 +71,7 @@ class pgaAdditionOperations: XCTestCase {
     
     let arrayOfVectors = arrayOfFloats |+| arrayOfEpsilons
     
-    let validateResults = zip2(with: |+|) (arrayOfFloats, arrayOfEpsilons) |> flatmap
+    let validateResults = zip2(with: |+|) (arrayOfFloats, arrayOfEpsilons)
     
     XCTAssertEqual(arrayOfVectors.count, validateResults.count)
     
@@ -101,7 +91,7 @@ class pgaAdditionOperations: XCTestCase {
     
     let arrayOfVectors = arrayOfEpsilons |+| arrayOfFloats
     
-    let validateResults = zip2(with: |+|) (arrayOfEpsilons, arrayOfFloats) |> flatmap
+    let validateResults = zip2(with: |+|) (arrayOfEpsilons, arrayOfFloats)
     
     XCTAssertEqual(arrayOfVectors.count, validateResults.count)
     
