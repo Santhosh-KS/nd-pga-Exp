@@ -637,16 +637,128 @@ class pgaWedgeOperations: XCTestCase {
   }
   
     // START: Test: |^| (_ lhs:(A, e), _ rhs:(A, [e])) -> (A, [e])
-  func testBVCUsingBasisVectorAndMultivector() { }
+  func testBVCUsingBasisVectorAndMultivector() {
+    let bv = (10, e(1))
+    let mv = (20, [e(2), e(3)])
+    
+    let result1 = bv |^| mv
+    let result2 = (10, e(1)) |^| (20, [e(2), e(3)])
+    
+    XCTAssertEqual(result1.0, bv.0 * mv.0)
+    XCTAssertEqual(result2.0, bv.0 * mv.0)
+    
+    XCTAssertEqual(result1.1, [e(1), e(2), e(3)])
+    XCTAssertEqual(result2.1, [e(1), e(2), e(3)])
+    
+    let bv1 = (10, e(1))
+    let mv1 = (20, [e(2), e(3), e(1)])
+    
+    let result3 = bv1 |^| mv1
+    let result4 = (10, e(1)) |^| (20, [e(2), e(3), e(1)])
+    
+    XCTAssertEqual(result3.0, 0)
+    XCTAssertEqual(result4.0, 0)
+    
+    XCTAssertEqual(result3.1, [])
+    XCTAssertEqual(result4.1, [])
+    
+  }
   
     // START: Test: |^| (_ lhs:[(A, e)], _ rhs:[(A, [e])]) -> [(A, [e])]
-  func testBVCUsingArrayOfBasisVectorsAndArrayOfMultiVector() { }
+  func testBVCUsingArrayOfBasisVectorsAndArrayOfMultiVector() {
+    
+    let bvs = [(10, e(1))]
+    let mvs = [(20, [e(2), e(3)])]
+    
+    let result1 = bvs |^| mvs
+    let result2 = [(10, e(1))] |^| [(20, [e(2), e(3)])]
+    
+    XCTAssertEqual(result1.first!.0, bvs.first!.0 * mvs.first!.0)
+    XCTAssertEqual(result2.first!.0, bvs.first!.0 * mvs.first!.0)
+    
+    XCTAssertEqual(result1.first!.1, [e(1), e(2), e(3)])
+    XCTAssertEqual(result2.first!.1, [e(1), e(2), e(3)])
+    
+    let bvs1 = [(10, e(1)), (20, e(2))]
+    let mvs1 = [(30, [e(2), e(3), e(1)]), (40, [e(1), e(3)])]
+    
+    let result3 = bvs1 |^| mvs1
+    let result4 = [(10, e(1)), (20, e(2))] |^| [(30, [e(2), e(3), e(1)]), (40, [e(1), e(3)])]
+    
+    XCTAssertEqual(result3.first!.0, 0)
+    XCTAssertEqual(result4.first!.0, 0)
+    
+    XCTAssertEqual(result3.first!.1, [])
+    XCTAssertEqual(result4.first!.1, [])
+    
+    XCTAssertEqual(result3.last!.0, 800)
+    XCTAssertEqual(result4.last!.0, 800)
+    
+    XCTAssertEqual(result3.last!.1, [e(2), e(1), e(3)])
+    XCTAssertEqual(result4.last!.1, [e(2), e(1), e(3)])
+  }
   
     // START: Test: |^| (_ lhs:(A, [e]), _ rhs:(A, e)) -> (A, [e])
-  func testBVCUsingMultivectorAndBasisVector() { }
+  func testBVCUsingMultivectorAndBasisVector() {
+    let bv = (10, e(1))
+    let mv = (20, [e(2), e(3)])
+    
+    let result1 = mv |^| bv
+    let result2 = (20, [e(2), e(3)]) |^| (10, e(1))
+    
+    XCTAssertEqual(result1.0, bv.0 * mv.0)
+    XCTAssertEqual(result2.0, bv.0 * mv.0)
+    
+    XCTAssertEqual(result1.1, [e(2), e(3), e(1)])
+    XCTAssertEqual(result2.1, [e(2), e(3), e(1)])
+    
+    let bv1 = (10, e(1))
+    let mv1 = (20, [e(2), e(3), e(1)])
+    
+    let result3 = mv1 |^| bv1
+    let result4 = (20, [e(2), e(3), e(1)]) |^| (10, e(1))
+    
+    XCTAssertEqual(result3.0, 0)
+    XCTAssertEqual(result4.0, 0)
+    
+    XCTAssertEqual(result3.1, [])
+    XCTAssertEqual(result4.1, [])
+    
+  }
   
     // START: Test: |^| (_ lhs:[(A, [e])], _ rhs:[(A, e)]) -> [(A, [e])]
-  func testBVCUsingArrayOfMultivectorsAndArrayOfBaisVector() { }
+  func testBVCUsingArrayOfMultivectorsAndArrayOfBaisVector() {
+    
+    let bvs = [(10, e(1))]
+    let mvs = [(20, [e(2), e(3)])]
+    
+    let result1 = mvs |^| bvs
+    let result2 = [(20, [e(2), e(3)])]  |^| [(10, e(1))]
+    
+    XCTAssertEqual(result1.first!.0, bvs.first!.0 * mvs.first!.0)
+    XCTAssertEqual(result2.first!.0, bvs.first!.0 * mvs.first!.0)
+    
+    XCTAssertEqual(result1.first!.1, [e(2), e(3), e(1)])
+    XCTAssertEqual(result2.first!.1, [e(2), e(3), e(1)])
+    
+    let bvs1 = [(10, e(1)), (20, e(2))]
+    let mvs1 = [(30, [e(2), e(3), e(1)]), (40, [e(1), e(3)])]
+    
+    let result3 = mvs1 |^| bvs1
+    let result4 = [(30, [e(2), e(3), e(1)]), (40, [e(1), e(3)])] |^| [(10, e(1)), (20, e(2))]
+    
+    XCTAssertEqual(result3.first!.0, 0)
+    XCTAssertEqual(result4.first!.0, 0)
+    
+    XCTAssertEqual(result3.first!.1, [])
+    XCTAssertEqual(result4.first!.1, [])
+    
+    XCTAssertEqual(result3.last!.0, 800)
+    XCTAssertEqual(result4.last!.0, 800)
+    
+    XCTAssertEqual(result3.last!.1, [e(1), e(3), e(2)])
+    XCTAssertEqual(result4.last!.1, [e(1), e(3), e(2)])
+  }
 }
 
 

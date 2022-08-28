@@ -122,7 +122,7 @@ public func |^|<A:Numeric> (_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A,[e]) {
     if lhs.1 == rhs.1 || lhs.0 == A.zero || rhs.0 == A.zero {
       return wedge0()
     } else {
-        var es = [e]()
+      var es = [e]()
       var foundDuplicate = false
       lhs.1.forEach { le in
         if !rhs.1.contains(where: { $0 == le }) {
@@ -147,18 +147,15 @@ public func |^|<A:Numeric> (_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A,[e]) {
 
 // 10e(1) |^| (2e(2)^3e(3)) = 10e(1) |^| (6(e(2)^e(3))) = 60((e(1)^e(2)^e(3)))
 public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, [e])) -> (A, [e]) {
-  if lhs.0 == 0 || rhs.0 == 0 {
+  if lhs.0 == A.zero || rhs.0 == A.zero {
     return wedge0()
   }
-  if rhs.1.contains(where: { localE in localE == lhs.1 }) {
+  if rhs.1.contains(where: { $0 == lhs.1 }) {
     return wedge0()
   }
   var arrayE = [e]()
   arrayE.append(lhs.1)
   arrayE.append(contentsOf: rhs.1)
-  if grade((0,arrayE)) != grade(rhs) {
-    return wedge0()
-  }
   return (lhs.0*rhs.0, arrayE)
 }
 
@@ -167,60 +164,25 @@ public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[(A, [e])]) -> [(A, [e])] {
 }
 
 public func |^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, e)) -> (A, [e]) {
-  rhs |^| lhs
+  if lhs.0 == A.zero || rhs.0 == A.zero {
+    return wedge0()
+  }
+  if lhs.1.contains(where: { $0 == rhs.1 }) {
+    return wedge0()
+  }
+  var arrayE = [e]()
+  arrayE.append(contentsOf: lhs.1)
+  arrayE.append(rhs.1)
+  return (lhs.0*rhs.0, arrayE)
 }
 
 public func |^|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, e)]) -> [(A, [e])] {
   zip2(with: |^|)(lhs,rhs) 
 }
 
-
 //https://www.euclideanspace.com/maths/algebra/vectors/related/bivector/index.htm
-//
-//public func |^| (_ lhs:(Float, [e]), _ rhs:(Float, [e])) -> (Float, [e]) {
-//  var arrayE = [e]()
-//  arrayE.append(contentsOf:lhs.1)
-//  arrayE.append(contentsOf: rhs.1)
-//  // l = [e(1),e(2)]
-//  // r = [e(3),e(4)]
-//  // --> [(e(1),e(2)),[e(3),e(4)]]
-//  if lhs.1.count == rhs.1.count {
-//
-//  }
-//  return (lhs.0*rhs.0, arrayE)
-//}
-
   // (a+b)^(a+b) = a^a + b^a + a^b + b^b = 0
   // a^a = 0 and b^b = 0,
   // a^b = -b^a
 
   // (a+b+c)^(a+b+c)^(a+b+c)
-
-/*
- func ||| (_ lhs:BasisVector, _ rhs:BasisVector) -> BiVector {
- if lhs.e > rhs.e {
- return BiVector(-1*lhs.coefficient*rhs.coefficient, (rhs.e, lhs.e))
- }
- return BiVector(1*lhs.coefficient*rhs.coefficient, (lhs.e, rhs.e))
- }
- 
- func ||| (_ lhs:[BasisVector], _ rhs:[BasisVector]) -> [BiVector] {
- zip2(with: |||) (lhs, rhs)
- }
- 
- func |^| (_ lhs:BasisVector, _ rhs:BasisVector) -> BiVector {
- if (lhs.e == rhs.e) {
- // example: e(1) ^ e(1) = 0
- // here we are assuming Grossmann algebra
- return BiVector(0, (lhs.e, rhs.e))
- }
- if lhs.e > rhs.e {
- return BiVector(-1*lhs.coefficient*rhs.coefficient, (rhs.e, lhs.e))
- }
- return BiVector(1*lhs.coefficient*rhs.coefficient, (lhs.e, rhs.e))
- }
- 
- func |^| (_ lhs:[BasisVector], _ rhs:[BasisVector]) -> [BiVector] {
- zip2(with: |^|) (lhs, rhs)
- }
- */
