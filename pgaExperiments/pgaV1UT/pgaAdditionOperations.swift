@@ -5,56 +5,41 @@ class pgaAdditionOperations: XCTestCase {
   let indexes:[UInt8] = [0,1,2,3,4,5,6,7,8,9,10]
   var epsilons:[e]  { indexes |> map(e.init(index:)) }
   var e0:e { epsilons.first! }
-  let coefficient:Float = 3.1415
+  let coefficient = Double.pi
   
   // START: Test: |+| (_ lhs:Float, _ rhs:Float)  -> (Float, e)
   func test2Floats() {
     let lhs = coefficient |+| coefficient
-    let rhs = (coefficient + coefficient, e0)
-    XCTAssertEqual(lhs.0, rhs.0)
-    XCTAssertEqual(lhs.1, rhs.1)
-    
-    let lhs1:(Float, e) =  1.1 |+| 2.2
-    let rhs1:(Float, e) = (1.1  +  2.2, e0)
-    XCTAssertEqual(lhs1.0, rhs1.0)
-    XCTAssertEqual(lhs1.1, rhs1.1)
+    let rhs = Double.pi  + Double.pi
+    XCTAssertEqual(lhs, rhs, accuracy:0.0001)
   }
   
   func testFloatsMultiplicationPrecedence() {
     let lhs1 =  coefficient*coefficient |+| coefficient*coefficient
-    let rhs1 = (coefficient*coefficient  +  coefficient*coefficient, e0)
-    XCTAssertEqual(lhs1.0, rhs1.0)
-    XCTAssertEqual(lhs1.1, rhs1.1)
+    let rhs1 = coefficient*coefficient  +  coefficient*coefficient
+    XCTAssertEqual(lhs1, rhs1)
   }
   
   func testFloatsAdditionSubstractionPrecedence() {
     let lhs2 =  coefficient+coefficient |+| coefficient-coefficient
-    let rhs2 = (coefficient+coefficient  +  coefficient-coefficient, e0)
-    XCTAssertEqual(lhs2.0, rhs2.0, accuracy:0.0001)
-    XCTAssertEqual(lhs2.1, rhs2.1)
-    
+    let rhs2 =  coefficient+coefficient  +  coefficient-coefficient
+    XCTAssertEqual(lhs2, rhs2, accuracy:0.0001)
   }
   
   func testFloatsDivisionPrecedence() {
     let lhs3 =  coefficient/coefficient |+| coefficient/coefficient
-    let rhs3 = (coefficient/coefficient  +  coefficient/coefficient, e0)
-    XCTAssertEqual(lhs3.0, rhs3.0)
-    XCTAssertEqual(lhs3.1, rhs3.1)
+    let rhs3 =  coefficient/coefficient  +  coefficient/coefficient
+    XCTAssertEqual(lhs3, rhs3, accuracy:0.0001)
   }
   
   // START: Test: |+| (_ lhs:[Float], _ rhs:[Float])  -> [(Float, e)]
   func testArrayOfFloats() {
-    let f1:[Float] = Array(Int8.min...Int8.max) |> map { Float($0) * Float.pi }
-//    let f1:[Float] = Array(1...100_000_000) |> map { Float($0) * Float.pi }
+    let f1 = Array(Int8.min...Int8.max) |> map { Double($0) * Double.pi }
     let f2 = Array(f1.reversed())
     
     let lhs = f1 |+| f2
-    let rhs = zip(f1,f2).map{ $0 + $1 }.map{ ($0, e0) }
-    XCTAssertEqual(lhs.count, rhs.count)
-    _ = zip2(lhs,rhs).map { (first,second) in
-      XCTAssertEqual(first.0, second.0)
-      XCTAssertEqual(first.1, second.1)
-    }
+    let rhs = zip2(with: |+|)(f1, f2).reduce(0, |+|)
+    XCTAssertEqual(lhs, rhs, accuracy:0.0001)
   }
   
   // START: Test: |+| (_ lhs:Float, _ rhs:e)  -> [(Float, e)]

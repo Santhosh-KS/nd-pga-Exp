@@ -2,6 +2,7 @@ import Foundation
 
 internal func wedge0<A:Numeric>() -> (A,[e]) { (A.zero, []) }
 
+
 internal func reduce<A:Numeric>(toMultivector xs: [(A, [e])]) -> [(A, [e])] {
   var compactResult = [(A,[e])]()
   if xs.isEmpty { return compactResult }
@@ -18,6 +19,40 @@ internal func reduce<A:Numeric>(toMultivector xs: [(A, [e])]) -> [(A, [e])] {
   compactResult.append(previousPairs)
   return compactResult
 }
+
+internal func reduce<A:Numeric>(_ xs:[(A,e)]) -> [(A,e)] {
+  var result = [(A,e)]()
+  xs.forEach { pair in
+    var index = 0
+    if zip((0...),result).contains(where: { indexBvPair in
+      index = indexBvPair.0
+      let bv = indexBvPair.1
+      return bv.1 == pair.1
+    }) {
+      result[index] = (result[index].0 * pair.0, pair.1)
+    } else {
+      result.append(pair)
+    }
+  }
+  return result
+}
+
+internal func removeDuplicates(_ xs:[e]) -> [e] {
+  var retVal = [e]()
+  var duplicatesFound = false
+  xs.forEach { outerE in
+    if retVal.contains(where: { $0 != outerE }) {
+      retVal.append(outerE)
+    } else {
+      duplicatesFound = true
+    }
+  }
+  if duplicatesFound {
+    return []
+  }
+  return retVal
+}
+
 
 //internal func compact<A:Numeric>(_ xs:[(A, [e])]) -> [(A, [e])] {
 //  var retVal = [(A,[e])]()

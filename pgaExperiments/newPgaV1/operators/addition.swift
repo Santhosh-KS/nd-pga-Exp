@@ -7,12 +7,12 @@ precedencegroup additionEvaluation {
 
 infix operator |+|:additionEvaluation
 
-public func |+|<A:Numeric> (_ lhs:A, _ rhs:A)  -> (A, e) {
-  (lhs+rhs, e0)
+public func |+|<A:Numeric> (_ lhs:A, _ rhs:A)  -> A {
+  lhs+rhs
 }
 
-public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[A])  -> [(A, e)] {
-  zip2(with: |+|)(lhs, rhs)
+public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[A])  -> A {
+  zip2(with: |+|)(lhs, rhs).reduce(0, |+|)
 }
 
 public func |+|<A:Numeric> (_ lhs:A, _ rhs:e)  -> [(A, e)] {

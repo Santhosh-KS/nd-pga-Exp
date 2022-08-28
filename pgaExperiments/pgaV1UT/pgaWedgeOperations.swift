@@ -23,7 +23,7 @@ class pgaWedgeOperations: XCTestCase {
     XCTAssertEqual(result1, Double(result), accuracy:0.0001)
   }
   
-  // START: Test:|^| (_ lhs:[Float], _ rhs:[Float]) -> (Float, [e])
+  // START: Test:|^| (_ lhs:[A], _ rhs:[A]) -> A
   func testBVCUsing2ArraysOfFloats() {
     let f1:[Float] = [1.1,1.2,1.3]
     let f2:[Float] = [2.1,2.2,2.3]
@@ -45,7 +45,7 @@ class pgaWedgeOperations: XCTestCase {
     XCTAssertEqual(validatedResult2, result2)
   }
   
-    // START: Test:|^| (_ lhs:Float, _ rhs:(Float, e)) -> (Float, [e])
+  // START: Test:|^| (_ lhs:A, _ rhs:(A, e)) -> (A, e)
   func testBVCUsingFloatAndBasisVector() {
     let f1 = 1.1
     let basisVector = (2.2, e(1))
@@ -57,7 +57,7 @@ class pgaWedgeOperations: XCTestCase {
     XCTAssertEqual(result.1, result1.1)
   }
   
-    // START: Test:|^| (_ lhs:[Float], _ rhs:[(Float, e)]) -> [(Float, [e])]
+    // START: Test:|^| (_ lhs:[A], _ rhs:[(A, e)]) -> [(A, e)]
   func testBVCUsingArrayOfFloatsAndArrayOfBasisVectors() {
     let doubles = [1.1,1.2,1.3]
     let bvs = [(2.1, e(1)),(2.2, e(2)),(2.3, e(3))]
@@ -74,6 +74,23 @@ class pgaWedgeOperations: XCTestCase {
       XCTAssertEqual(validating.1, result.1)
     }
     
+    let duplicateValues = [(10, e(1)), (20, e(2)), (30,e(1))]
+    let vals = [2,3,4]
+    let reducedResult = vals |^| duplicateValues
+    let validatedResults = [2,3,4] |^| [(10, e(1)), (20, e(2)), (30,e(1))]
+    
+    XCTAssertNotEqual(reducedResult.count, 3)
+    XCTAssertEqual(reducedResult.count, 2)
+    
+    XCTAssertNotEqual(validatedResults.count, 3)
+    XCTAssertEqual(validatedResults.count, 2)
+    XCTAssertEqual(reducedResult.count, validatedResults.count)
+    
+    XCTAssertEqual(reducedResult.first!.0, 2400)
+    XCTAssertEqual(validatedResults.first!.0, 2400)
+    XCTAssertEqual(reducedResult.first!.0 , validatedResults.first!.0)
+    
+    
     let arrayOfDoubles = (1...100).map { Double($0) * Double.pi }
     let arrayOfBasisVectors = (1...100).map { (Double($0)*Double.pi, e(UInt8($0))) }
     
@@ -88,58 +105,547 @@ class pgaWedgeOperations: XCTestCase {
     }
   }
   
-    // START: Test:|^| (_ lhs:(Float, e), _ rhs:Float) -> (Float, [e])
-  func testBVCUsingBasisVectorAndFloat() {}
+    // START: Test:|^| (_ lhs:(A, e), _ rhs:A) -> (A, e)
+  func testBVCUsingBasisVectorAndFloat() {
+    let bv = (2.1, e(1))
+    let val = 1.0
+    
+    let result = bv |^| val
+    let result1 = (2.1, e(1)) |^| 1.0
+    
+    XCTAssertEqual(result.0, result1.0)
+    XCTAssertEqual(result.1, result1.1)
+    
+    let bv1 = (2.1, e1)
+    
+    let result2 = bv1 |^| val
+    let result3 = (2.1, e1) |^| val
+    
+    XCTAssertEqual(result2.0, result3.0)
+    XCTAssertEqual(result2.1, result3.1)
+    
+    let result4 = bv1 |^| 0.0
+    XCTAssertEqual(result4.0, 0.0)
+    XCTAssertEqual(result4.1, e0)
+    
+    let result5 = (0, e(2)) |^| 10.0
+    XCTAssertEqual(result5.0, 0.0)
+    XCTAssertEqual(result5.1, e0)
+    
+  }
   
-    // START: Test:|^| (_ lhs:[(Float, e)], _ rhs:[Float]) -> [(Float, [e])]
-  func testBVCUsingArrayOfBasisVectorAndArrayOfFloat() {}
+    // START: Test:|^| (_ lhs:[(A, e)], _ rhs:[A]) -> [(A, e)]
+  func testBVCUsingArrayOfBasisVectorAndArrayOfFloat() {
+    let doubles = [1.1,1.2,1.3]
+    let bvs = [(2.1, e(1)),(2.2, e(2)),(2.3, e(3))]
+    
+    let result = bvs |^| doubles
+    let result1 = [(2.1, e(1)),(2.2, e(2)),(2.3, e(3))] |^| [1.1,1.2,1.3]
+    
+    XCTAssertEqual(result.count, result1.count)
+    
+    let _ = zip2(result1, result).map { pairs in
+      let validating = pairs.0
+      let result = pairs.1
+      XCTAssertEqual(validating.0, result.0)
+      XCTAssertEqual(validating.1, result.1)
+    }
+    
+    let duplicateValues = [(10, e(1)), (20, e(2)), (30,e(1))]
+    let vals = [2,3,4]
+    let reducedResult = duplicateValues |^| vals
+    let validatedResults = [(10, e(1)), (20, e(2)), (30,e(1))] |^| [2,3,4]
+    
+    XCTAssertNotEqual(reducedResult.count, 3)
+    XCTAssertEqual(reducedResult.count, 2)
+    
+    XCTAssertNotEqual(validatedResults.count, 3)
+    XCTAssertEqual(validatedResults.count, 2)
+    XCTAssertEqual(reducedResult.count, validatedResults.count)
+    
+    XCTAssertEqual(reducedResult.first!.0, 2400)
+    XCTAssertEqual(validatedResults.first!.0, 2400)
+    XCTAssertEqual(reducedResult.first!.0 , validatedResults.first!.0)
+    
+    let arrayOfDoubles = (1...100).map { Double($0) * Double.pi }
+    let arrayOfBasisVectors = (1...100).map { (Double($0)*Double.pi, e(UInt8($0))) }
+    
+    let actualResult = arrayOfBasisVectors |^| arrayOfDoubles
+    let validationResults = zip2(with: |^|)(arrayOfBasisVectors, arrayOfDoubles)
+    
+    let _ = zip2(actualResult, validationResults).map { pairs in
+      let validating = pairs.0
+      let result = pairs.1
+      XCTAssertEqual(validating.0, result.0)
+      XCTAssertEqual(validating.1, result.1)
+    }
+  }
   
-    // START: Test:|^| (_ lhs:Float, rhs:e) -> (Float, [e])
-  func testBVCUsingFloatAndEpsilon() { }
+    // START: Test:|^| (_ lhs:A, rhs:e) -> (A, e)
+  func testBVCUsingFloatAndEpsilon() {
+    let val = 10.0
+    let epsilon = e(1)
+    
+    let result = val |^| epsilon
+    let result1 = 10.0 |^| e(1)
+    
+    XCTAssertEqual(result1.0, result.0)
+    XCTAssertEqual(result1.1, result.1)
+  }
   
-    // START: Test: |^| (_ lhs:[Float], rhs:[e]) -> [(Floa|^| (_ lhs:e, rhs:Float) -> (Float, [e])
-  func testBVCUsingArrayOfFloatsAndArrayOfEpsilons() { }
+    // START: Test: |^| (_ lhs:[A], rhs:[e]) -> [(A, e)]
+  func testBVCUsingArrayOfFloatsAndArrayOfEpsilons() {
+    let doubles = [10.0, 20, 30]
+    let epsilons = [e(1),e(2),e(3)]
+    
+    let result = doubles |^| epsilons
+    let result1 = [10.0, 20, 30] |^| [e(1),e(2),e(3)]
+    
+    XCTAssertEqual(result.count, min(doubles.count, epsilons.count))
+    XCTAssertEqual(result1.count, min([10.0, 20, 30].count, [e(1),e(2),e(3)].count))
+
+    XCTAssertEqual(result.count, result.count)
+    let _ = zip2(result, result1).map { pairs in
+      let rp = pairs.0
+      let vp = pairs.1
+
+      XCTAssertEqual(rp.0, vp.0)
+      XCTAssertEqual(rp.1, vp.1)
+    }
+    
+    let duplicateValues = [(10, e(1)), (20, e(2)), (30,e(1))]
+    let vals = [2,3,4]
+    let reducedResult = duplicateValues |^| vals
+    let validatedResults = [(10, e(1)), (20, e(2)), (30,e(1))] |^| [2,3,4]
+    
+    XCTAssertNotEqual(reducedResult.count, 3)
+    XCTAssertNotEqual(validatedResults.count, 3)
+    
+    XCTAssertEqual(reducedResult.count, 2)
+    XCTAssertEqual(validatedResults.count, 2)
+    XCTAssertEqual(reducedResult.count, validatedResults.count)
+    
+    XCTAssertEqual(reducedResult.first!.0, 2400)
+    XCTAssertEqual(validatedResults.first!.0, 2400)
+    XCTAssertEqual(reducedResult.first!.0 , validatedResults.first!.0)
+    
+    
+    let arrayOfDoubles = (1...100).map { Double($0) * Double.pi }
+    let arrayOfBasisVectors = (1...100).map { (Double($0)*Double.pi, e(UInt8($0))) }
+    
+    let actualResult = arrayOfDoubles |^| arrayOfBasisVectors
+    let validationResults = zip2(with: |^|)(arrayOfDoubles, arrayOfBasisVectors)
+    
+    let _ = zip2(actualResult, validationResults).map { pairs in
+      let validating = pairs.0
+      let result = pairs.1
+      XCTAssertEqual(validating.0, result.0)
+      XCTAssertEqual(validating.1, result.1)
+    }
+  }
   
-    // START: Test: |^| (_ lhs:[e], rhs:[Float]) -> [(Float, [e])]
-  func testBVCUsingUsingArrayOfEspilonsAndArrayOfFloat() { }
+    // START: Test: |^| (_ lhs:[e], rhs:[A]) -> [(A, [e])]
+  func testBVCUsingUsingArrayOfEspilonsAndArrayOfFloat() {
+    let doubles = [10.0, 20, 30]
+    let epsilons = [e(1),e(2),e(3)]
+    
+    let result = epsilons |^| doubles
+    let result1 = [e(1),e(2),e(3)] |^| [10.0, 20, 30]
+    
+    XCTAssertEqual(result.count, min(doubles.count, epsilons.count))
+    XCTAssertEqual(result1.count, min([10.0, 20, 30].count, [e(1),e(2),e(3)].count))
+    
+    XCTAssertEqual(result.count, result.count)
+    let _ = zip2(result, result1).map { pairs in
+      let rp = pairs.0
+      let vp = pairs.1
+      
+      XCTAssertEqual(rp.0, vp.0)
+      XCTAssertEqual(rp.1, vp.1)
+    }
+    
+    let duplicateValues = [(10, e(1)), (20, e(2)), (30,e(1))]
+    let vals = [2,3,4]
+    let reducedResult = vals |^| duplicateValues
+    let validatedResults = [(10, e(1)), (20, e(2)), (30,e(1))] |^| [2,3,4]
+    
+    XCTAssertNotEqual(reducedResult.count, 3)
+    XCTAssertNotEqual(validatedResults.count, 3)
+    
+    XCTAssertEqual(reducedResult.count, 2)
+    XCTAssertEqual(validatedResults.count, 2)
+    XCTAssertEqual(reducedResult.count, validatedResults.count)
+    
+    XCTAssertEqual(reducedResult.first!.0, 2400)
+    XCTAssertEqual(validatedResults.first!.0, 2400)
+    XCTAssertEqual(reducedResult.first!.0 , validatedResults.first!.0)
+    
+    let arrayOfDoubles = (1...100).map { Double($0) * Double.pi }
+    let arrayOfBasisVectors = (1...100).map { (Double($0)*Double.pi, e(UInt8($0))) }
+    
+    let actualResult = arrayOfBasisVectors |^| arrayOfDoubles
+    let validationResults = zip2(with: |^|)(arrayOfBasisVectors, arrayOfDoubles)
+    
+    let _ = zip2(actualResult, validationResults).map { pairs in
+      let validating = pairs.0
+      let result = pairs.1
+      XCTAssertEqual(validating.0, result.0)
+      XCTAssertEqual(validating.1, result.1)
+    }
+  }
   
-    // START: Test: |^| (_ lhs:e, _ rhs:(Float, e)) -> (Float, [e])
-  func testBVCUsingEpsilonAndBasisVector() { }
+    // START: Test: |^| (_ lhs:e, _ rhs:(A, e)) -> (A, [e])
+  func testBVCUsingEpsilonAndBasisVector() {
+    let epsilon1 = e(1)
+    let bv = (10, e(2))
+    
+    let result = epsilon1 |^| bv
+    let result1 = e(1) |^| (10, e(2))
+    
+    XCTAssertEqual(result.0, result1.0)
+    XCTAssertEqual(result.1, result1.1)
+    
+    XCTAssertEqual(result.1.count, 2)
+    XCTAssertEqual(result.1.count, result1.1.count)
+    XCTAssertEqual(result.1, [e(1),e(2)])
+    
+    XCTAssertNotEqual(result1.1, [e(2), e(1)])
+    
+    let bv1 = (10, e(1))
+    
+    let result2 = epsilon1 |^| bv1
+    let result3 = e(1) |^| (10, e(1))
+    
+    XCTAssertEqual(result2.0, 0)
+    XCTAssertEqual(result3.0, 0)
+    
+    XCTAssertEqual(result2.1.isEmpty, result3.1.isEmpty)
+    
+    let arrayOfEpslions = (1...100).map { e(UInt8($0)) }
+    let arrayOfBasisVectors = (1...100).map { (Double($0)*Double.pi, e(UInt8($0))) }
+    
+    let actualResult = arrayOfEpslions |^| arrayOfBasisVectors
+    let validationResults = zip2(with: |^|)(arrayOfEpslions, arrayOfBasisVectors)
+    
+    let _ = zip2(actualResult, validationResults).map { pairs in
+      let validating = pairs.0
+      let result = pairs.1
+      XCTAssertEqual(validating.0, result.0)
+      XCTAssertEqual(validating.1, result.1)
+    }
+    
+  }
   
-    // START: Test: |^| (_ lhs:[e], _ rhs:[(Float, e)]) -> [(Float, [e])]
-  func testBVCUsingArrayOfEpsilonsAndArrayOfBasisVecotros() { }
+    // START: Test: |^| (_ lhs:[e], _ rhs:[(A, e)]) -> [(A, [e])]
+  func testBVCUsingArrayOfEpsilonsAndArrayOfBasisVectors() {
+    let epsilons = [e(1),e(2)]
+    let bvs = [(3, e(3)), (4, e(4))]
+    
+    let result = epsilons |^| bvs
+    let result1 = [e(1), e(2)] |^| [(3, e(3)), (4, e(4))]
+    
+    XCTAssertEqual(result.count, 2)
+    XCTAssertEqual(result.count, result1.count)
+    
+    XCTAssertEqual(result.first!.0, 3)
+    XCTAssertEqual(result.first!.1, [e(1),e(3)])
+    
+    XCTAssertEqual(result.last!.0, 4)
+    XCTAssertEqual(result.last!.1, [e(2),e(4)])
+    
+    XCTAssertEqual(result.first!.0, result1.first!.0)
+    XCTAssertEqual(result.first!.1, result1.first!.1)
+    
+    XCTAssertEqual(result.last!.0, result1.last!.0)
+    XCTAssertEqual(result.last!.1, result1.last!.1)
+    
+    
+    let epsilons1 = [e(1),e(2)]
+    let bvs1 = [(3, e(1)), (2, e(2))]
+    
+    let result2 = epsilons1 |^| bvs1
+    let result3 = [e(1),e(2)] |^| [(3, e(1)), (2, e(2))]
+    
+    
+    XCTAssertNotEqual(result2.count, 2)
+    XCTAssertNotEqual(result3.count, min(epsilons1.count, bvs1.count))
+    
+    XCTAssertEqual(result2.count, 1)
+    XCTAssertEqual(result3.count, 1)
+    
+  }
   
     // START: Test: |^| (_ lhs:(Float, e), _ rhs:e) -> (Float, [e])
-  func testBVCUsingBasisVectorAndEpsilon() { }
+  func testBVCUsingBasisVectorAndEpsilon() {
+    let epsilon1 = e(1)
+    let bv = (10, e(2))
+    
+    let result = bv |^| epsilon1
+    let result1 = (10, e(2)) |^| e(1)
+    
+    XCTAssertEqual(result.0, result1.0)
+    XCTAssertEqual(result.1, result1.1)
+    
+    XCTAssertEqual(result.1.count, 2)
+    XCTAssertEqual(result.1.count, result1.1.count)
+    XCTAssertEqual(result.1, [e(2),e(1)])
+    
+    XCTAssertNotEqual(result1.1, [e(1), e(2)])
+    
+    let bv1 = (10, e(1))
+    
+    let result2 = bv1 |^|  epsilon1
+    let result3 = (10, e(1)) |^| e(1)
+    
+    XCTAssertEqual(result2.0, 0)
+    XCTAssertEqual(result3.0, 0)
+    
+    XCTAssertEqual(result2.1.isEmpty, result3.1.isEmpty)
+  }
   
     // START: Test: |^| (_ lhs:[(Float, e)], _ rhs:[e]) -> [(Float, [e])]
-  func testBVCUsingArrayOfBasisVectorsAndArrayOfEpsilon() { }
+  func testBVCUsingArrayOfBasisVectorsAndArrayOfEpsilon() {
+    let epsilons = [e(1),e(2)]
+    let bvs = [(3, e(3)), (4, e(4))]
+    
+    let result = bvs |^| epsilons
+    let result1 = [(3, e(3)), (4, e(4))] |^| [e(1), e(2)]
+    
+    XCTAssertEqual(result.count, 2)
+    XCTAssertEqual(result.count, result1.count)
+    
+    XCTAssertEqual(result.first!.0, 3)
+    XCTAssertEqual(result.first!.1, [e(3),e(1)])
+    
+    XCTAssertEqual(result.last!.0, 4)
+    XCTAssertEqual(result.last!.1, [e(4),e(2)])
+    
+    XCTAssertEqual(result.first!.0, result1.first!.0)
+    XCTAssertEqual(result.first!.1, result1.first!.1)
+    
+    XCTAssertEqual(result.last!.0, result1.last!.0)
+    XCTAssertEqual(result.last!.1, result1.last!.1)
+    
+    let epsilons1 = [e(1),e(2)]
+    let bvs1 = [(3, e(1)), (2, e(2))]
+    
+    let result2 = bvs1 |^| epsilons1
+    let result3 = [(3, e(1)), (2, e(2))] |^| [e(1),e(2)]
+    
+    XCTAssertNotEqual(result2.count, 2)
+    XCTAssertNotEqual(result3.count, min(epsilons1.count, bvs1.count))
+    
+    XCTAssertEqual(result2.count, 1)
+    XCTAssertEqual(result3.count, 1)
+    
+    let arrayOfEpslions = (1...100).map { e(UInt8($0)) }
+    let arrayOfBasisVectors = (1...100).map { (Double($0)*Double.pi, e(UInt8($0))) }
+    
+    let actualResult = arrayOfEpslions |^| arrayOfBasisVectors
+    let validationResults = zip2(with: |^|)(arrayOfEpslions, arrayOfBasisVectors)
+    
+    let _ = zip2(actualResult, validationResults).map { pairs in
+      let validating = pairs.0
+      let result = pairs.1
+      XCTAssertEqual(validating.0, result.0)
+      XCTAssertEqual(validating.1, result.1)
+    }
+  }
   
-    // START: Test: |^| (_ lhs:e, _ rhs:e) -> (Float, [e])
-  func testBVCUsing2Epsilons() { }
+    // START: Test: |^| (_ lhs:e, _ rhs:e) -> (A, [e])
+  func testBVCUsing2Epsilons() {
+    let epsilon1 = e(1)
+    let epsilon2 = e(2)
+    
+    let result1 = epsilon1 |^| epsilon2
+    let result2 = e(1) |^| e(2)
+    
+    XCTAssertEqual(result1, [e(1),e(2)])
+    XCTAssertEqual(result1, result2)
+    
+    let result3 = epsilon1 |^| epsilon1
+    let result4 = e(2) |^| e(2)
+    
+    XCTAssertEqual(result3, [])
+    XCTAssertEqual(result3, result4)
+    
+    XCTAssertNotEqual(result3, [e(1), e(1)])
+    XCTAssertNotEqual(result4, [e(2), e(2)])
+  }
   
-    // START: Test: |^| (_ lhs:[e], _ rhs:[e]) -> [(Float, [e])]
-  func testBVCUsing2ArraysOfEpsilon() { }
+    // START: Test: |^| (_ lhs:[e], _ rhs:[e]) -> [(A, [e])]
+  func testBVCUsing2ArraysOfEpsilon() {
+    let epsilons1 = [e(1)]
+    let epsilons2 = [e(2)]
+
+    let result1 = epsilons1 |^| epsilons2
+    let result2 = [e(1)] |^| [e(2)]
+
+    XCTAssertEqual(result1.count, 1)
+
+    XCTAssertEqual(result1.first!, [e(1),e(2)])
+
+    XCTAssertEqual(result1, result2)
+
+    let result3 = epsilons1 |^| epsilons1
+    let result4 = [e(2)] |^| [e(2)]
+
+    XCTAssertEqual(result3, [])
+    XCTAssertEqual(result3, result4)
+
+    XCTAssertNotEqual(result3, [[e(1), e(1)]])
+    XCTAssertNotEqual(result4, [[e(2), e(2)]])
+
+    let e12 = [e(1),e(2)]
+    let e21 = [e(2),e(1)]
+
+    let result5 = e12 |^| e21
+    let result6 = ([e(1),e(2)] |^| [e(2),e(1)]).compactMap {  $0.isEmpty ? nil : $0 }
+
+    XCTAssertEqual(result5.count, 2)
+    XCTAssertEqual(result6.count, 2)
+
+    XCTAssertEqual(result5.count, 2)
+    XCTAssertEqual(result6.count, 2)
+
+    let result7 = e12 |^| e12
+    let result8 = [e(2),e(1)] |^| [e(2),e(1)]
+
+    XCTAssertEqual(result7.count, 0)
+    XCTAssertEqual(result8.count, 0)
+    
+    XCTAssertNotEqual(result7.count, 2)
+    XCTAssertNotEqual(result8.count, 2)
+
+    
+    let arrayOfEpsilons1 = (1...100).map { e(UInt8($0)) }
+    let arrayOfEpsilons2 = Array(arrayOfEpsilons1.reversed())
+
+    let actualResult = arrayOfEpsilons1 |^| arrayOfEpsilons2
+    let validationResults = zip2(with: |^|) (arrayOfEpsilons1, arrayOfEpsilons2)
+                         |> compactMap
+
+    let _ = zip2(actualResult, validationResults).map { pairs in
+      let validating = pairs.0
+      let result = pairs.1
+      XCTAssertEqual(validating, result)
+    }
+
+    let actualResult1 = arrayOfEpsilons1 |^| arrayOfEpsilons1
+    let validationResults1 = zip2(with: |^|)(arrayOfEpsilons1, arrayOfEpsilons1)
+                          |> compactMap
+
+    XCTAssertEqual(actualResult1.count, 0)
+    XCTAssertEqual(validationResults1.count, 0)
+
+    let _ = zip2(actualResult1, validationResults1).map { pairs in
+      let validating = pairs.0
+      let result = pairs.1
+      XCTAssertEqual(validating, result)
+    }
+
+    let actualResult2 = arrayOfEpsilons2 |^| arrayOfEpsilons2
+    let validationResults2 = zip2(with: |^|)(arrayOfEpsilons2, arrayOfEpsilons2)
+                          |> compactMap
+
+    XCTAssertEqual(actualResult2.count, 0)
+    XCTAssertEqual(validationResults2.count, 0)
+
+    let _ = zip2(actualResult2, validationResults2).map { pairs in
+      let validating = pairs.0
+      let result = pairs.1
+      XCTAssertEqual(validating, result)
+    }
+  }
   
-    // START: Test: |^| (_ lhs:(Float, e), _ rhs:(Float, e)) -> (Float, [e])
-  func testBVCUsing2BasisVectors() { }
+  // START: Test: |^| (_ lhs:(A, e), _ rhs:(A, e)) -> (A, [e])
+  func testBVCUsing2BasisVectors() {
+    let bv1 = (10, e(1))
+    let bv2 = (20, e(2))
+    
+    let result1 = bv1 |^| bv2
+    let result2 = (10, e(1)) |^| (20, e(2))
+    
+    XCTAssertEqual(result1.0, bv1.0*bv2.0)
+    XCTAssertEqual(result1.1, [e(1),e(2)])
+    
+    XCTAssertEqual(result2.0, result1.0)
+    XCTAssertEqual(result2.1, result1.1)
+    
+    let result3 = bv1 |^| bv1
+    let result4 = bv2 |^| bv2
+    
+    XCTAssertNotEqual(result3.0, bv1.0*bv1.0)
+    XCTAssertNotEqual(result4.0, bv2.0*bv2.0)
+    
+    XCTAssertEqual(result3.0, 0)
+    XCTAssertEqual(result4.0, 0)
+    
+  }
   
-    // START: Test: |^| (_ lhs:[(Float, e)], _ rhs:[(Float, e)]) -> [(Float, [e])]
-  func testBVCUsing2ArraysOfBasisVectors() { }
+    // START: Test: |^| (_ lhs:[(A, e)], _ rhs:[(A, e)]) -> [(A, [e])]
+  func testBVCUsing2ArraysOfBasisVectors() {
+    let bvs1 = [(10, e(1))]
+    let bvs2 = [(20, e(2))]
+    
+    let result1 = bvs1 |^| bvs2
+    let result2 = [(10, e(1))] |^| [(20, e(2))]
+    
+    XCTAssertEqual(result1.first!.0, bvs1.first!.0*bvs2.first!.0)
+    XCTAssertEqual(result1.first!.1, [e(1),e(2)])
+    
+    XCTAssertEqual(result2.first!.0, result1.first!.0)
+    XCTAssertEqual(result2.first!.1, result1.first!.1)
+    
+    let result3 = bvs1 |^| bvs1
+    let result4 = bvs2 |^| bvs2
+    
+    XCTAssertEqual(result3.count, 1)
+    
+    XCTAssertNotEqual(result3.first!.0, bvs1.first!.0*bvs1.first!.0)
+    XCTAssertNotEqual(result4.first!.0, bvs2.first!.0*bvs2.first!.0)
+    
+    XCTAssertEqual(result3.first!.0, 0)
+    XCTAssertEqual(result4.first!.0, 0)
+    
+  }
   
-    // START: Test: |^| (_ lhs:(Float,[e]), _ rhs:(Float,[e])) -> (Float,[e])
-  func testBVCUsing2MultiVectors() { }
+    // START: Test: |^| (_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A,[e])
+  func testBVCUsing2MultiVectors() {
+    let mv1 = (10.0, [e(1), e(2)])
+    let mv2 = (20.0, [e(3), e(4)])
+    
+    let result1 = mv1 |^| mv2
+    let result2 = (10.0, [e(1), e(2)]) |^| (20.0, [e(3), e(4)])
+    
+    XCTAssertEqual(result1.0, mv1.0*mv2.0)
+    XCTAssertEqual(result2.0, mv1.0*mv2.0)
+    
+    XCTAssertEqual(result1.1, [e(1), e(2), e(3), e(4)])
+    
+    let result3 = mv1 |^| mv1
+    
+    XCTAssertEqual(result3.0, 0)
+    XCTAssertEqual(result3.1, [])
+    
+    let mv3 = (30.0, [e(2),e(3)])
+    
+    let result4 = mv1 |^| mv3
+    XCTAssertEqual(result4.0, 0)
+    XCTAssertEqual(result4.1, [])
+    
+  }
   
-    // START: Test: |^| (_ lhs:(Float, e), _ rhs:(Float, [e])) -> (Float, [e])
+    // START: Test: |^| (_ lhs:(A, e), _ rhs:(A, [e])) -> (A, [e])
   func testBVCUsingBasisVectorAndMultivector() { }
   
-    // START: Test: |^| (_ lhs:[(Float, e)], _ rhs:[(Float, [e])]) -> [(Float, [e])]
+    // START: Test: |^| (_ lhs:[(A, e)], _ rhs:[(A, [e])]) -> [(A, [e])]
   func testBVCUsingArrayOfBasisVectorsAndArrayOfMultiVector() { }
   
-    // START: Test: |^| (_ lhs:(Float, [e]), _ rhs:(Float, e)) -> (Float, [e])
+    // START: Test: |^| (_ lhs:(A, [e]), _ rhs:(A, e)) -> (A, [e])
   func testBVCUsingMultivectorAndBasisVector() { }
   
-    // START: Test: |^| (_ lhs:[(Float, [e])], _ rhs:[(Float, e)]) -> [(Float, [e])]
+    // START: Test: |^| (_ lhs:[(A, [e])], _ rhs:[(A, e)]) -> [(A, [e])]
   func testBVCUsingArrayOfMultivectorsAndArrayOfBaisVector() { }
 }
 

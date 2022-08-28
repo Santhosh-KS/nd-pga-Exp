@@ -31,11 +31,14 @@ public func |^|<A:Numeric> (_ lhs:[A], _ rhs:[A]) -> A {
 
 //(ta)^b = a^(tb) = t(a^b) // Scalar factorization for the wedge product.
 public func |^|<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> (A, e) {
-  (lhs*rhs.0, rhs.1)
+  if lhs == 0 || rhs.0 == 0 {
+    return (0, e0)
+  }
+  return (lhs*rhs.0, rhs.1)
 }
 
 public func |^|<A:Numeric> (_ lhs:[A], _ rhs:[(A, e)]) -> [(A, e)] {
-  zip2(with: |^|)(lhs, rhs)
+  zip2(with: |^|)(lhs, rhs) |> reduce
 }
 
 public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:A) -> (A, e) {
@@ -46,22 +49,19 @@ public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[A]) -> [(A, e)] {
   rhs |^| lhs
 }
 
-public func |^|<A:Numeric> (_ lhs:A, rhs:e) -> (A, [e]) {
-  if rhs == e0 {
-    return (lhs, [])
-  }
-  return (lhs, [rhs])
+public func |^|<A:Numeric> (_ lhs:A, rhs:e) -> (A, e) {
+  return (lhs, rhs)
 }
 
-public func |^|<A:Numeric> (_ lhs:[A], rhs:[e]) -> [(A, [e])] {
- zip2(with: |^|)(lhs, rhs)
+public func |^|<A:Numeric> (_ lhs:[A], rhs:[e]) -> [(A, e)] {
+ zip2(with: |^|)(lhs, rhs) |> reduce
 }
 
-public func |^|<A:Numeric> (_ lhs:e, rhs:A) -> (A, [e]) {
+public func |^|<A:Numeric> (_ lhs:e, rhs:A) -> (A, e) {
   rhs |^| lhs
 }
 
-public func |^|<A:Numeric> (_ lhs:[e], rhs:[A]) -> [(A, [e])] {
+public func |^|<A:Numeric> (_ lhs:[e], rhs:[A]) -> [(A, e)] {
   rhs |^| lhs
 }
 
@@ -73,7 +73,7 @@ public func |^|<A:Numeric> (_ lhs:e, _ rhs:(A, e)) -> (A, [e]) {
 }
 
 public func |^|<A:Numeric> (_ lhs:[e], _ rhs:[(A, e)]) -> [(A, [e])] {
-  zip2(with: |^|)(lhs, rhs)
+  zip2(with: |^|)(lhs, rhs) |> reduce
 }
 
 public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:e) -> (A, [e]) {
@@ -84,57 +84,65 @@ public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:e) -> (A, [e]) {
 }
 
 public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[e]) -> [(A, [e])] {
-  zip2(with: |^|)(lhs, rhs)
+  zip2(with: |^|)(lhs, rhs) |> reduce
 }
 
-public func |^|<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
+public func |^|(_ lhs:e, _ rhs:e) -> [e] {
   if lhs == rhs {
-    return wedge0()
+    return []
   }
-  return (1,[lhs,rhs])
+  return [lhs, rhs]
 }
 
-public func |^|<A:Numeric> (_ lhs:[e], _ rhs:[e]) -> [(A, [e])] {
-  zip2(with: |^|)(lhs,rhs)
+public func |^|(_ lhs:[e], _ rhs:[e]) -> [[e]] {
+  zip2(with: |^|)(lhs, rhs) |> compactMap
 }
 
 public func |^|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, e)) -> (A, [e]) {
-  if lhs.1 == rhs.1 {
+  if lhs.1 == rhs.1 || lhs.0 == A.zero || rhs.0 == A.zero {
     return wedge0()
   }
   return (lhs.0*rhs.0, [lhs.1, rhs.1])
 }
 
 public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[(A, e)]) -> [(A, [e])] {
-//  zip2(with: |^|)(lhs,rhs) |> compact
-  var result = [(A, [e])]()
   if lhs.count == rhs.count {
-    lhs.forEach { lpair in
-      rhs.forEach { rpair in
-        result.append(lpair |^| rpair)
-      }
-    }
-  } else {
-    fatalError("Don't know how to do this math yet ☹️")
+    return zip2(with: |^|)(lhs, rhs) |> reduce
   }
-//  return result
-  var result1 = [(A, [e])]()
-  var trunkResult = result.dropFirst()
-  result.forEach { outerPair in
-    let localE = Array(outerPair.1.reversed())
-    trunkResult.forEach { innerPair in
-      if localE == innerPair.1 {
-        result1.append(((outerPair.0 - innerPair.0), outerPair.1 ))
-      }
-    }
-    trunkResult = trunkResult.dropFirst()
+  else {
+      // TODO: Not clear how to handle the uequal lenght of multivectors.
+      // will kick this can down the road, when actual problem is encountered.
+    fatalError("Not implemented yet!")
   }
-  return result1
 }
 
 // (10, e(1)^e(2)) |^| (5, e(1))
 public func |^|<A:Numeric> (_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A,[e]) {
-  fatalError("Not implemented yet")
+  if lhs.1.count == rhs.1.count {
+    if lhs.1 == rhs.1 || lhs.0 == A.zero || rhs.0 == A.zero {
+      return wedge0()
+    } else {
+        var es = [e]()
+      var foundDuplicate = false
+      lhs.1.forEach { le in
+        if !rhs.1.contains(where: { $0 == le }) {
+          es.append(le)
+        } else {
+          foundDuplicate = true
+        }
+      }
+      if foundDuplicate {
+        return (A.zero, [])
+      } else {
+        es.append(contentsOf: rhs.1)
+        return (lhs.0 * rhs.0, es)
+      }
+    }
+  } else {
+    // TODO: Not clear how to handle the uequal lenght of multivectors.
+    // will kick this can down the road, when actual problem is encountered.
+    fatalError("Not implemented yet!")
+  }
 }
 
 // 10e(1) |^| (2e(2)^3e(3)) = 10e(1) |^| (6(e(2)^e(3))) = 60((e(1)^e(2)^e(3)))

@@ -32,21 +32,23 @@ let arrayPairs = zip2(coeffs, es)
 let coeffs1 = numbers.map { 1/Float($0) }
 let arrayPairs1 = zip2(coeffs1, es)
 let coeffs2 = numbers.map { 1/(Float($0)*Float($0)) }
-let arrayPairs2 = zip2(coeffs2, es)
-
-print("numbers: \(numbers)")
-print("es: \(es)")
-print("coefss: \(coeffs)")
-print("arrayPairs: \(arrayPairs)")
+//let arrayPairs2 = zip2(coeffs2, es)
+let arrayPairs2 = [(10,e(1)), (2,e(1)), (3,e(2)), (3,e(1)), (4, e(2))]
+//
+//print("numbers: \(numbers)")
+//print("es: \(es)")
+//print("coefss: \(coeffs)")
+//print("arrayPairs: \(arrayPairs)")
+//print("arrayPairs1: \(arrayPairs1)")
 
 //print("grade: \(grade((10,es)))")
 //print(es.max())
 //print("coefss1: \(coeffs1)")
-//print("arrayPairs1: \(arrayPairs1)")
+print("arrayPairs2: \(arrayPairs2)")
 
-print(arrayPairs |^| arrayPairs1)
-print(arrayPairs |^| arrayPairs1 |^| arrayPairs2)
-
+//print(arrayPairs |^| arrayPairs1)
+//print(arrayPairs |^| arrayPairs1 |^| arrayPairs2)
+print( arrayPairs2 |> reduce)
 //let appendedArray = arrayPairs + arrayPairs1
 //
 //print(appendedArray |^| arrayPairs1)

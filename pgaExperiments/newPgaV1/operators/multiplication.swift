@@ -2,7 +2,7 @@ import Foundation
 
 precedencegroup multiplicationProcessingOrder {
   associativity:left
-  higherThan: additionEvaluation
+  higherThan: additionEvaluation, ForwardApplication
   lowerThan: MultiplicationPrecedence, AdditionPrecedence
 }
 
