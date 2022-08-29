@@ -13,6 +13,44 @@ class pgaWedgeProperties: XCTestCase {
     
     XCTAssertEqual(result1.0, result2.0)
     XCTAssertEqual(result1.1, result1.1)
+    
+    let scalars = [10]
+    let vectors = [(20, e(1))]
+    
+    let result3 = scalars |^| vectors
+    let result4 = vectors |^| scalars
+    
+    XCTAssertEqual(result3.count, 1)
+    XCTAssertEqual(result4.count, 1)
+    
+    XCTAssertEqual(result3.first!.0, 200)
+    
+    XCTAssertEqual(result3.first!.0, result4.first!.0)
+    XCTAssertEqual(result3.first!.1, result4.first!.1)
+    
+    
+    let scalars1 = [10,11]
+    let vectors1 = [(20, e(1)), (30, e(2))]
+    
+    let result5 = scalars1 |^| vectors1
+    let result6 = vectors1 |^| scalars1
+    
+    XCTAssertEqual(result5.count, 2)
+    XCTAssertEqual(result6.count, 2)
+    
+    XCTAssertEqual(result5.first!.0, 200)
+    XCTAssertEqual(result5.first!.1, e(1))
+    XCTAssertEqual(result5.last!.0, 330)
+    XCTAssertEqual(result5.last!.1, e(2))
+    
+    XCTAssertEqual(result6.first!.0, 200)
+    XCTAssertEqual(result6.first!.1, e(1))
+    XCTAssertEqual(result6.last!.0, 330)
+    XCTAssertEqual(result6.last!.1, e(2))
+    
+    XCTAssertEqual(result5.first!.0, result6.first!.0)
+    XCTAssertEqual(result5.first!.1, result6.first!.1)
+    
   }
   
   // Property-2: Wedge product between scalars {
@@ -24,6 +62,22 @@ class pgaWedgeProperties: XCTestCase {
     let result2 = scalar2 |^| scalar1
     
     XCTAssertEqual(result1, result2)
+    
+    let scalars1 = [-10]
+    let scalars2 = [20]
+    
+    let result3 = scalars1 |^| scalars2
+    let result4 = scalars2 |^| scalars1
+    
+    XCTAssertEqual(result3, result4)
+    
+    let scalars3 = Array(repeating: 10, count: 5)
+    let scalars4 = Array(repeating: 20, count: 5)
+    
+    let result5 = scalars3 |^| scalars4
+    let result6 = scalars4 |^| scalars3
+    
+    XCTAssertEqual(result5, result6)
   }
   
   // Property-3: Scalar factorization for the wedge product.
@@ -91,15 +145,46 @@ class pgaWedgeProperties: XCTestCase {
   // (a+b)^(a+b) = a^a + b^a + a^b + b^b = 0
   // a^a = 0 and b^b = 0,
   // a^b = -b^a
-//  func testAntiCommutativity() {
-//    let a = e(1)
-//    let b = e(2)
-//    
-//    let c:(Float, e) = a |+| b
-//    
-//    let result:[(Float, [e])] = c |^| c
-//    
-//    XCTAssertEqual(result.count, 2)
-//    XCTAssertEqual(result.first!.1, [e(1), e(2)])
-//  }
+  func testAntiCommutativity() {
+    let a = e(1)
+    let b = e(2)
+
+//    let c = a |+| b
+
+//    let result = c |^| c
+    let result = (a |+| b) |^| (a |+| b)
+
+    XCTAssertEqual(result.count, 2)
+    XCTAssertEqual(result.first!, [e(1), e(2)])
+    XCTAssertEqual(result.last! , [e(2), e(1)])
+    
+    XCTAssertNotEqual(result.first!, [])
+    XCTAssertNotEqual(result.last!, [])
+    
+    let e1 = (1, e(1))
+    let e2 = (1, e(2))
+    
+    let result1 = (e1 |+| e2) |^| (e1 |+| e2)
+    
+    XCTAssertEqual(result1.count, 2)
+    
+    XCTAssertEqual(result1.first!.1, [e(1), e(2)])
+    XCTAssertEqual(result1.last!.1 , [e(2), e(1)])
+    
+    XCTAssertNotEqual(result1.first!.1, [])
+    XCTAssertNotEqual(result1.last!.1, [])
+    
+    let e1s = [(1, e(1))]
+    let e2s = [(1, e(2))]
+    
+    let result2 = (e1s |+| e2s) |^| (e1s |+| e2s)
+    
+    XCTAssertEqual(result2.count, 2)
+    
+    XCTAssertEqual(result2.first!.1, [e(1), e(2)])
+    XCTAssertEqual(result2.last!.1 , [e(2), e(1)])
+    
+    XCTAssertNotEqual(result2.first!.1, [])
+    XCTAssertNotEqual(result2.last!.1, [])
+  }
 }

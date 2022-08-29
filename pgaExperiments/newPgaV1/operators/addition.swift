@@ -34,13 +34,21 @@ public func |+|<A:Numeric> (_ lhs:[e], _ rhs:[A])  -> [(A, e)] {
   rhs |+| lhs
 }
 
-public func |+|<A:Numeric> (_ lhs:e, _ rhs:e)  -> [(A, e)] {
-  [(1,lhs), (1,rhs)]
+public func |+| (_ lhs:e, _ rhs:e)  -> [e] {
+  [lhs, rhs]
+}
+public func |+|(_ lhs:[e], _ rhs:[e])  -> [[e]] {
+  zip2(with: |+|)(lhs, rhs)
 }
 
-public func |+|<A:Numeric> (_ lhs:[e], _ rhs:[e])  -> [(A, e)] {
-  zip2(with: |+|)(lhs, rhs) |> flatmap
-}
+//
+//public func |+|<A:Numeric> (_ lhs:e, _ rhs:e)  -> [(A, e)] {
+//  [(1,lhs), (1,rhs)]
+//}
+
+//public func |+|<A:Numeric> (_ lhs:[e], _ rhs:[e])  -> [(A, e)] {
+//  zip2(with: |+|)(lhs, rhs) |> flatmap
+//}
 
 public func |+|<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> [(A, e)] {
   if rhs.1.index == 0  {
