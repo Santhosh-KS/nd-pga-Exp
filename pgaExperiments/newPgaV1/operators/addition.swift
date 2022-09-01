@@ -7,23 +7,22 @@ precedencegroup additionEvaluation {
 
 infix operator |+|:additionEvaluation
 
+
 public func |+|<A:Numeric> (_ lhs:A, _ rhs:A)  -> A {
   lhs+rhs
 }
 
 public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[A])  -> A {
-  zip2(with: |+|)(lhs, rhs).reduce(0, |+|)
+//  zip2(with: |+|)(lhs, rhs).reduce(A.zero, |+|)
+  lhs.reduce(A.zero, |+|) |+| rhs.reduce(A.zero, |+|)
 }
 
 public func |+|<A:Numeric> (_ lhs:A, _ rhs:e)  -> (A, e) {
-  if rhs.index == 0 {
-    return (lhs, e(0))
-  }
   return (lhs, rhs)
 }
 
-public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[e]) -> [(A,e)] {
-  zip2(with: |+|)(lhs, rhs)
+public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[e])  -> [(A, e)] {
+  reduce(with: |+|, zip2(with: |+|)(lhs, rhs))
 }
 
 public func |+|<A:Numeric> (_ lhs:e, _ rhs:A)  -> (A, e) {
@@ -31,120 +30,82 @@ public func |+|<A:Numeric> (_ lhs:e, _ rhs:A)  -> (A, e) {
 }
 
 public func |+|<A:Numeric> (_ lhs:[e], _ rhs:[A])  -> [(A, e)] {
-  rhs |+| lhs
+  reduce(with: |+|, zip2(with: |+|)(lhs, rhs))
 }
 
-public func |+| (_ lhs:e, _ rhs:e)  -> [e] {
-  [lhs, rhs]
-}
-public func |+|(_ lhs:[e], _ rhs:[e])  -> [[e]] {
-  zip2(with: |+|)(lhs, rhs)
-}
-
-//
-//public func |+|<A:Numeric> (_ lhs:e, _ rhs:e)  -> [(A, e)] {
-//  [(1,lhs), (1,rhs)]
-//}
-
-//public func |+|<A:Numeric> (_ lhs:[e], _ rhs:[e])  -> [(A, e)] {
-//  zip2(with: |+|)(lhs, rhs) |> flatmap
-//}
-
-public func |+|<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> [(A, e)] {
-  if rhs.1.index == 0  {
-    return [(lhs+rhs.0, e0)]
+public func |+|<A:Numeric> (_ lhs:e, _ rhs:e)  -> [(A, e)] {
+  if lhs == rhs {
+    return [A.zero + 2] |+| [lhs]
   }
-  return [(lhs, e0), rhs]
+  return [A.zero + 1, A.zero + 1] |+| [lhs, rhs]
 }
 
-public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[(A, e)]) -> [(A, e)] {
-  zip2(with: |+|)(lhs, rhs) |> flatmap
+public func |+|<A:Numeric> (_ lhs:[e], _ rhs:[e])  -> [(A, e)] {
+  reduce(with: |+|, zip2(with: |+|)(lhs, rhs) |> flatmap)
 }
 
-public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs:A) -> [(A, e)] {
-  rhs |+| lhs
-}
-
-public func |+|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[A]) -> [(A, e)] {
-  zip2(with: |+|)(lhs, rhs) |> flatmap
-}
-
-public func |+|<A:Numeric> (_ lhs:(A,e), _ rhs:(A,e)) -> [(A,e)] {
-  if lhs.1 == rhs.1 {
-    return [(lhs.0+rhs.0, lhs.1)]
+public func |+|<A:Numeric> (_ lhs:e, _ rhs:(A, e))  -> [(A, e)] {
+  if lhs == rhs.1 {
+    return [rhs.0 + 1] |+| [rhs.1]
   }
-//  return [lhs, rhs].sorted(by: <)
-  return [lhs, rhs]
+  return [A.zero + 1, rhs.0] |+| [lhs, rhs.1]
 }
 
-public func |+|<A:Numeric> (_ lhs:[(A,e)], _ rhs:[(A,e)])  -> [(A, e)] {
-  zip2(with: |+|)(lhs, rhs) |> flatmap
-}
-
-public func |+|<A:Numeric> (_ lhs:A, _ rhs:[(A,e)]) -> [(A,e)] {
-  rhs.map { (first:A, second:e) -> (A,e) in
-    if second.index == 0 {
-      return (first+lhs, second)
-    }
-    return (first, second)
-  }
-}
-
-public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[[(A,e)]]) -> [(A,e)] {
-  zip2(with: |+|)(lhs, rhs) |> flatmap
-}
-
-public func |+|<A:Numeric> (_ lhs:[(A,e)], _ rhs:A) -> [(A,e)] {
-  rhs |+| lhs
-}
-
-public func |+|<A:Numeric> (_ lhs:[[(A,e)]], _ rhs:[A]) -> [(A,e)] {
+public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs:e)  -> [(A, e)] {
   rhs |+| lhs
 }
 
 public func |+|<A:Numeric> (_ lhs:[(A,e)], _ rhs:(A,e)) -> [(A,e)] {
-  lhs.map { (first:A, second:e) -> (A, e) in
-    if second == rhs.1 {
-      return (first+rhs.0, second)
+  var retVal:[(A,e)] = []
+  let _ = zip(0..., lhs).forEach { nestedPairs in
+    let index = nestedPairs.0
+    let pairs = nestedPairs.1
+    if retVal.contains(where: { $0.1 == pairs.1 }) {
+      retVal[index].0 += rhs.0
+    } else {
+      retVal.append(pairs)
     }
-    return (first,second)
   }
+  return reduce(with: |+|, retVal)
 }
 
-public func |+|<A:Numeric> (_ lhs:(A,e), _ rhs:[(A,e)]) -> [(A,e)] {
+
+public func |+|<A:Numeric> (_ lhs:(A,e), _ rhs:(A,e)) -> [(A, e)] {
+  return [lhs.0, rhs.0] |+| [lhs.1, rhs.1]
+}
+
+public func |+|<A:Numeric> (_ lhs:[(A,e)], _ rhs:[(A,e)]) -> [(A, e)] {
+  reduce(with: |+|, zip2(with: |+|)(lhs, rhs) |> flatmap)
+}
+
+public func |+|<A:Numeric> (_ lhs:([A], [e]), _ rhs: (A,e)) -> [(A, e)] {
+  (lhs.0 |+| lhs.1) |+| rhs
+}
+
+public func |+|<A:Numeric> (_ lhs:(A,e), _ rhs: ([A], [e]) ) -> [(A, e)] {
   rhs |+| lhs
 }
 
-public func |+|<A:Numeric>(_ lhs:[[(A,e)]], _ rhs:[(A,e)]) -> [(A,e)] {
-  zip2(with: |+|)(lhs, rhs) |> flatmap
+public func |+|<A:Numeric> (_ lhs:A, _ rhs:(A,e)) -> [(A,e)] {
+  (lhs, e(0)) |+| rhs
 }
 
-// 10e(1) |+| (2e(2)^3e(3) = 10(e(1)^e(0)) |+| (6(e(2)^e(3)))
-// [(10,[e(1),e(0)]), (6(e(2)^e(3)))]
-public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs:(A,[e])) -> [(A,[e])] {
-  [(lhs.0,[lhs.1]), rhs]
+public func |+|<A:Numeric> (_ lhs:(A,e), _ rhs:A) -> [(A,e)] {
+  lhs |+| (rhs, e(0))
 }
 
-public func |+|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[(A,[e])]) -> [(A,[e])] {
-  zip2(with: |+|)(lhs, rhs) |> flatmap
+public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[(A,e)]) -> [(A,e)] {
+  reduce(with: |+|, zip2(with: |+|)(lhs, rhs) |> flatmap)
 }
 
-public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A,e)) -> [(A,[e])] {
-   rhs |+| lhs
+public func |+|<A:Numeric> (_ lhs:[(A,e)], _ rhs:[A]) -> [(A,e)] {
+  reduce(with: |+|, zip2(with: |+|)(lhs, rhs) |> flatmap)
 }
 
-public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A,e)]) -> [(A,[e])] {
-  zip2(with: |+|)(lhs, rhs) |> flatmap
-}
-
-public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A,[e])) -> [(A,[e])] {
-  if lhs.1 == rhs.1 {
-    return [ ((lhs.0 + rhs.0), lhs.1)]
-  }
-  return [lhs, rhs]
-}
-
-public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A,[e])]) -> [(A,[e])] {
-  zip2(with: |+|)(lhs,rhs) |> flatmap
+public func |+|<A:Numeric>(_ lhs:(A,e), _ rhs:[(A,e)]) -> [(A,e)] {
+  var retVal:[(A,e)] = []
+  retVal.append(lhs)
+  retVal.append(contentsOf: rhs)
+  return reduce(with: |+|, retVal)
 }
 

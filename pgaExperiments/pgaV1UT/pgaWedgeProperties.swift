@@ -1,7 +1,18 @@
 import XCTest
 
 class pgaWedgeProperties: XCTestCase {
-  
+    // [10,20] |^| [(1,e(1)),(2,e(2))] = [(10, e(1)), (40, e(2))]
+    // [e(1),e(2)] |^| e(3) = [e(1), e(2), e(3)]
+    // [e(1),e(2)] |^| e(2) = []
+    // e(1) |^| (2, e(2)) = (2, [e(1),e(2)])
+    // [e(1), e(1)] |^| [(2, e(2)),(2, e(2))] = [(2, [e(1),e(2)]), (2, [e(1),e(2)])]
+    // e(1) |^| e(1) = []
+    // e(1) |^| e(2) = [e(1), e(2)]
+    // [e(1), e(1)] |^| [e(2), e(2)] = [[e(1), e(2)], [e(1), e(2)]]
+    // (10, e(1)) |^| (20, e(2)) = (200, [e(1),e(2)])
+    // [(10, e(1)), (10, e(1))] |^| [(20, e(2)), (20, e(2))] = [(200, [e(1),e(2)]), (200, [e(1),e(2)])]
+    // (10, [e(1),e(2)]) |^| (10, [e(1),e(2)])
+    // (10, e(1)^e(2)) |^| (5, e(1))
   // Test Wedge Operation Properties
   //  Property-1: Wedge product between a scalar and a vector
   func testWedgeProductBetweenAScalarAndAVector() {
@@ -98,9 +109,12 @@ class pgaWedgeProperties: XCTestCase {
     let b = 5
     let c = 10
     
-    let result = a |^| (b+c)
+    let result = a |^| (b|+|c)
     let result1 = (a |^| b) |+| (a |^| c)
+    
     XCTAssertEqual(result.0, b+c)
+    
+    XCTAssertEqual(result1.count,  1)
     XCTAssertEqual(result1.first!.0, b+c)
     
     XCTAssertEqual(result.1, e(1))
@@ -109,6 +123,8 @@ class pgaWedgeProperties: XCTestCase {
     let result2 = (b+c) |^| a
     let result3 = (b |^| a) |+| (c |^| a)
     XCTAssertEqual(result2.0, b+c)
+    
+    XCTAssertEqual(result3.count,  1)
     XCTAssertEqual(result3.first!.0, b+c)
     
     XCTAssertEqual(result2.1, e(1))
@@ -146,23 +162,30 @@ class pgaWedgeProperties: XCTestCase {
   // a^a = 0 and b^b = 0,
   // a^b = -b^a
   func testAntiCommutativity() {
-    let a = e(1)
-    let b = e(2)
+    let a = e1
+    let b = e2
 
-//    let c = a |+| b
+    let c = a |+| b
 
-//    let result = c |^| c
-    let result = (a |+| b) |^| (a |+| b)
+    let result = c |^| c
+    let resultEx = (a |+| b) |^| (a |+| b)
 
     XCTAssertEqual(result.count, 2)
-    XCTAssertEqual(result.first!, [e(1), e(2)])
-    XCTAssertEqual(result.last! , [e(2), e(1)])
+    XCTAssertEqual(result.first!.1, [e(1), e(2)])
+    XCTAssertEqual(result.last!.1 , [e(2), e(1)])
     
-    XCTAssertNotEqual(result.first!, [])
-    XCTAssertNotEqual(result.last!, [])
+    XCTAssertNotEqual(result.first!.1, [])
+    XCTAssertNotEqual(result.last!.1, [])
     
-    let e1 = (1, e(1))
-    let e2 = (1, e(2))
+    XCTAssertEqual(resultEx.count, 2)
+    XCTAssertEqual(resultEx.first!.1, [e(1), e(2)])
+    XCTAssertEqual(resultEx.last!.1 , [e(2), e(1)])
+    
+    XCTAssertNotEqual(resultEx.first!.1, [])
+    XCTAssertNotEqual(resultEx.last!.1, [])
+    
+    let e1 = e1
+    let e2 = e2
     
     let result1 = (e1 |+| e2) |^| (e1 |+| e2)
     
@@ -174,16 +197,16 @@ class pgaWedgeProperties: XCTestCase {
     XCTAssertNotEqual(result1.first!.1, [])
     XCTAssertNotEqual(result1.last!.1, [])
     
-    let e1s = [(1, e(1))]
-    let e2s = [(1, e(2))]
-    
+    let e1s = [e1]
+    let e2s = [e2]
+
     let result2 = (e1s |+| e2s) |^| (e1s |+| e2s)
-    
+
     XCTAssertEqual(result2.count, 2)
-    
+
     XCTAssertEqual(result2.first!.1, [e(1), e(2)])
     XCTAssertEqual(result2.last!.1 , [e(2), e(1)])
-    
+
     XCTAssertNotEqual(result2.first!.1, [])
     XCTAssertNotEqual(result2.last!.1, [])
   }

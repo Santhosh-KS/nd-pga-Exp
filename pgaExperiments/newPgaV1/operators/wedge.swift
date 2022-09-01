@@ -29,10 +29,26 @@ public func |^|<A:Numeric> (_ lhs:[A], _ rhs:[A]) -> A {
   zip2(with: |^|)(lhs, rhs).reduce(1, |^|)
 }
 
+//public func |^|<A:Numeric>(_ lhs:[A], _ rhs:[e]) -> (A, [e]) {
+//  (lhs.reduce(1, |+|), rhs)
+//}
+
+//public func |^|<A:Numeric>(_ lhs:[[A]], _ rhs:[[e]]) -> [(A, [e])] {
+//  zip2(with: |^|)(lhs, rhs)
+//}
+
+//public func |^|<A:Numeric>(_ lhs:[e], _ rhs:[A]) -> (A, [e]) {
+//  rhs |^| lhs
+//}
+//
+//public func |^|<A:Numeric>(_ lhs:[[e]], _ rhs:[[A]]) -> [(A, [e])] {
+//  rhs |^| lhs
+//}
+
   //(ta)^b = a^(tb) = t(a^b) // Scalar factorization for the wedge product.
 public func |^|<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> (A, e) {
-  if lhs == 0 || rhs.0 == 0 || lhs == A.zero || rhs.0 == A.zero {
-    return (0, e0)
+  if lhs == A.zero || rhs.0 == A.zero{
+    return (A.zero, e(0))
   }
   return (lhs*rhs.0, rhs.1)
 }
@@ -154,18 +170,6 @@ public func |^|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[(A, e)]) -> [(A, [e])] {
   return retVal |> compactMap
 }
 
-  // [10,20] |^| [(1,e(1)),(2,e(2))] = [(10, e(1)), (40, e(2))]
-  // [e(1),e(2)] |^| e(3) = [e(1), e(2), e(3)]
-  // [e(1),e(2)] |^| e(2) = []
-  // e(1) |^| (2, e(2)) = (2, [e(1),e(2)])
-  // [e(1), e(1)] |^| [(2, e(2)),(2, e(2))] = [(2, [e(1),e(2)]), (2, [e(1),e(2)])]
-  // e(1) |^| e(1) = []
-  // e(1) |^| e(2) = [e(1), e(2)]
-  // [e(1), e(1)] |^| [e(2), e(2)] = [[e(1), e(2)], [e(1), e(2)]]
-  // (10, e(1)) |^| (20, e(2)) = (200, [e(1),e(2)])
-  // [(10, e(1)), (10, e(1))] |^| [(20, e(2)), (20, e(2))] = [(200, [e(1),e(2)]), (200, [e(1),e(2)])]
-  // (10, [e(1),e(2)]) |^| (10, [e(1),e(2)])
-  // (10, e(1)^e(2)) |^| (5, e(1))
 public func |^|<A:Numeric> (_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A,[[e]]) {
   if lhs.0 == A.zero || rhs.0 == A.zero {
     return (A.zero, [[]])
@@ -193,8 +197,31 @@ public func |^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, e)) -> (A, [e]) {
 }
 
 public func |^|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, e)]) -> [(A, [e])] {
-  zip2(with: |^|)(lhs,rhs)
+  zip2(with: |^|)(lhs,rhs) |> compactMap
 }
+
+public func |^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:e) -> (A, [e]) {
+  if lhs.0 == A.zero {
+    return wedge0()
+  }
+  return (lhs.0, lhs.1 |^| rhs)
+}
+
+public func |^|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[e]) -> [(A, [e])] {
+  zip2(with: |^|)(lhs,rhs) |> compactMap
+}
+
+public func |^|<A:Numeric> (_ lhs:e, _ rhs:(A, [e])) -> (A, [e]) {
+  if rhs.0 == A.zero {
+    return wedge0()
+  }
+  return (rhs.0, lhs |^| rhs.1)
+}
+
+public func |^|<A:Numeric> (_ lhs:[e], _ rhs:[(A, [e])]) -> [(A, [e])] {
+  zip2(with: |^|)(lhs,rhs) |> compactMap
+}
+
 
   //https://www.euclideanspace.com/maths/algebra/vectors/related/bivector/index.htm
   // (a+b)^(a+b) = a^a + b^a + a^b + b^b = 0
@@ -202,3 +229,11 @@ public func |^|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, e)]) -> [(A, [e])] {
   // a^b = -b^a
 
   // (a+b+c)^(a+b+c)^(a+b+c)
+
+
+public func antiCommutativity<A:Numeric>(_ es:[e]) -> (A, [e]) {
+  if !es.isEmpty && es.count == 1 {
+    return (A.zero+1, es)
+  }
+  return (A.zero - 1, es.reversed()) // --> this is one way to anticommute
+}

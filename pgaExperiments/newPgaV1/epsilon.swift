@@ -24,8 +24,12 @@ extension e:CustomStringConvertible {
 
 extension e:Hashable { }
 
-internal var e0 = e(0)
-internal var e1 = e0 |> set(^\e.index, 1)
-//internal var e2 = E0 |> set(^\e.index, 2)
-//internal var e3 = E0 |> set(^\e.index, 3)
-//internal var e4 = E0 |> set(^\e.index, 4)
+internal let e0 = 1.0 |^| e(0)
+internal let e1 = 1.0 |^| e(1)
+internal let e2 = 1.0 |^| e(2)
+internal let e3 = 1.0 |^| e(3)
+internal let e12 = e1 |^| e2
+internal let e21 = e2 |^| e1
+internal let e123 = e12 |^| e(3)
+
+

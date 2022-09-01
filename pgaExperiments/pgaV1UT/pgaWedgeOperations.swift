@@ -116,21 +116,21 @@ class pgaWedgeOperations: XCTestCase {
     XCTAssertEqual(result.0, result1.0)
     XCTAssertEqual(result.1, result1.1)
     
-    let bv1 = (2.1, e1)
+    let bv1 = (2.1, e(1))
     
     let result2 = bv1 |^| val
-    let result3 = (2.1, e1) |^| val
+    let result3 = (2.1, e(1)) |^| val
     
     XCTAssertEqual(result2.0, result3.0)
     XCTAssertEqual(result2.1, result3.1)
     
     let result4 = bv1 |^| 0.0
     XCTAssertEqual(result4.0, 0.0)
-    XCTAssertEqual(result4.1, e0)
+    XCTAssertEqual(result4.1, e(0))
     
     let result5 = (0, e(2)) |^| 10.0
     XCTAssertEqual(result5.0, 0.0)
-    XCTAssertEqual(result5.1, e0)
+    XCTAssertEqual(result5.1, e(0))
     
   }
   
@@ -294,7 +294,7 @@ class pgaWedgeOperations: XCTestCase {
     }
   }
   
-    // START: Test: |^| (_ lhs:e, _ rhs:(A, e)) -> (A, [e])
+  // START: Test: |^| (_ lhs:e, _ rhs:(A, e)) -> (A, [e])
   func testBVCUsingEpsilonAndBasisVector() {
     let epsilon1 = e(1)
     let bv = (10, e(2))
@@ -336,7 +336,7 @@ class pgaWedgeOperations: XCTestCase {
     
   }
   
-    // START: Test: |^| (_ lhs:[e], _ rhs:[(A, e)]) -> [(A, [e])]
+  // START: Test: |^| (_ lhs:[e], _ rhs:[(A, e)]) -> [(A, [e])]
   func testBVCUsingArrayOfEpsilonsAndArrayOfBasisVectors() {
     let epsilons = [e(1),e(2)]
     let bvs = [(3, e(3)), (4, e(4))]
@@ -370,12 +370,12 @@ class pgaWedgeOperations: XCTestCase {
     XCTAssertNotEqual(result2.count, 2)
     XCTAssertNotEqual(result3.count, min(epsilons1.count, bvs1.count))
     
-    XCTAssertEqual(result2.count, 1)
-    XCTAssertEqual(result3.count, 1)
+    XCTAssertEqual(result2.count, 0)
+    XCTAssertEqual(result3.count, 0)
     
   }
   
-    // START: Test: |^| (_ lhs:(Float, e), _ rhs:e) -> (Float, [e])
+  // START: Test: |^| (_ lhs:(Float, e), _ rhs:e) -> (Float, [e])
   func testBVCUsingBasisVectorAndEpsilon() {
     let epsilon1 = e(1)
     let bv = (10, e(2))
@@ -569,30 +569,36 @@ class pgaWedgeOperations: XCTestCase {
   }
   
   // START: Test: |^| (_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A,[e])
-//  func testBVCUsing2MultiVectors() {
-//    let mv1 = (10.0, [e(1), e(2)])
-//    let mv2 = (20.0, [e(3), e(4)])
-//    
-//    let result1 = mv1 |^| mv2
-//    let result2 = (10.0, [e(1), e(2)]) |^| (20.0, [e(3), e(4)])
-//    
-//    XCTAssertEqual(result1.0, mv1.0*mv2.0)
-//    XCTAssertEqual(result2.0, mv1.0*mv2.0)
-//    
+  func testBVCUsing2MultiVectors() {
+    let mv1 = (10.0, [e(1), e(2)])
+    let mv2 = (20.0, [e(3), e(4)])
+    
+    let result1 = mv1 |^| mv2
+    let result2 = (10.0, [e(1), e(2)]) |^| (20.0, [e(3), e(4)])
+    
+    XCTAssertEqual(result1.0, mv1.0*mv2.0)
+    XCTAssertEqual(result2.0, mv1.0*mv2.0)
+    
 //    XCTAssertEqual(result1.1, [e(1), e(2), e(3), e(4)])
-//    
-//    let result3 = mv1 |^| mv1
-//    
-//    XCTAssertEqual(result3.0, 0)
-//    XCTAssertEqual(result3.1, [])
-//    
-//    let mv3 = (30.0, [e(2),e(3)])
-//    
-//    let result4 = mv1 |^| mv3
-//    XCTAssertEqual(result4.0, 0)
-//    XCTAssertEqual(result4.1, [])
-//    
-//  }
+    
+    let result3 = mv1 |^| mv1
+    
+    XCTAssertNotEqual(result3.0, 0)
+    XCTAssertNotEqual(result3.1, [])
+    
+    XCTAssertEqual(result3.0, 100)
+    XCTAssertEqual(result3.1, [[e(1), e(2)], [e(2), e(1)]])
+    
+    let mv3 = (30.0, [e(2),e(3)])
+    
+    let result4 = mv1 |^| mv3
+    XCTAssertNotEqual(result4.0, 0)
+    XCTAssertNotEqual(result4.1, [])
+    
+    XCTAssertEqual(result4.0, 300)
+    XCTAssertEqual(result4.1, [[e(1), e(2)], [e(1), e(3)], [e(2), e(3)]])
+    
+  }
   
     // START: Test: |^| (_ lhs:(A, e), _ rhs:(A, [e])) -> (A, [e])
   func testBVCUsingBasisVectorAndMultivector() {
@@ -614,8 +620,11 @@ class pgaWedgeOperations: XCTestCase {
     let result3 = bv1 |^| mv1
     let result4 = (10, e(1)) |^| (20, [e(2), e(3), e(1)])
     
-    XCTAssertEqual(result3.0, 0)
-    XCTAssertEqual(result4.0, 0)
+    XCTAssertNotEqual(result3.0, 0)
+    XCTAssertNotEqual(result4.0, 0)
+    
+    XCTAssertEqual(result3.0, 200)
+    XCTAssertEqual(result4.0, 200)
     
     XCTAssertEqual(result3.1, [])
     XCTAssertEqual(result4.1, [])
@@ -643,8 +652,11 @@ class pgaWedgeOperations: XCTestCase {
     let result3 = bvs1 |^| mvs1
     let result4 = [(10, e(1)), (20, e(2))] |^| [(30, [e(2), e(3), e(1)]), (40, [e(1), e(3)])]
     
-    XCTAssertEqual(result3.first!.0, 0)
-    XCTAssertEqual(result4.first!.0, 0)
+    XCTAssertEqual(result3.first!.0, 300)
+    XCTAssertEqual(result4.first!.0, 300)
+    
+    XCTAssertNotEqual(result3.first!.0, 0)
+    XCTAssertNotEqual(result4.first!.0, 0)
     
     XCTAssertEqual(result3.first!.1, [])
     XCTAssertEqual(result4.first!.1, [])
@@ -676,8 +688,11 @@ class pgaWedgeOperations: XCTestCase {
     let result3 = mv1 |^| bv1
     let result4 = (20, [e(2), e(3), e(1)]) |^| (10, e(1))
     
-    XCTAssertEqual(result3.0, 0)
-    XCTAssertEqual(result4.0, 0)
+    XCTAssertEqual(result3.0, 200)
+    XCTAssertEqual(result4.0, 200)
+    
+    XCTAssertNotEqual(result3.0, 0)
+    XCTAssertNotEqual(result4.0, 0)
     
     XCTAssertEqual(result3.1, [])
     XCTAssertEqual(result4.1, [])
@@ -705,8 +720,11 @@ class pgaWedgeOperations: XCTestCase {
     let result3 = mvs1 |^| bvs1
     let result4 = [(30, [e(2), e(3), e(1)]), (40, [e(1), e(3)])] |^| [(10, e(1)), (20, e(2))]
     
-    XCTAssertEqual(result3.first!.0, 0)
-    XCTAssertEqual(result4.first!.0, 0)
+    XCTAssertNotEqual(result3.first!.0, 0)
+    XCTAssertNotEqual(result4.first!.0, 0)
+    
+    XCTAssertEqual(result3.first!.0, 300)
+    XCTAssertEqual(result4.first!.0, 300)
     
     XCTAssertEqual(result3.first!.1, [])
     XCTAssertEqual(result4.first!.1, [])
