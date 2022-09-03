@@ -210,4 +210,12 @@ class pgaWedgeProperties: XCTestCase {
     XCTAssertNotEqual(result2.first!.1, [])
     XCTAssertNotEqual(result2.last!.1, [])
   }
+  
+  func testabc() {
+    let a = (10, e(1)) |+| (20, e(2)) |+| (30, e(3))
+    
+    let result = a + a
+    
+    XCTAssertEqual(result.count, 2)
+  }
 }
