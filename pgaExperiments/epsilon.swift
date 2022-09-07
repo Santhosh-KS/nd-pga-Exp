@@ -24,7 +24,7 @@ extension e:CustomStringConvertible {
 
 extension e:Hashable { }
 
-//internal let e0 = 1.0 |^| e(0)
+//let e0 = 1.0 |^| e(0)
 //internal let e1 = 1.0 |^| e(1)
 //internal let e2 = 1.0 |^| e(2)
 //internal let e3 = 1.0 |^| e(3)

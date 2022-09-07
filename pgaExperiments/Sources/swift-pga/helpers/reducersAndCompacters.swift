@@ -143,6 +143,12 @@ internal func reduce<A:Numeric>(toMultivector xs: [(A, [e])]) -> [(A, [e])] {
   return compactResult
 }
 
+//[[(A, [e])]]
+func reduce<A:Numeric>(with f:@escaping (A,A) -> A,
+                       _ xs:[[(A, [e])]]) -> [(A, [e])] {
+  reduce( with:f,xs |> flatmap)
+}
+
 internal func reduce<A>(with f:@escaping (A, A) -> A,
                         _ xs:[(A,[e])]) -> [(A,[e])] {
   var result = [(A,[e])]()
@@ -161,7 +167,13 @@ internal func reduce<A>(with f:@escaping (A, A) -> A,
   return result
 }
 
-internal func reduce<A>(with f:@escaping (A, A) -> A,
+//[[(A, e)]]
+func reduce<A:Numeric>(with f:@escaping (A,A) -> A,
+                       _ xs:[[(A, e)]]) -> [(A, e)] {
+  reduce( with:f,xs |> flatmap)
+}
+
+internal func reduce<A:Numeric>(with f:@escaping (A, A) -> A,
                         _ xs:[(A,e)]) -> [(A,e)] {
   var result = [(A,e)]()
   xs.forEach { pair in
