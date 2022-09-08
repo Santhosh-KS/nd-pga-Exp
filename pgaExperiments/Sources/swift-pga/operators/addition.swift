@@ -85,7 +85,8 @@ public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[e])  -> [(A, [e])] {
 }
 
 public func |+|<A:Numeric> (_ lhs:A, _ rhs:(A,[e])) -> [(A, [e])] {
-  [(lhs, []), rhs]
+  if lhs == 0 { return [ rhs ]}
+  return [(lhs, [e(0)]), rhs]
 }
 
 public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[(A,[e])]) -> [(A, [e])] {
@@ -109,6 +110,13 @@ public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[(A,e)]) -> [(A,e)] {
   reduce(with: |+|, zip2(with: |+|)(lhs, rhs))
 }
 
+//'A' and '(A, [e])
+public func |+|<A:Numeric> (_ lhs:A , _ rhs:[(A,[e])]) -> [(A,[e])] {
+  var retVal = [(A,[e])]()
+  if lhs != 0 { retVal.append((lhs,[])) }
+  retVal.append(contentsOf: rhs)
+  return retVal
+}
 
 // (A, [e])
 // TODO Ignore not validated

@@ -23,6 +23,10 @@ public func |*|<A:Numeric> (_ lhs:e, _ rhs:e) -> [(A, [e])] {
   lhs ||| rhs |+| lhs |^| rhs
 }
 
+public func |*|(_ lhs:e, _ rhs:e) -> [e] {
+  lhs |^| rhs
+}
+
 public func |*|<A:Numeric> (_ lhs:[e], _ rhs:[e]) -> [(A, [e])] {
  reduce(with: |*|, zip2(with: |*|)(lhs, rhs))
 }
@@ -44,50 +48,43 @@ public func |*|<A:Numeric> (_ lhs:[e], _ rhs:[A]) -> [(A,e)] {
 }
 
 public func|*|<A:Numeric> (_ lhs:(A,e), _ rhs: (A,e)) -> [(A, [e])] {
-  let l = (lhs ||| rhs)
-  let r =  (lhs |^| rhs)
-  
-  let v =  l |+| r
-  return v
+  lhs ||| rhs |+|  (lhs |^| rhs)
 }
 
-//
-//public func |*|<A:Numeric> (_ lhs:[e], _ rhs:[e]) -> [[(A, [e])]] {
-//  zip2(with: |*|)(lhs, rhs)
-//}
-//
-//public func |*|<A:Numeric> (_ lhs:A, _ rhs:e) -> (A,e) {
-//  (lhs ||| rhs)  |+| (lhs |^| rhs)
-//}
-//
-//public func |*|<A:Numeric> (_ lhs:[A], _ rhs:[e]) -> [(A,e)] {
-//  zip2(with: |*|)(lhs, rhs)
-//}
-//
-//public func |*|<A:Numeric> (_ lhs:e, _ rhs:A) -> (A,e) {
-//  (lhs ||| rhs)  |+| (lhs |^| rhs)
-//}
-//
-//public func |*|<A:Numeric> (_ lhs:[e], _ rhs:[A]) -> [(A,e)] {
-//  zip2(with: |*|)(lhs, rhs)
-//}
-//
+public func|*|<A:Numeric> (_ lhs:[(A,e)], _ rhs: [(A,e)]) -> [(A, [e])] {
+  reduce(with: |*|, zip2(with: |*|)(lhs, rhs))
+}
 
-//
-//public func |*|<A:Numeric>(_ lhs:A, _ rhs:e) -> (A,e) {
-//  lhs ||| rhs |+| lhs |^| rhs
-//}
-//
-//public func |*|<A:Numeric>(_ lhs:[A], _ rhs:[e]) -> [(A,e)] {
-//  zip2(with: |*|)(lhs, rhs)
-//}
-//
-//
-//public func |*|<A:Numeric>(_ lhs:e, _ rhs:A) -> (A,e) {
-//  rhs |^| lhs
-//}
-//
-//public func |*|<A:Numeric>(_ lhs:[e], _ rhs:[A]) -> [(A,e)] {
-//  zip2(with: |*|)(lhs, rhs)
-//}
+// [(Double, [e])], (Double, e)
 
+public func|*|<A:Numeric> (_ lhs:(A,[e]), _ rhs:(A,e)) -> [(A, [e])] {
+  lhs ||| rhs |+|  (lhs |^| rhs)
+}
+
+public func|*|<A:Numeric> (_ lhs:[(A,[e])], _ rhs:[(A,e)]) -> [(A, [e])] {
+  reduce(with: |*|, zip2(with: |*|)(lhs, rhs))
+}
+
+public func|*|<A:Numeric> (_ lhs:(A,e), _ rhs:(A,[e])) -> [(A, [e])] {
+  lhs ||| rhs |+| lhs |^| rhs
+}
+
+public func|*|<A:Numeric> (_ lhs:[(A,e)], _ rhs:[(A,[e])]) -> [(A, [e])] {
+  reduce(with: |*|, zip2(with: |*|)(lhs, rhs))
+}
+
+public func|*|<A:Numeric> (_ lhs:[(A,[e])], _ rhs:(A,e)) -> [(A, [e])] {
+  lhs ||| rhs |+| lhs |^| rhs
+}
+
+public func|*|<A:Numeric> (_ lhs:[[(A,[e])]], _ rhs:[(A,e)]) -> [(A, [e])] {
+  reduce(with: |*|, zip2(with: |*|)(lhs, rhs))
+}
+
+public func|*|<A:Numeric> (_ lhs:(A,e), _ rhs:[(A,[e])]) -> [(A, [e])] {
+  lhs ||| rhs |+| lhs |^| rhs
+}
+
+public func|*|<A:Numeric> (_ lhs:[(A,e)], _ rhs:[[(A,[e])]]) -> [(A, [e])] {
+  reduce(with: |*|, zip2(with: |*|)(lhs, rhs))
+}
