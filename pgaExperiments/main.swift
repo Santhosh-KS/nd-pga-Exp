@@ -1,9 +1,9 @@
-
 let e0 = (1.0 |*| e(0)).first!
 let e1 = (1.0 |*| e(1)).first!
 let e2 = (1.0 |*| e(2)).first!
 let e3 = (1.0 |*| e(3)).first!
 let e4 = (1.0 |*| e(4)).first!
+
 print(e0)
 print(e1)
 print(e2)
@@ -33,6 +33,17 @@ print(e123)
 print(e312)
 print(e231)
 
-//let e123 = e(1) |*| e(2) |*| e(3)
-//
-//print(e123)
+let e_10 = (10.0 |*| e1).first!
+print(e_10)
+
+let e_10_rev = (e1 |*| 10).first!
+print(e_10_rev)
+
+let a = (10, e(1)) |+| ((20, e(2)) |+| (30, e(3)))
+print(a)
+
+let e_12 = (11.0 |*| e12).first!
+print(e_12)
+
+let e_21 = (e12 |*| 10).first!
+print(e_21)

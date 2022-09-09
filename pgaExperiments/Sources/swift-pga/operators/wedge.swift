@@ -54,11 +54,15 @@ func |^|<A:Numeric> (_ lhs:[e], _ rhs:[A]) -> [(A, e)] {
   zip2(with: |^|)(lhs, rhs)
 }
 
+public func|^|<A:Numeric> (_ lhs:A, _ rhs:(A,e)) -> (A,e) {
+  return (lhs * rhs.0, rhs.1)
+}
+
 func |^|<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> (A, [e]) {
   if lhs.1 == rhs.1 {
     return (A.zero + 1, [lhs.1, rhs.1])
   }
-  return (lhs.0 ||| rhs.0, [lhs.1, rhs.1])
+  return (lhs.0 * rhs.0, [lhs.1, rhs.1])
 }
 
 func |^|<A:Numeric>(_ lhs:[(A,e)], _ rhs:[(A,e)]) -> [(A, [e])] {
@@ -108,6 +112,16 @@ public func|^|<A:Numeric> (_ lhs:[(A,[e])], _ rhs:(A,e)) -> [(A,[e])] {
 public func|^|<A:Numeric> (_ lhs:(A,e), _ rhs:[(A,[e])]) -> [(A,[e])] {
   reduce(with: |^|, rhs.map { lhs |^| $0 })
 }
+
+public func |^|<A:Numeric> (_ lhs:A, _ rhs:(A, [e])) -> (A, [e]) {
+  if lhs == 0 || rhs.0 == 0 { return wedge0() }
+  return (lhs * rhs.0, rhs.1)
+}
+
+public func |^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:A) -> (A, [e]) {
+  rhs |^| lhs
+}
+
 
   //https://www.euclideanspace.com/maths/algebra/vectors/related/bivector/index.htm
   // (a+b)^(a+b) = a^a + b^a + a^b + b^b = 0

@@ -39,6 +39,10 @@ func |||<A:Numeric>(_ lhs:[e], _ rhs:[A]) -> A {
   return A.zero
 }
 
+public func|||<A:Numeric> (_ lhs:A, _ rhs:(A,e)) -> A {
+  return A.zero
+}
+
 func |||<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> A {
   if lhs.1 == rhs.1 { return lhs.0 ||| rhs.0}
   return A.zero
@@ -60,4 +64,12 @@ public func|||<A:Numeric> (_ lhs:[(A,[e])], _ rhs:(A,e)) -> A {
 
 public func|||<A:Numeric> (_ lhs:(A,e), _ rhs:[(A,[e])]) -> A {
   rhs ||| lhs
+}
+
+public func |||<A:Numeric> (_ lhs:A, _ rhs:(A, [e])) -> A {
+  return A.zero
+}
+
+public func |||<A:Numeric> (_ lhs:(A, [e]), _ rhs:A) -> A {
+  return A.zero
 }
