@@ -111,3 +111,5 @@ public func |*|<A:Numeric> (_ lhs:A, _ rhs:(A, [e])) -> [(A, [e])] {
 public func |*|<A:Numeric> (_ lhs:(A, [e]), _ rhs:A) -> [(A, [e])] {
   lhs ||| rhs |+| lhs |^| rhs
 }
+
+//public func|*|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e]))

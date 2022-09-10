@@ -1,5 +1,7 @@
 import Foundation
 
+public func customDomain<A:Numeric>() -> A { A.zero + 1 } // e(i)*e(i) = 1 is the current domain
+
 public struct e {
   var index:UInt8
 }
@@ -23,6 +25,17 @@ extension e:CustomStringConvertible {
 }
 
 extension e:Hashable { }
+
+public func sign<A:Numeric>(_ lhs:e, _ rhs:e) -> A {
+  if lhs > rhs { return A.zero - 1}
+  return A.zero + 1
+}
+
+public func sign<A:Numeric>(_ xs:[e]) -> A  {
+  
+  return A.zero + 1
+}
+
 
 //let e0 = 1.0 |^| e(0)
 //internal let e1 = 1.0 |^| e(1)

@@ -34,8 +34,10 @@ func |^|(_ lhs:e, _ rhs:e) -> [e] {
 }
 
 func |^|<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
+  let s:A = sign(lhs, rhs)
   if lhs == rhs { return (A.zero, []) }
-  return (A.zero + 1, [lhs, rhs])
+  if lhs > rhs { return  (s, [rhs, lhs]) }
+  return (s, [lhs, rhs])
 }
 
 func |^|<A:Numeric> (_ lhs:A, _ rhs:e) -> (A, e) {
@@ -55,14 +57,17 @@ func |^|<A:Numeric> (_ lhs:[e], _ rhs:[A]) -> [(A, e)] {
 }
 
 public func|^|<A:Numeric> (_ lhs:A, _ rhs:(A,e)) -> (A,e) {
+  if lhs == 0 { return (A.zero, e(0)) }
   return (lhs * rhs.0, rhs.1)
 }
 
 func |^|<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> (A, [e]) {
+  let s:A = sign(lhs.1, rhs.1)
   if lhs.1 == rhs.1 {
-    return (A.zero + 1, [lhs.1, rhs.1])
+    return (A.zero, [])
   }
-  return (lhs.0 * rhs.0, [lhs.1, rhs.1])
+  if lhs.1 > rhs.1 { return ((lhs.0 * rhs.0)*s, [rhs.1, lhs.1]) }
+  return ((lhs.0 * rhs.0), [lhs.1, rhs.1])
 }
 
 func |^|<A:Numeric>(_ lhs:[(A,e)], _ rhs:[(A,e)]) -> [(A, [e])] {
@@ -80,6 +85,7 @@ public func|^|<A:Numeric> (_ lhs:(A,[e]), _ rhs:(A,e)) -> (A, [e]) {
   var mv = [e]()
   mv.append(contentsOf: lhs.1)
   mv.append(rhs.1)
+//  let s:A = sign(mv)
   return (lhs.0 * rhs.0, mv)
 }
 
@@ -121,6 +127,11 @@ public func |^|<A:Numeric> (_ lhs:A, _ rhs:(A, [e])) -> (A, [e]) {
 public func |^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:A) -> (A, [e]) {
   rhs |^| lhs
 }
+//
+//public func|^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e])) -> (A, [e]) {
+////  return A.zero
+//  
+//}
 
 
   //https://www.euclideanspace.com/maths/algebra/vectors/related/bivector/index.htm

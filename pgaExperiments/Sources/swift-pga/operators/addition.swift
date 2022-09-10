@@ -137,3 +137,7 @@ public func |+|<A:Numeric> (_ lhs:(A,e), _ rhs:(A,e)) -> [(A,e)] {
   return reduce(with: |+|, [lhs, rhs])
 }
 
+public func |+|<A:Numeric> (_ lhs:[(A,e)], _ rhs:[(A,e)]) -> [(A,e)] {
+  return reduce(with: |+|, [lhs, rhs])
+}
+

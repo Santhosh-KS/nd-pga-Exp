@@ -1,7 +1,6 @@
 
 import Foundation
 
-func customDomain<A:Numeric>() -> A { A.zero + 1 } // e(i)*e(i) = 1 is the current domain
 
 infix operator |||:multiplicationProcessingOrder
 
@@ -71,5 +70,9 @@ public func |||<A:Numeric> (_ lhs:A, _ rhs:(A, [e])) -> A {
 }
 
 public func |||<A:Numeric> (_ lhs:(A, [e]), _ rhs:A) -> A {
+  return A.zero
+}
+
+public func|||<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e])) -> A {
   return A.zero
 }

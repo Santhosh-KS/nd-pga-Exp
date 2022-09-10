@@ -150,7 +150,7 @@ internal func reduce<A:Numeric>(toMultivector xs: [(A, [e])]) -> [(A, [e])] {
 //[[(A, [e])]]
 func reduce<A:Numeric>(with f:@escaping (A,A) -> A,
                        _ xs:[[(A, [e])]]) -> [(A, [e])] {
-  reduce( with:f,xs |> flatmap)
+  reduce( with:f,xs |> flatmap) |> compactMap 
 }
 
 internal func reduce<A>(with f:@escaping (A, A) -> A,
@@ -248,3 +248,13 @@ public func antiCommutativity<A:Numeric>(_ es:[e]) -> (A, [e]) {
   }
   return (A.zero - 1, es.reversed()) // --> this is one way to anticommute
 }
+
+//[(A, [e])]
+
+//public func compactMap<A:Numeric>(_ xs:[(A, [e])]) -> [(A, [e])] {
+//  var retVal = [(A, [e])]()
+//  for (val, xes) in xs {
+//    if val != 0 && !xes.isEmpty { retVal.append((val,xes)) }
+//  }
+//  return retVal
+//}
