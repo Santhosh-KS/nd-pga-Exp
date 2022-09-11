@@ -1,6 +1,6 @@
 import Foundation
 
-internal func wedge0<A:Numeric>() -> (A,[e]) { (A.zero, []) }
+internal func wedge0<A:Numeric>() -> (A,[e]) { (A.zero, [e(0)]) }
 
 
 internal func getBaseVectors<A:Numeric>(_ mulVecs:[(A,[e])]) -> [[e]] {
@@ -225,11 +225,12 @@ internal func removeDuplicates(_ xs:[e]) -> [e] {
   return retVal
 }
 
-//internal func grade(_ mulVecs:[e]) -> UInt8 {
-//  mulVecs.sorted(by: <).last!.index
-//}
+func grade(_ mulVecs:[e]) -> UInt8 {
+  if mulVecs.isEmpty { return 0 }
+  return UInt8(mulVecs.count)
+}
 
-internal func complement(_ vec:[e]) -> [e] {
+func complement(_ vec:[e]) -> [e] {
   // NOTE: curryently focusing only on 3D
   if vec.isEmpty { return [e(1), e(2), e(3)] }
   else if vec == [e(1)] { return [e(2), e(3)] }

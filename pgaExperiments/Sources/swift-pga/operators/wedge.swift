@@ -35,14 +35,15 @@ func |^|(_ lhs:e, _ rhs:e) -> [e] {
 
 func |^|<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
   let s:A = sign(lhs, rhs)
-  if lhs == rhs { return (s, []) }
+  if lhs == rhs { return (s, [e(0)]) }
   if lhs > rhs { return  (s, [rhs, lhs]) }
   return (s, [lhs, rhs])
 }
 
 func |^|<A:Numeric> (_ lhs:[e], _ rhs:[e]) -> [(A, [e])] {
-  zip2(with: |^|)(lhs, rhs)
-  
+//  zip2(with: |^|)(lhs, rhs)
+  if lhs == rhs { return [ (A.zero + 1, [e(0)])]}
+  return zip2(with: |^|)(lhs, rhs)
 }
 
 func |^|<A:Numeric> (_ lhs:A, _ rhs:e) -> (A, e) {
@@ -135,16 +136,14 @@ public func |^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:A) -> (A, [e]) {
 }
 
 public func|^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e])) -> [(A, [e])] {
-  if lhs.0 == A.zero || rhs.0 == A.zero { return [wedge0()] }
+  if lhs.0 == A.zero || rhs.0 == A.zero { return [] }
   let tmp:[(A, [e])] = lhs.1 |^| rhs.1
   var retVal = [(A, [e])]()
-  retVal.append((lhs.0 * tmp.first!.0, lhs.1.sorted()))
-  retVal.append((rhs.0 * tmp.last!.0 , rhs.1.sorted()))
-  let val = reduce(with:|||, retVal |> compactMap)
-  return val
+  retVal.append((lhs.0 * tmp.first!.0, tmp.first!.1))
+  retVal.append((rhs.0 * tmp.last!.0 , tmp.first!.1))
+  return reduce(with: |||, retVal)
 }
 
-//[(A, [e])]
 public func|^|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, [e])]) -> [(A, [e])] {
   reduce(with: |||, zip2(with: |^|)(lhs, rhs) |> flatmap)
 }

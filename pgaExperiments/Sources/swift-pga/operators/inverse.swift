@@ -18,12 +18,15 @@ public func Inverse<A:Numeric & FloatingPoint>(_ multiVec:(A,[e]) ) -> (A, [e]) 
 
 public func Inverse<A:Numeric & FloatingPoint>(_ multiVec:[(A,[e])] ) -> [(A, [e])] {
   let nr = multiVec.map { Inverse($0) }
-  print("nr = ", nr)
-  let dr = multiVec |*| nr
+  print("before nr = ", nr)
+  let dr = (multiVec |*| nr).first!.0
   print("dr = ", dr)
-  return dr
+  var retVal = [(A, [e])]()
+  nr.forEach { pairs in
+    retVal.append((pairs.0/dr, pairs.1))
+  }
+  return retVal
 }
-
 
 precedencegroup divisionProcessingOrder {
   associativity:left
