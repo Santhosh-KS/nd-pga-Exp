@@ -112,4 +112,10 @@ public func |*|<A:Numeric> (_ lhs:(A, [e]), _ rhs:A) -> [(A, [e])] {
   lhs ||| rhs |+| lhs |^| rhs
 }
 
-//public func|*|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e]))
+public func|*|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e])) -> [(A, [e])] {
+  lhs ||| rhs |+| lhs |^| rhs
+}
+
+public func|*|<A:Numeric> (_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
+  reduce(with: |*|, zip2(with: |*|)(lhs, rhs))
+}

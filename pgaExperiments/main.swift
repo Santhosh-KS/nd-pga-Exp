@@ -20,20 +20,16 @@ let e12 = (e1 |*| e2).first!
 let e21 = (e2 |*| e1).first!
 //let e23 = e(2) |*| e(3)
 let e23 = (e2 |*| e3).first!
+let e32 = (e3 |*| e2).first!
 let e31 = (e3 |*| e1).first!
 
 print("e12 =",e12)
 print("e21 =",e21)
 print("e23 =",e23)
+print("e32 =",e32)
 print("e31 =",e31)
 
-let e123 = (e12 |*| e3).first!
-let e312 = (e3 |*| e12).first!
-let e231 = (e23 |*| e1).first!
 
-print("e123 =",e123)
-print("e321 =",e312)
-print("e231 =",e231)
 
 let e_10 = (10.0 |*| e1).first!
 print("e_10 =",e_10)
@@ -72,7 +68,7 @@ print("inve1 =",inve1)
 let inve2 = Inverse(e(2))
 print("inve2 =",inve2)
 
-let inve12:(Double, [e]) =  e(1)/e(2)
+let inve12:(Double, [e]) =  e(1)|/|e(2)
 print("inve12 =",inve12)
 
 let inve12_1:(Double, [e]) =  Inverse(e(1), e(2))
@@ -88,6 +84,58 @@ print("eq2 =",eq2)
 let seq = eq1 |*| eq2
 print("eq1 |*| eq2 =",seq.first!)
 
+let e123 = (e12 |*| e3).first!
+let e312 = (e3 |*| e12).first!
+let e231 = (e23 |*| e1).first!
+let e321 = (e32 |*| e1).first!
+
+print("e123 =",e123)
+print("e312 =",e312)
+print("e231 =",e231)
+print("e321 =",e321)
+
+let e1234 = (e123 |*| e4).first!
+let e3124 = (e312 |*| e4).first!
+let e2314 = (e231 |*| e4).first!
+let e3214 = (e321 |*| e4).first!
+
+print("e1234 =",e1234)
+print("e3124 =",e3124)
+print("e2314 =",e2314)
+print("e3214 =",e3214)
+
+
+let e1221 = e12 |*| e21
+print("e1221 = ", e1221)
+
+let inv_e12 = Inverse(e12)
+print("inv_e12 = ", inv_e12)
+
+
+let ae12 = 10 |*| e12
+let be23 = 20 |*| e23
+
+print("ae12", ae12)
+print("be23", be23)
+
+let ae21 = 10 |*| e21
+let be32 = 20 |*| e32
+
+print("ae21", ae21)
+print("be32", be32)
+
+let ae12Plusbe23 = ae12 |+| be23
+print("ae12 |+| be23 = ", ae12Plusbe23)
+
+let ae21Plusbe32 = ae21 |+| be32
+print("ae21 |+| be32 = ", ae21Plusbe32)
+
+
+let ae12Plusbe23Mulae21Plusbe32 = ae12Plusbe23 |*| ae21Plusbe32
+print(" ae12Plusbe23 |*| ae21Plusbe32 = ", ae12Plusbe23Mulae21Plusbe32)
+//let ae12Plusbe23Mulae12Plusbe23 = ae12Plusbe23 |*| ae12Plusbe23
+//print("ae12Plusbe23 |*| ae12Plusbe23 = ",ae12Plusbe23Mulae12Plusbe23)
 //
-//let e1221 = e12 |*| e21
-//print("e1221 = ", e1221)
+//
+//let inv_ae12Plusbe23 = Inverse(ae12Plusbe23)
+//print("Inverse(ae12 |+| be23) = ", inv_ae12Plusbe23)

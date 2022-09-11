@@ -141,3 +141,13 @@ public func |+|<A:Numeric> (_ lhs:[(A,e)], _ rhs:[(A,e)]) -> [(A,e)] {
   return reduce(with: |+|, [lhs, rhs])
 }
 
+//[(A, [e])]
+
+public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e])) -> [(A, [e])] {
+  reduce(with: |+|, [lhs, rhs] |> compactMap )
+}
+
+public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, [e])]) -> [(A, [e])] {
+  reduce(with: |+|, zip2(with: |+|)(lhs, rhs) |> compactMap)
+}
+

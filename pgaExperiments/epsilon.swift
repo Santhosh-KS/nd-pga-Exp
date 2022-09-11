@@ -32,8 +32,26 @@ public func sign<A:Numeric>(_ lhs:e, _ rhs:e) -> A {
 }
 
 public func sign<A:Numeric>(_ xs:[e]) -> A  {
-  
-  return A.zero + 1
+  let sorted = xs.sorted()
+  if xs == sorted { return A.zero + 1 }
+  // TODO: Think of better approach than bubblesort
+  return bubbleSort(xs)
+ 
+}
+
+func bubbleSort<A:Numeric> (_ xs: [e]) -> A {
+  guard xs.count > 1 else { return A.zero + 1}
+  var sortedArray = xs
+  var retVal:A = A.zero + 1
+  for i in 0..<sortedArray.count {
+    for j in 0..<sortedArray.count-i-1 {
+      if sortedArray[j]>sortedArray[j + 1] {
+        sortedArray.swapAt(j + 1, j)
+        retVal *= -1
+      }
+    }
+  }
+  return retVal
 }
 
 

@@ -35,9 +35,14 @@ func |^|(_ lhs:e, _ rhs:e) -> [e] {
 
 func |^|<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
   let s:A = sign(lhs, rhs)
-  if lhs == rhs { return (A.zero, []) }
+  if lhs == rhs { return (s, []) }
   if lhs > rhs { return  (s, [rhs, lhs]) }
   return (s, [lhs, rhs])
+}
+
+func |^|<A:Numeric> (_ lhs:[e], _ rhs:[e]) -> [(A, [e])] {
+  zip2(with: |^|)(lhs, rhs)
+  
 }
 
 func |^|<A:Numeric> (_ lhs:A, _ rhs:e) -> (A, e) {
@@ -85,8 +90,8 @@ public func|^|<A:Numeric> (_ lhs:(A,[e]), _ rhs:(A,e)) -> (A, [e]) {
   var mv = [e]()
   mv.append(contentsOf: lhs.1)
   mv.append(rhs.1)
-//  let s:A = sign(mv)
-  return (lhs.0 * rhs.0, mv)
+  let s:A = sign(mv)
+  return (lhs.0 * rhs.0*s, mv.sorted(by: <))
 }
 
 public func|^|<A:Numeric> (_ lhs:[(A,[e])], _ rhs:[(A,e)]) -> [(A, [e])] {
@@ -104,7 +109,8 @@ public func|^|<A:Numeric> (_ lhs:(A,e), _ rhs:(A,[e])) -> (A, [e]) {
   var mv = [e]()
   mv.append(lhs.1)
   mv.append(contentsOf: rhs.1)
-  return (lhs.0 * rhs.0, mv)
+  let s:A = sign(mv)
+  return (lhs.0*rhs.0*s, mv.sorted(by: <))
 }
 
 public func|^|<A:Numeric> (_ lhs:[(A,e)], _ rhs:[(A,[e])]) -> [(A, [e])] {
@@ -127,18 +133,26 @@ public func |^|<A:Numeric> (_ lhs:A, _ rhs:(A, [e])) -> (A, [e]) {
 public func |^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:A) -> (A, [e]) {
   rhs |^| lhs
 }
-//
-//public func|^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e])) -> (A, [e]) {
-////  return A.zero
-//  
-//}
 
+public func|^|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e])) -> [(A, [e])] {
+  if lhs.0 == A.zero || rhs.0 == A.zero { return [wedge0()] }
+  let tmp:[(A, [e])] = lhs.1 |^| rhs.1
+  var retVal = [(A, [e])]()
+  retVal.append((lhs.0 * tmp.first!.0, lhs.1.sorted()))
+  retVal.append((rhs.0 * tmp.last!.0 , rhs.1.sorted()))
+  let val = reduce(with:|||, retVal |> compactMap)
+  return val
+}
 
-  //https://www.euclideanspace.com/maths/algebra/vectors/related/bivector/index.htm
-  // (a+b)^(a+b) = a^a + b^a + a^b + b^b = 0
-  // a^a = 0 and b^b = 0,
-  // a^b = -b^a
+//[(A, [e])]
+public func|^|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, [e])]) -> [(A, [e])] {
+  reduce(with: |||, zip2(with: |^|)(lhs, rhs) |> flatmap)
+}
 
-  // (a+b+c)^(a+b+c)^(a+b+c)
+//https://www.euclideanspace.com/maths/algebra/vectors/related/bivector/index.htm
+// (a+b)^(a+b) = a^a + b^a + a^b + b^b = 0
+// a^a = 0 and b^b = 0,
+// a^b = -b^a
+// (a+b+c)^(a+b+c)^(a+b+c)
 
 

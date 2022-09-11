@@ -1,7 +1,9 @@
-
-
 public func Inverse(_ basis:e) -> e {
   basis
+}
+
+func Inverse<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
+  lhs|/|rhs
 }
 
 public func Inverse<A:Numeric & FloatingPoint>(_ basis:(A,e) ) -> (A, e) {
@@ -9,13 +11,19 @@ public func Inverse<A:Numeric & FloatingPoint>(_ basis:(A,e) ) -> (A, e) {
   return ( 1/basis.0 , basis.1)
 }
 
-public func Inverse<A:Numeric>(_ basis:(A,[e]) ) -> (A, [e]) {
-  basis
+public func Inverse<A:Numeric & FloatingPoint>(_ multiVec:(A,[e]) ) -> (A, [e]) {
+  let revE = Array(multiVec.1.reversed())
+  return multiVec |/| ((A.zero+1, revE))
 }
 
-func Inverse<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
-  lhs/rhs
+public func Inverse<A:Numeric & FloatingPoint>(_ multiVec:[(A,[e])] ) -> [(A, [e])] {
+  let nr = multiVec.map { Inverse($0) }
+  print("nr = ", nr)
+  let dr = multiVec |*| nr
+  print("dr = ", dr)
+  return dr
 }
+
 
 precedencegroup divisionProcessingOrder {
   associativity:left
@@ -26,16 +34,22 @@ precedencegroup divisionProcessingOrder {
 
 infix operator |/|:divisionProcessingOrder
 
-func /<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
+func |/|<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
   let s:A = sign(lhs, rhs)
   if lhs == rhs { return (s+1, []) }
   if lhs > rhs { return (s, [rhs, lhs]) }
   return (s, [lhs, rhs])
 }
 
-func /<A:Numeric & FloatingPoint> (_ lhs:(A,e), _ rhs:(A, e)) -> (A, [e]) {
+func |/|<A:Numeric & FloatingPoint> (_ lhs:(A,e), _ rhs:(A, e)) -> (A, [e]) {
   (Inverse(lhs) |*| Inverse(rhs)).first!
 }
 
-//[(Double, [e])]
+func |/|<A:Numeric & FloatingPoint> (_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A,[e]) {
+  (lhs |*| rhs).first!
+}
+
+func |/|<A:Numeric & FloatingPoint>(_ lhs: [(A, [e])], _ rhs: [(A, [e])]) -> [(A, [e])] {
+  zip2(with: |/|)(lhs, rhs) |> compactMap
+}
 
