@@ -10,6 +10,7 @@ print("e1 =",e1)
 print("e2 =",e2)
 print("e3 =",e3)
 print("e4 =",e4)
+let e01 = e0 |*| e1
 
 let r0 = (e(0) |*| 1.0).first!
 let r1 = (e(1) |*| 1.0).first!
@@ -145,3 +146,36 @@ print("ae12Plusbe23 |*| ae12Plusbe23 = ",ae12Plusbe23Mulae12Plusbe23)
 
 let inv_ae12Plusbe23 = Inverse(ae12Plusbe23)
 print("Inverse(ae12 |+| be23) = ", inv_ae12Plusbe23)
+
+print("Grade-1 Table")
+
+let grade1 = [e0,e1,e2,e3,e4]
+// Expected Result
+//    e0,  e1,    e2,  e3, e4
+//e0     0,   e1,   e2,   e3, e4
+//e1  -e01,   1 ,  e12,  e13, e14
+//e2  -e02, -e12,   1 ,  e23, e24
+//e3  -e03, -e13, -e23,   1 , e34
+//e4  -e04, -e14, -e24, -e34, 1
+//print("    :", grade1.map { $0.1 })
+//for outer in grade1 {
+//  var val = "\(outer.1):"
+//  for inner in grade1 {
+//    val += "\((outer |*| inner).first!),"
+//  }
+//  print(val)
+//}
+// Generated Result
+//    :   e(0),                 e(1),                e(2),             e(3),             e(4)]
+//e(0):(0.0, [])           , (1.0, [e(0), e(1)]), (1.0, [e(0), e(2)]) , (1.0, [e(0), e(3)]) , (1.0, [e(0), e(4)]),
+//e(1):(-1.0, [e(0), e(1)]),(1.0, [e(0)])       , (1.0, [e(1), e(2)]) , (1.0, [e(1), e(3)]) , (1.0, [e(1), e(4)]),
+//e(2):(-1.0, [e(0), e(2)]),(-1.0, [e(1), e(2)]), (1.0, [e(0)])       , (1.0, [e(2), e(3)]) , (1.0, [e(2), e(4)]),
+//e(3):(-1.0, [e(0), e(3)]),(-1.0, [e(1), e(3)]), (-1.0, [e(2), e(3)]), (1.0, [e(0)])       , (1.0, [e(3), e(4)]),
+//e(4):(-1.0, [e(0), e(4)]),(-1.0, [e(1), e(4)]), (-1.0, [e(2), e(4)]), (-1.0, [e(3), e(4)]), (1.0, [e(0)]),
+
+let e0e0 = e0 |*| e0
+print("e0e0 = ", e0e0)
+let e03 = e0|*|e3
+print(e03)
+let n = e3 |*| e01
+print(n)

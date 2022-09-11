@@ -43,7 +43,10 @@ public func|||<A:Numeric> (_ lhs:A, _ rhs:(A,e)) -> A {
 }
 
 func |||<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> A {
-  if lhs.1 == rhs.1 { return lhs.0 ||| rhs.0}
+  if lhs.1 == rhs.1 {
+    if lhs.1 == e(0) { return A.zero }
+    else { return lhs.0 ||| rhs.0 }
+  }
   return A.zero
 }
 

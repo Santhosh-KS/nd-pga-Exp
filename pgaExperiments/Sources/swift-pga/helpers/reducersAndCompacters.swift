@@ -1,6 +1,6 @@
 import Foundation
 
-internal func wedge0<A:Numeric>() -> (A,[e]) { (A.zero, [e(0)]) }
+internal func wedge0<A:Numeric>() -> (A,[e]) { (A.zero, []) }
 
 
 internal func getBaseVectors<A:Numeric>(_ mulVecs:[(A,[e])]) -> [[e]] {

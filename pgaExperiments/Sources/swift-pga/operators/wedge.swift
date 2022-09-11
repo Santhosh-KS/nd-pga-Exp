@@ -81,6 +81,7 @@ func |^|<A:Numeric>(_ lhs:[(A,e)], _ rhs:[(A,e)]) -> [(A, [e])] {
 }
 
 public func|^|<A:Numeric> (_ lhs:(A,[e]), _ rhs:(A,e)) -> (A, [e]) {
+  if rhs.1 == e(0) { return wedge0() }
   var foundSameBasis = false
   lhs.1.forEach { le in
     if le == rhs.1 {
@@ -100,6 +101,7 @@ public func|^|<A:Numeric> (_ lhs:[(A,[e])], _ rhs:[(A,e)]) -> [(A, [e])] {
 }
 
 public func|^|<A:Numeric> (_ lhs:(A,e), _ rhs:(A,[e])) -> (A, [e]) {
+  if lhs.1 == e(0) { return wedge0() }
   var foundSameBasis = false
   rhs.1.forEach { re in
     if re == lhs.1 {
