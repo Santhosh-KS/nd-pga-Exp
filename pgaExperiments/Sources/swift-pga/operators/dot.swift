@@ -2,7 +2,7 @@
 import Foundation
 
 
-infix operator |||:multiplicationProcessingOrder
+infix operator |||:MultiplicationProcessingOrder
 
 func |||<A:Numeric>(_ lhs:A, _ rhs:A) -> A {
   return (lhs * rhs)

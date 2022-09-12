@@ -1,11 +1,12 @@
 import Foundation
 
-precedencegroup additionEvaluation {
+precedencegroup AdditionEvaluation {
   associativity:left
   lowerThan:AdditionPrecedence, MultiplicationPrecedence
+  higherThan:ForwardApplication
 }
 
-infix operator |+|:additionEvaluation
+infix operator |+|:AdditionEvaluation
 
 public func |+|<A:Numeric> (_ lhs:A, _ rhs:A)  -> A {
   lhs+rhs

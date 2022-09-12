@@ -155,7 +155,6 @@ func reduce<A:Numeric>(with f:@escaping (A,A) -> A,
 
 internal func reduce<A>(with f:@escaping (A, A) -> A,
                         _ xs:[(A,[e])]) -> [(A,[e])] {
-  // hereadfs
   var result = [(A,[e])]()
   xs.forEach { pair in
     var index = 0

@@ -10,7 +10,16 @@ print("e1 =",e1)
 print("e2 =",e2)
 print("e3 =",e3)
 print("e4 =",e4)
-let e01 = e0 |*| e1
+
+let e01 = (e0 |*| e1).first!
+let e02 = (e0 |*| e2).first!
+let e03 = (e0 |*| e3).first!
+let e04 = (e0 |*| e4).first!
+
+print("e01 =",e01)
+print("e02 =",e02)
+print("e03 =",e03)
+print("e04 =",e04)
 
 let r0 = (e(0) |*| 1.0).first!
 let r1 = (e(1) |*| 1.0).first!
@@ -20,11 +29,15 @@ print("r1 =",r1)
 
 print("Grade-2 Basis vectors....")
 let e12 = (e1 |*| e2).first!
+let e31 = (e3 |*| e1).first!
+let e23 = (e2 |*| e3).first!
+let e13 = (e1 |*| e3).first!
+
 let e21 = (e2 |*| e1).first!
 //let e23 = e(2) |*| e(3)
-let e23 = (e2 |*| e3).first!
+
 let e32 = (e3 |*| e2).first!
-let e31 = (e3 |*| e1).first!
+
 
 print("e12 =",e12)
 print("e21 =",e21)
@@ -91,6 +104,12 @@ print ("c =",c)
 let d =  b |+| a |+| (-300, e(5))
 print("d =",d)
 
+print("Grade-4 Basis Vectors....")
+
+let e021 = (e0 |*| e21).first!
+let e013 = (e0 |*| e13).first!
+let e032 = (e0 |*| e32).first!
+
 
 let e123 = (e12 |*| e3).first!
 let e312 = (e3 |*| e12).first!
@@ -128,9 +147,9 @@ print("inve12_1 =",inve12_1)
 
 let e1221 = e12 |*| e21
 print("e1221 = ", e1221)
-
-let inv_e12 = Inverse(e12)
-print("inv_e12 = ", inv_e12)
+//
+//let inv_e12 = Inverse(e12)
+//print("inv_e12 = ", inv_e12)
 
 let ae12Plusbe23 = ae12 |+| be23
 print("ae12 |+| be23 = ", ae12Plusbe23)
@@ -144,12 +163,24 @@ print(" ae12Plusbe23 |*| ae21Plusbe32 = ", ae12Plusbe23Mulae21Plusbe32)
 let ae12Plusbe23Mulae12Plusbe23 = ae12Plusbe23 |*| ae12Plusbe23
 print("ae12Plusbe23 |*| ae12Plusbe23 = ",ae12Plusbe23Mulae12Plusbe23)
 
-let inv_ae12Plusbe23 = Inverse(ae12Plusbe23)
-print("Inverse(ae12 |+| be23) = ", inv_ae12Plusbe23)
+//print("before inverse")
+//let inv_ae12Plusbe23 = Inverse(ae12Plusbe23)
+//print("Inverse(ae12 |+| be23) = ", inv_ae12Plusbe23)
+//print("After inverse")
+let e0112 = e01 |*| e12
+print("e01 |*| e12 = ", e0112)
 
-print("Grade-1 Table")
+let e11 = e1 |*| e1 
+print("e11 = ", e11)
+let mv1 = [e(1), e(2)]
+let mv2 = [e(2), e(3)]
+let r:[(Double, [e])] = mv1 |^| mv2
+print(r)
 
-let grade1 = [e0,e1,e2,e3,e4]
+
+//print("Grade-1 Table")
+
+
 // Expected Result
 //    e0,  e1,    e2,  e3, e4
 //e0     0,   e1,   e2,   e3, e4
@@ -157,6 +188,21 @@ let grade1 = [e0,e1,e2,e3,e4]
 //e2  -e02, -e12,   1 ,  e23, e24
 //e3  -e03, -e13, -e23,   1 , e34
 //e4  -e04, -e14, -e24, -e34, 1
+
+func ClayTablePrint<A:Numeric> (_ xs:[(A, [e])]) {
+  for outer in xs {
+    var val = "\(outer.1):"
+    for inner in xs {
+      val += "\((outer |*| inner).first!),"
+    }
+    print(val)
+  }
+}
+let grade1 = [e0,e1,e2,e3]
+let grade2 = [e01,e02,e03,e12,e31,e23]
+let grade3 = [e021,e013,e032,e123]
+let e0123 = (e0 |*| e123).first!
+let grade4 = [e0123]
 //print("    :", grade1.map { $0.1 })
 //for outer in grade1 {
 //  var val = "\(outer.1):"
@@ -165,6 +211,22 @@ let grade1 = [e0,e1,e2,e3,e4]
 //  }
 //  print(val)
 //}
+//print("    :", grade2.map { $0.1 })
+//ClayTablePrint(grade2)
+//
+//    : e01, e02, e03, e12,  e13, e23
+//e01 :   0,   0,   0, e01, -e01, e12,
+//e02 :   0,   0,   0, e01, -e01, e02,
+//e03 :   0,   0,   0,-e01, -e01, e02,
+//e12 : e01,-e01,-e01,   1,   -1, e12,
+//e13 :-e01,-e01, e01,   1,    1,-e12,
+//e23 : e02, e02,-e02, e12, e12,    1,
+
+
+//print("    :", grade3.map { $0.1 })
+//ClayTablePrint(grade3)
+//print("    :", grade4.map { $0.1 })
+//ClayTablePrint(grade4)
 // Generated Result
 //    :   e(0),                 e(1),                e(2),             e(3),             e(4)]
 //e(0):(0.0, [])           , (1.0, [e(0), e(1)]), (1.0, [e(0), e(2)]) , (1.0, [e(0), e(3)]) , (1.0, [e(0), e(4)]),
@@ -173,9 +235,13 @@ let grade1 = [e0,e1,e2,e3,e4]
 //e(3):(-1.0, [e(0), e(3)]),(-1.0, [e(1), e(3)]), (-1.0, [e(2), e(3)]), (1.0, [e(0)])       , (1.0, [e(3), e(4)]),
 //e(4):(-1.0, [e(0), e(4)]),(-1.0, [e(1), e(4)]), (-1.0, [e(2), e(4)]), (-1.0, [e(3), e(4)]), (1.0, [e(0)]),
 
-let e0e0 = e0 |*| e0
-print("e0e0 = ", e0e0)
-let e03 = e0|*|e3
-print(e03)
-let n = e3 |*| e01
-print(n)
+//let e0e0 = e0 |*| e0
+//print("e0e0 = ", e0e0)
+//let e02 = e0|*|e2
+//let e03 = e0|*|e3
+//let e04 = e0|*|e4
+//print(e04)
+
+//let e00123 = e0 |*| e0123
+//let n = e0123 |*| e01
+//print(n)
