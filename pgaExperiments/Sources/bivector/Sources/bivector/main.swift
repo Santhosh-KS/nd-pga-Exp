@@ -1,4 +1,10 @@
 import Foundation
+let e1212_mul:[(Double, [e])] = [e(1),e(2)] |*| [e(1), e(2)]
+print(e1212_mul)
+let e1212_inner:(Double, [e]) = [e(1),e(2)] ||| [e(1), e(2)]
+print(e1212_inner)
+let e1212_outer:(Double, [e]) = [e(1),e(2)] |^| [e(1), e(2)]
+print(e1212_outer)
 
 let e0 = 1 |*| e(0)
 let e1 = 1 |*| e(1)
@@ -89,20 +95,52 @@ print("e031", e031)
 print("e032", e032)
 print("e033", e033)
 
-
 let grade1 = [e0, e1, e2, e3]
-var header = "||"
 
-for x in grade1 {
-  header += "\(x.1)|"
+print("######## Grade-1 Table #######")
+
+let g1p = grade1.map { ($0.0, [$0.1]) }
+print((g1p |> tabulate).joined(separator: "\n"))
+
+func shorthand(_ xs:[e]) -> String {
+  xs.map { val in "\(val.index)" }.joined(separator: "")
 }
-print(header)
-let l = Array<String>.init(repeating: ":---:", count: grade1.count+1).joined(separator: "|")
-print(l)
-for g in grade1 {
-  var k = "|\(g.1) |"
-  for i in grade1 {
-    k += " \(g |*| i) |"
+
+func tabulate<A:Numeric & BinaryInteger>(_ xs:[(A,[e])]) -> [String] {
+  var retVal = [String]()
+  var header = "||"
+  let l = Array<String>.init(repeating: ":---:", count: xs.count+1).joined(separator: "|")
+
+  for x in xs {
+    header += "e\(shorthand(x.1))|"
   }
-  print(k)
+  retVal.append(header)
+  retVal.append(l)
+
+  for g in xs {
+    var k = "|e\(shorthand(g.1)) |"
+    for i in xs {
+      let v = g |*| i
+      if v.isEmpty {
+        k += " 0 |"
+
+      } else {
+        k += "\(Int(v.first!.0) > 0 ? "" : "-" )"
+        k += (v.first!.1.isEmpty ? "1" : ("e" + "\(shorthand(v.first!.1))")) + "|"
+      }
+    }
+    retVal.append(k)
+  }
+  return retVal
 }
+
+let e123 = e12 |*| e3
+let e0123 = e01 |*| e23
+var grade2:[(Int, [e])] = g1p + [e01, e02, e03, e12, e31, e23]
+//grade2 += e012 //+ e013 + e032 + e123 + e0123
+
+let pg2 = tabulate(grade2)
+print("######## Grade-2 Table #######")
+print(pg2.joined(separator: "\n"))
+
+

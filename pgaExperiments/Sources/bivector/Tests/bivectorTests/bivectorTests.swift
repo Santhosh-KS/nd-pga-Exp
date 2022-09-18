@@ -714,6 +714,10 @@ final class bivectorTests: XCTestCase  {
     let inner_2e320_5e1:(Double, [e]) = (2, [e(3),e(2),e(0)]) ||| (5, [e(1)])
     XCTAssert(inner_2e320_5e1.1.isEmpty)
     XCTAssertEqual(inner_2e320_5e1.0, 0)
+    
+    let inner_1e12_1e12:(Double, [e]) = (1, [e(1),e(2)]) ||| (1, [e(1), e(2)])
+    XCTAssert(inner_1e12_1e12.1.isEmpty)
+    XCTAssertEqual(inner_1e12_1e12.0, -1)
   }
   
   func testScalarMulGrade1() {
@@ -814,9 +818,8 @@ final class bivectorTests: XCTestCase  {
     XCTAssert(outer_1e0_1e0_rhs.isEmpty)
     
     let outer_1e00_1e0 = (1, [e(0),e(0)]) |*| (1, e(0))
-    XCTAssertEqual(outer_1e00_1e0.count, 1)
-    XCTAssertEqual(outer_1e00_1e0.first!.0, 1)
-    XCTAssertEqual(outer_1e00_1e0.first!.1, [e(0)])
+    XCTAssert(outer_1e00_1e0.isEmpty)
+   
     
     let outer_1e1_1e1 = (1, [e(1)]) |*| (1, e(1))
     XCTAssert(outer_1e1_1e1.first!.1.isEmpty)
@@ -910,8 +913,8 @@ final class bivectorTests: XCTestCase  {
     XCTAssert(outer_1e0_1e0.isEmpty)
     
     let outer_1e00_1e00 = (1, [e(0),e(0)]) |*| (1, [e(0),e(0)])
-    XCTAssert(outer_1e00_1e00.first!.1.isEmpty)
-    XCTAssertEqual(outer_1e00_1e00.first!.0, 1)
+    XCTAssert(outer_1e00_1e00.isEmpty)
+
     
     let outer_1e1_1e1 = (1, [e(1)]) |*| (1, [e(1)])
     XCTAssert(outer_1e1_1e1.first!.1.isEmpty)
