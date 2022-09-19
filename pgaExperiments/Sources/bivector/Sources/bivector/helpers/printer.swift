@@ -53,8 +53,8 @@ func tabulate<A:Numeric & Comparable>(_ xs:[(A,[e])],
       if v.isEmpty {
         k += " 0 |"
       } else {
-        k += "\((v.first!.0) > A.zero ? "" : "-" )"
-        k += (v.first!.1.isEmpty ? "1" : ("e" + "\(shorthand(v.first!.1))")) + "|"
+        k += "\((v.first!.0) > A.zero ? "" : " -" )"
+        k += (v.first!.1.isEmpty ? "1" : ("e" + "\(shorthand(v.first!.1))")) + " |"
       }
     }
     retVal.append(k)
@@ -74,8 +74,8 @@ func tabulate<A:Numeric & Comparable>(_ xs:[(A,[e])],
       if v.0 == 0 {
         k += " 0 |"
       } else {
-        k += "\((v.0) > A.zero ? "" : "-" )"
-        k += (v.1.isEmpty ? "1" : ("e" + "\(shorthand(v.1))")) + "|"
+        k += "\((v.0) > A.zero ? "" : " -" )"
+        k += (v.1.isEmpty ? "1" : ("e" + "\(shorthand(v.1))")) + " |"
       }
     }
     retVal.append(k)
