@@ -40,10 +40,9 @@ func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
   if lhs.1.sorted() == rhs.1.sorted() {
     if contains(lhs.1, e(0)) { return (0, []) }
     else {
-      if lhs.1.count == 2 { // TODO: Fix this hack e12 ||| e12 = -1 
-        return normalized((lhs.0 * rhs.0 * -1, []))
-      }
-      return normalized((lhs.0 * rhs.0, []))
+      var retVal:(A, [e]) = normalized((lhs.0|||rhs.0, (lhs.1 + rhs.1)))
+      retVal.1 = (retVal.1 |> removeDuplicates)
+      return retVal
     }
   } else {
     if contains(lhs.1, e(0)) && contains(rhs.1, e(0)) { return (0, []) }

@@ -964,4 +964,23 @@ final class bivectorTests: XCTestCase  {
     XCTAssertEqual(outer_2e320_5e1.first!.1, [e(0), e(1), e(2), e(3)])
     XCTAssertEqual(outer_2e320_5e1.first!.0, -10)
   }
+  
+  func testGeometricProductTable() {
+    let table:[(Double,[e])] = getTable()
+    let geometricTable = tabulate(table, with: |*|).joined(separator: "\n")
+    XCTAssertEqual(geometricTable, printGeometricTable())
+  }
+  
+  func testInnerProductTable() {
+    let table:[(Double,[e])] = getTable()
+    let geometricTable = tabulate(table, with: |||).joined(separator: "\n")
+    XCTAssertEqual(geometricTable, printInnerProductTable())
+  }
+  
+  func testOuterProductTable() {
+    let table:[(Double,[e])] = getTable()
+    let geometricTable = tabulate(table, with: |^|).joined(separator: "\n")
+    XCTAssertEqual(geometricTable, printOuterProductTable())
+  }
+  
 }
