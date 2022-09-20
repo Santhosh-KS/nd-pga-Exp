@@ -3,11 +3,9 @@ import Foundation
 
 func getTable() -> [(Double, [e])] {
   let grade1 = [e0, e1, e2, e3]
-  let e123 = e12 |*| e3
-  let e0123 = e01 |*| e23
   var table:[(Double, [e])] = grade1.map { ($0.0, [$0.1]) }
   table += [e01, e02, e03, e12, e31, e23]
-  table += e012 + e013 + e032 + e123 + e0123
+  table += [e012, e013, e032, e123, e0123]
   return table
 }
 

@@ -224,10 +224,10 @@ internal func reduce<A:Numeric>(_ xs:[(A,e)]) -> [(A,e)] {
 //  return retVal
 //}
 
-func grade(_ mulVecs:[e]) -> UInt8 {
-  if mulVecs.isEmpty { return 0 }
-  return UInt8(mulVecs.count)
-}
+//func grade(_ mulVecs:[e]) -> UInt8 {
+//  if mulVecs.isEmpty { return 0 }
+//  return UInt8(mulVecs.count)
+//}
 
 func complement(_ vec:[e]) -> [e] {
   // NOTE: curryently focusing only on 3D
