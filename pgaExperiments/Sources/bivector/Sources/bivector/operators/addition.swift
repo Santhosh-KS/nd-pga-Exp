@@ -66,6 +66,20 @@ public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e]))  -> [(A,[e])] {
   }
 }
 
+public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, [e])])  -> [(A,[e])] {
+  if lhs.isEmpty && rhs.isEmpty { return [] }
+  if lhs.isEmpty { return rhs }
+  if rhs.isEmpty { return lhs }
+  
+  var result = [(A,[e])]()
+  for lmlv in lhs {
+    for rmlv in rhs {
+      result.append(contentsOf: lmlv |+| rmlv)
+    }
+  }
+  return result
+}
+
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, e))  -> [(A,[e])] {
   lhs |+| (rhs.0, [rhs.1])
 }

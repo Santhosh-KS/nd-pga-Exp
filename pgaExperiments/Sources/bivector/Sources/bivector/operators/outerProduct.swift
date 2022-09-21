@@ -42,6 +42,16 @@ public func |^|<A:Numeric> (_ lhs:(A,[e]), _ rhs:(A, [e])) -> (A, [e]) {
   return normalized((lhs.0*rhs.0, lhs.1 + rhs.1))
 }
 
+func |^|<A:Numeric>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
+  var retVal = [(A, [e])]()
+  for lmlv in lhs {
+    for rmlv in rhs {
+      retVal.append((lmlv |^| rmlv))
+    }
+  }
+  return retVal |> compactMap
+}
+
 public func |^|<A:Numeric> (_ lhs:(A,[e]), _ rhs:(A, e)) -> (A, [e]) {
   lhs |^| (rhs.0, [rhs.1])
 }

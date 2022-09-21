@@ -74,3 +74,22 @@ func |*|<A:Numeric>(_ lhs:[e], _ rhs: (A,[e])) -> [(A, [e])] {
 func |*|<A:Numeric>(_ lhs:[e], _ rhs: [e]) -> [(A, [e])] {
   (1, lhs) |*| (1, rhs)
 }
+
+func |*|<A:Numeric>(_ lhs:A, _ rhs:(A,[e])) -> [(A, [e])] {
+  (lhs, []) |*| rhs
+}
+
+func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:A) -> [(A, [e])] {
+   lhs |*| (rhs, [])
+}
+
+
+func |*|<A:Numeric>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
+  var retVal = [(A, [e])]()
+  for lmlv in lhs {
+    for rmlv in rhs {
+      retVal.append((lmlv |*| rmlv).first!)
+    }
+  }
+  return reduce(with: |+|, retVal |> compactMap)
+}

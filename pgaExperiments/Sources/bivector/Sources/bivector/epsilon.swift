@@ -101,6 +101,16 @@ public func grade<A:Numeric>(_ exp:(A,[e])) -> UInt8 {
   exp.1.isEmpty ? 0 : UInt8(exp.1.count)
 }
 
+public func grade<A:Numeric>(with val:UInt8, in exp:[(A,[e])]) -> [(A,[e])] {
+  var retVal = [(A,[e])]()
+  for xp in exp {
+    if grade(xp) == val {
+      retVal.append(xp)
+    }
+  }
+  return retVal
+}
+
 enum domain:String {
   case VGA = "VectorSpace Geometric Algebra"
   case STA = "Space Time Algebra"

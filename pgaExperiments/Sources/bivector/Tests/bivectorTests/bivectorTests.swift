@@ -1002,11 +1002,11 @@ final class bivectorTests: XCTestCase  {
     XCTAssertEqual((|~|e3).1, e3.1)
     
     XCTAssertEqual(grade(e113), 1)
-    XCTAssertEqual((|~|e113).0, -1)
+    XCTAssertEqual((|~|e113).0, 1)
     XCTAssertEqual((|~|e113).1, e113.1)
     
     XCTAssertEqual(grade(e131), 1)
-    XCTAssertEqual((|~|e131).0, 1)
+    XCTAssertEqual((|~|e131).0, -1)
     XCTAssertEqual((|~|e131).1, e131.1)
     
   }
@@ -1056,19 +1056,19 @@ final class bivectorTests: XCTestCase  {
   }
   
   func testReverseOfGrade3() {
-    XCTAssertEqual((|~|e123).0, 1)
+    XCTAssertEqual((|~|e123).0, -1)
     XCTAssertEqual((|~|e123).1, e123.1)
     
-    XCTAssertEqual((|~|e213).0, -1)
+    XCTAssertEqual((|~|e213).0, 1)
     XCTAssertEqual((|~|e213).1, e123.1)
     
-    XCTAssertEqual((|~|e231).0, 1)
+    XCTAssertEqual((|~|e231).0, -1)
     XCTAssertEqual((|~|e231).1, e123.1)
     
-    XCTAssertEqual((|~|e312).0, 1)
+    XCTAssertEqual((|~|e312).0, -1)
     XCTAssertEqual((|~|e312).1, e123.1)
     
-    XCTAssertEqual((|~|e321).0, -1)
+    XCTAssertEqual((|~|e321).0, 1)
     XCTAssertEqual((|~|e321).1, e123.1)
   }
   

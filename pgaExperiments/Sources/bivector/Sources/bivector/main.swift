@@ -46,3 +46,40 @@ print(|~|e321)
 print(grade(e112))
 let b = (e00 |*| e0)
 print(b)
+
+let inv1 = e12|-||
+print(inv1)
+
+print(|~|e123)
+
+// (ae12 + be23)(ae21 + be32)
+let ae12 = 10 |*| e12
+let be23 =  3 |*| e23
+let ae21 = 10 |*| e12
+let be32 =  3 |*| e32
+
+let ae12_plus_be23 = ae12 |+| be23
+let ae21_plus_be32 = ae21 |+| be32
+
+print("ae12_plus_be23 = ", ae12_plus_be23)
+print("ae21_plus_be32 = ", ae21_plus_be32)
+
+let resultGp = (ae12 |+| be23) |*| (ae21 |+| be32)
+print("resultGp = ", resultGp)
+let resultOp = (ae12 |+| be23) |^| (ae21 |+| be32)
+print("resultOp = ", resultOp)
+let resultIp = (ae12 |+| be23) ||| (ae21 |+| be32)
+print("resultIp = ", resultIp)
+
+print(grade(with: 0, in: resultGp))
+print(grade(with: 1, in: resultGp))
+print(grade(with: 2, in: resultGp))
+print(grade(with: 3, in: resultGp))
+
+print("resultIp|-|| = ", resultIp|-||)
+
+//A = 1 + 2*e1 + 3*e12 + 4*e123
+//var A = (1 |*| e0) |+| (2|*|e1) |+| (3|*|e12) |+| (4|*|e123)
+//let A = (1.0 |*| [e(0)])
+//print(A)
+//e12
