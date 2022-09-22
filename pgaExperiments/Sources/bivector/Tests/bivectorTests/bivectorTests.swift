@@ -390,7 +390,7 @@ final class bivectorTests: XCTestCase  {
     XCTAssertEqual(outer_e0.0, 1)
     
     let outer_10e0:(Double, [e]) = (10, e(0)) |^| (10, e(0))
-    XCTAssertEqual(outer_10e0.0, 1)
+    XCTAssertEqual(outer_10e0.0, 100)
     XCTAssertEqual(outer_10e0.1.first, nil)
     
     let outer_10e1_2e1:(Double, [e]) = (10, e(1)) |^| (2, e(1))
@@ -734,7 +734,7 @@ final class bivectorTests: XCTestCase  {
   func testGrade1MulGrade1WithCoefficents() {
     
     let mul_1e0_2e0:(Double, [e]) = (1, e(0)) |*| (2, e(0))
-    XCTAssertEqual(mul_1e0_2e0.0, 1)
+    XCTAssertEqual(mul_1e0_2e0.0, 2)
     XCTAssertEqual(mul_1e0_2e0.1.first, nil)
     
     let mul_2e1_3e1:(Double, [e]) = (2, e(1)) |*| (3, e(1))

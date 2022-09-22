@@ -57,9 +57,7 @@ public func process<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
 }
 
 public func process<A:Numeric> (_ lhs:(A,e), _ rhs:(A,e)) -> (A, [e]) {
-  isEqualBasis(lhs.1, rhs.1) ?
-  (isNullBasis(lhs.1) ?
-   (1,[]) : (lhs.0 * rhs.0, [])) : (lhs.0 * rhs.0, [lhs.1, rhs.1])
+  isEqualBasis(lhs.1, rhs.1) ? (lhs.0 * rhs.0, []) : (lhs.0 * rhs.0, [lhs.1, rhs.1])
 }
 
 public func isEqualBasis(_ lhs:e, _ rhs:e) -> Bool {
