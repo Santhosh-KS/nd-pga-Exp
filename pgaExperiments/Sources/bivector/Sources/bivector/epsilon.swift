@@ -59,7 +59,7 @@ public func process<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
 public func process<A:Numeric> (_ lhs:(A,e), _ rhs:(A,e)) -> (A, [e]) {
   isEqualBasis(lhs.1, rhs.1) ?
   (isNullBasis(lhs.1) ?
-   (0,[]) : (lhs.0 * rhs.0, [])) : (lhs.0 * rhs.0, [lhs.1, rhs.1])
+   (1,[]) : (lhs.0 * rhs.0, [])) : (lhs.0 * rhs.0, [lhs.1, rhs.1])
 }
 
 public func isEqualBasis(_ lhs:e, _ rhs:e) -> Bool {
@@ -72,7 +72,11 @@ public func isNullBasis(_ b:e) -> Bool {
 
 public func normalized<A:Numeric> (_ exp:(A, [e])) -> (A, [e]) {
   let sign:(A, [e]) = bubbleSort(exp.1)
-  return (exp.0 * sign.0, sign.1)
+  return (exp.0 * sign.0, sign.1 == [e(0)] ? [] : sign.1)
+}
+
+public func normalized<A:Numeric> (_ exp:(A, e)) -> (A, [e]) {
+  (exp.0, [exp.1])
 }
 
 public func removeDuplicates(_ xs:[e]) -> [e] {
@@ -98,13 +102,14 @@ public func contains(_ xs:[e], _ val:e) -> Bool {
 }
 
 public func grade<A:Numeric>(_ exp:(A,[e])) -> UInt8 {
-  exp.1.isEmpty ? 0 : UInt8(exp.1.count)
+  exp.1.isEmpty ? 0 : (exp.1 == [e(0)] ?  0 : UInt8(exp.1.count))
 }
 
 public func grade<A:Numeric>(with val:UInt8, in exp:[(A,[e])]) -> [(A,[e])] {
   var retVal = [(A,[e])]()
   for xp in exp {
-    if grade(xp) == val {
+    let grd = grade(xp)
+    if grd == val {
       retVal.append(xp)
     }
   }

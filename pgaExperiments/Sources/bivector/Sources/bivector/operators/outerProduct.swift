@@ -79,3 +79,18 @@ public func |^|<A:Numeric> (_ lhs:[e], _ rhs: (A,[e])) -> (A, [e]) {
 public func |^|<A:Numeric> (_ lhs:[e], _ rhs: [e]) -> (A, [e]) {
   (1, lhs) |^| (1, rhs)
 }
+public func |^|<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> (A,e) {
+  (lhs*rhs.0, rhs.1)
+}
+
+public func |^|<A:Numeric> (_ lhs:(A,e), _ rhs:A) -> (A, e) {
+  (lhs.0*rhs, lhs.1)
+}
+
+public func |^|<A:Numeric> (_ lhs:A, _ rhs:(A, [e])) -> (A,[e]) {
+  (lhs*rhs.0, rhs.1)
+}
+
+public func |^|<A:Numeric> (_ lhs:(A,[e]), _ rhs:A) -> (A, [e]) {
+  (lhs.0*rhs, lhs.1)
+}

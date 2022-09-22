@@ -56,6 +56,9 @@ public func |+|<A:Numeric> (_ lhs:e, _ rhs:[e]) -> [(A,[e])] {
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e]))  -> [(A,[e])] {
+  if lhs.0 == 0 && rhs.0 == 0 { return [] }
+  if lhs.0 == 0 { return [rhs] }
+  if rhs.0 == 0 { return [lhs] }
   if lhs.1.sorted() == rhs.1.sorted() {
     let le = normalized(lhs)
     let re = normalized(rhs)
@@ -67,17 +70,7 @@ public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e]))  -> [(A,[e])] {
 }
 
 public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, [e])])  -> [(A,[e])] {
-  if lhs.isEmpty && rhs.isEmpty { return [] }
-  if lhs.isEmpty { return rhs }
-  if rhs.isEmpty { return lhs }
-  
-  var result = [(A,[e])]()
-  for lmlv in lhs {
-    for rmlv in rhs {
-      result.append(contentsOf: lmlv |+| rmlv)
-    }
-  }
-  return result
+  reduce(with: |+|, lhs + rhs)
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, e))  -> [(A,[e])] {
@@ -102,4 +95,22 @@ public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:[e])  -> [(A,[e])] {
 
 public func |+|<A:Numeric> (_ lhs:[e], _ rhs:(A, [e]))  -> [(A,[e])] {
   (1, lhs) |+| rhs
+}
+
+// [(A, e)] |+| (A, [e])
+public func |+|<A:Numeric> (_ lhs:[(A, e)], _ rhs:(A, [e]))  -> [(A,[e])] {
+  lhs.map { pairs in (pairs.0, [pairs.1]) } |+| [rhs]
+}
+
+public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:[(A, e)])  -> [(A,[e])] {
+  [lhs] |+| rhs.map { pairs in (pairs.0, [pairs.1]) }
+}
+
+  // [(A,[e])], (A, [e])
+public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:(A, [e]))  -> [(A,[e])] {
+  lhs |+| [rhs]
+}
+
+public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:[(A, [e])])  -> [(A,[e])] {
+  [lhs] |+| rhs
 }
