@@ -168,7 +168,9 @@ internal func reduce<A>(with f:@escaping (A, A) -> A,
       result.append(pair)
     }
   }
-  return result
+  return result.sorted { p1, p2 in
+    p1.1.count < p2.1.count
+  }
 }
 
 //[[(A, e)]]

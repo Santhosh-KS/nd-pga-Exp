@@ -100,54 +100,41 @@
 //(0.06666666666666667, [e(1)]),
 //(-0.1, [e(1), e(2)]),
 //(-0.13333333333333333, [e(1), e(2), e(3)])
-let a = 2 |*| e1
-print(a)
-
-let a_inv = a|-||
-print(a_inv)
-
-let id_a = a |*| a_inv
-print(id_a)
-
-let b = 3 |*| e12
-print(b)
-
-let b_inv = b|-||
-print(b_inv)
-
-let id_b = b |*| b_inv
-print(id_b)
-
-let c = 4 |*| e123
-print(c)
-
-let c_inv = c|-||
-print(c_inv)
-
-let id_c = c |*| c_inv
-print(id_c)
+//let a = 2 |*| e1
+//print(a)
+//
+//let a_inv = a|-||
+//print(a_inv)
+//
+//let id_a = a |*| a_inv
+//print(id_a)
+//
+//let b = 3 |*| e12
+//print(b)
+//
+//let b_inv = b|-||
+//print(b_inv)
+//
+//let id_b = b |*| b_inv
+//print(id_b)
+//
+//let c = 4 |*| e123
+//print(c)
+//
+//let c_inv = c|-||
+//print(c_inv)
+//
+//let id_c = c |*| c_inv
+//print(id_c)
 
 // [(Double, e)] |+| (Double, [e])
 // [(A,[e])], (A, [e])
 //e123
-var A = (1 |*| e0) |+| (2|*|e1) |+| (3|*|e12) |+| (4 |*| e123)
-print(A)
-let A_inv = A|-||
-print("Inverse(A) = ", A_inv)
-//let mul_1e0_2e0:(Double, [e]) = (1, e(0)) |*| (2, e(0))
-//print("mul_1e0_2e0 = ", mul_1e0_2e0)
-//print(A_inv |*| A)
-//[(-0.03571428571428571, []),
-// (0.07142857142857142, [e(1)]),
-// (-0.10714285714285714, [e(1), e(2)]),
-// (-0.14285714285714285, [e(1), e(2), e(3)])]
+var A = (1 ||| e0) |+| (2|||e1) |+| (3|||e12) |+| (4 ||| e123)
 
-//0.13415 +
-//(0.12195^e1)
-//- (0.14634^e3)
-//+ (0.18293^e12)
-//+ (0.09756^e23)
-//- (0.29268^e123)
-
-//[(1.0, []),
-// (0.25, [e(0), e(1)]), (-0.16666666666666666, [e(0), e(1), e(2)]), (-0.125, [e(0), e(1), e(2), e(3)]), (-1.0, [e(1)]), (-1.0833333333333333, [e(2)]), (0.75, [e(2), e(3)]), (-1.5, [e(1), e(2)]), (1.0416666666666665, [e(3)]), (-2.0, [e(1), e(2), e(3)])]
+//print("%%%%%%%%%%%%%%%%")
+//print("Input A = ", A)
+//print("Conjugate A = ", conjugate(A))
+//print(" A * A_conj = ", A |*| conjugate(A))
+print("A Inverse = ", A|-||)
+print("Id = ", A |*| (A|-||))

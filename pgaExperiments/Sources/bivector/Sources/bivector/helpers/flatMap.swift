@@ -35,7 +35,9 @@ internal func compactMap<A:Numeric>(_ xs:[(A, [e])]) -> [(A, [e])] {
   var retVal = [(A,[e])]()
   xs.forEach { pair in
     if pair != wedge0() {
-      retVal.append(pair)
+      if pair.0 != A.zero {
+        retVal.append(pair)
+      }
     }
   }
   return retVal

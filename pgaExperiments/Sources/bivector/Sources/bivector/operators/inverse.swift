@@ -31,32 +31,59 @@ public postfix func |-||<A:Numeric & FloatingPoint>(_ basis:(A, [e])) -> (A, [e]
   return ( reveresedScalar , reverse.1)
 }
 
+// TODO: Fix the Inverse.
+// Since there is no Inverse operation listed in https://bivector.net/tools.html
+// Not sure how to implement the same for domain with e(0) as scalar.
+// A |*| Inverse(A) = 1 is not being satisfied even after multiple trys.
+// May be using |*| is not to correct operation here. Need to revist this portion of code.
 public postfix func |-||<A:Numeric & FloatingPoint>(_ input:[(A, [e])]) -> [(A, [e])] {
+  let conj = input.map(conjugate)
+  print("input = ", input)
+  print("Conjugate = ", conj)
+  let dr = input |*| conj
+  print("dr = ",dr)
+  let constdr = dr.map { pairs in pairs.0 * pairs.0 }.reduce(0, |+|)
+  let result = conj.map { pairs in (pairs.0/constdr, pairs.1)}
+  return result
+}
+
+/*
+ public postfix func |-||<A:Numeric & FloatingPoint>(_ input:[(A, [e])]) -> [(A, [e])] {
   let conj = input.map(conjugate)
   print("input = ", input)
   print("Conjugate = ", conj)
 //  let numerator = input |*| conjugate
 //  print("numerator = ", numerator)
+  // Inv(A) = Conjugate(A) / Magnitude(A)
   var result = [(A, [e])]()
   let grades:[UInt8] = [0,1,2,3]
   var gc = [(grade:UInt8, constant:A)]()
+  var dr = [A]()
   for g in grades {
     let vecs = grade(with: g, in: input)
     for vec in vecs {
-      let c = vec |*| conjugate(vec)
+      let conj_vec = conjugate(vec)
+      let c = vec |*| conj_vec
       print("vec = \(vec): grade = \(g) : \(c)")
       if c.isEmpty {
         gc.append((g, 1))
-        result.append((vec.0, []))
+//        result.append((vec.0, []))
+        dr.append(A(1*1))
       }
       else {
         gc.append((g, c.first!.0))
-        result.append((vec.0 |*| Inverse(of:c.first!.0), vec.1))
+//        result.append((vec.0 |*| Inverse(of:c.first!.0), vec.1))
+        dr.append(c.first!.0 * c.first!.0)
       }
     }
   }
+  print("dr = ", dr)
+  let conjConst  = dr.reduce(0, |+|)
+  print("conjConst = ", conjConst)
+  result = conj.map({ pairs in (pairs.0/conjConst, pairs.1) })
   return result
 }
+ */
 
 public postfix func |-||<A:Numeric & FloatingPoint >(_ val:A) -> A {
   if val == 0  { return val }

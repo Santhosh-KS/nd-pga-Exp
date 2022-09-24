@@ -38,14 +38,15 @@ func |||<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> A {
 
 func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
   if lhs.1.sorted() == rhs.1.sorted() {
-    if contains(lhs.1, e(0)) { return (0, []) }
+//    if contains(lhs.1, e(0)) { return (0, []) }
+    if lhs.1.count == 1 && lhs.1 == [e(0)] { return (lhs.0, [])}
     else {
       var retVal:(A, [e]) = normalized((lhs.0|||rhs.0, (lhs.1 + rhs.1)))
       retVal.1 = (retVal.1 |> removeDuplicates)
       return retVal
     }
   } else {
-    if contains(lhs.1, e(0)) && contains(rhs.1, e(0)) { return (0, []) }
+    if contains(lhs.1, e(0)) && contains(rhs.1, e(0)) { return (rhs.0, []) }
     for re in rhs.1 {
       var retVal:(A, [e]) = normalized((lhs.0|||rhs.0, (lhs.1 + rhs.1)))
       retVal.1 = (retVal.1 |> removeDuplicates)

@@ -41,6 +41,7 @@ func |*|<A:Numeric>(_ lhs:e, _ rhs:e) -> (A, [e]){
 
 public func |*|<A:Numeric> (_ lhs:(A,e), _ rhs:(A, e)) -> (A, [e]) {
   (lhs |^| rhs)
+//  ((lhs ||| rhs).first! |+| (lhs |^| rhs).first!) |> compactMap
 }
 
 func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> [(A, [e])] {
@@ -95,19 +96,17 @@ func |*|<A:Numeric>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
   var retVal = [(A, [e])]()
   for lmlv in lhs {
     for rmlv in rhs {
-      let tmp = (lmlv |*| rmlv)
-      if !tmp.isEmpty { retVal.append(tmp.first!)}
+      let prod = (lmlv |*| rmlv)
+      if !prod.isEmpty { retVal.append(prod.first!)}
     }
   }
-  return reduce(with: |+|, retVal |> compactMap)
+  return reduce(with: |+|, retVal) |> compactMap
 }
 
 public func |*|<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> (A,e) {
   (lhs|*|rhs.0, rhs.1)
-//  (lhs, e(0)) |*| rhs
 }
 
 public func |*|<A:Numeric> (_ lhs:(A,e), _ rhs:A) -> (A, e) {
   (lhs.0|*|rhs, lhs.1)
-//  lhs |*| (rhs, e(0))
 }
