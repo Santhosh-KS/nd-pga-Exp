@@ -4,8 +4,16 @@ import Foundation
 func getTable() -> [(Double, [e])] {
   let grade1 = [e1, e2, e3]
   var table:[(Double, [e])] = grade1.map { ($0.0, [$0.1]) }
-  table += [e01, e02, e03, e12, (1, [e(3),e(1)]), e23]
-  table += [(1,[e(2), e(1)]), e013, (1,[e(3),e(2)]), e123]
+  table += [(1,[e(0), e(1)]),
+            (1,[e(0), e(2)]),
+            (1,[e(0), e(3)]),
+            (1,[e(1), e(2)]),
+            (1,[e(3),e(1)]),
+            (1,[e(2), e(3)])]
+  table += [(1,[e(2), e(1)]),
+            (1,[e(0), e(1),e(3)]),
+            (1,[e(3), e(2)]),
+            (1,[e(1), e(2), e(3)])]
   return table
 }
 
