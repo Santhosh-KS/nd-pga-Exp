@@ -153,3 +153,7 @@ print(printOuterProductTable())
 //print(dual(dual(e1)))
 //
 //print(e1 |&*| e2)
+//print(e01 |*| e01)
+//
+//let v = (1, [e(0),e(1)]) |*| (1, [e(0),e(1)])
+//print(v)
