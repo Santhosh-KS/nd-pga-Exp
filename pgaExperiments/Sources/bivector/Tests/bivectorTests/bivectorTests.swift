@@ -1299,6 +1299,20 @@ final class bivectorTests: XCTestCase  {
     XCTAssertEqual(dual(10).1, e123.1)
   }
   
+  func testOperatorDualOfGrade0() {
+    XCTAssertEqual((|!|e0).0, 1)
+    XCTAssertEqual((|!|e0).1, e123.1)
+    XCTAssertEqual((|!|e0).0, 1)
+    XCTAssertEqual((|!|e0).1, e0123.1)
+    XCTAssertEqual((|!|e0).0, 1)
+    XCTAssertEqual((|!|e0).1, e0123.1)
+    XCTAssertEqual((|!|e0).0, 1)
+    XCTAssertEqual((|!|e0).1, e0123.1)
+    
+    XCTAssertEqual((|!|10).0, 10)
+    XCTAssertEqual((|!|10).1, e123.1)
+  }
+  
   func testDualOfGrade1() {
     XCTAssertEqual(dual(e1).0, 1)
     XCTAssertEqual(dual(e1).1, e023.1)
@@ -1308,19 +1322,28 @@ final class bivectorTests: XCTestCase  {
     XCTAssertEqual(dual(e3).1, e012.1)
   }
   
+  func testOperatorDualOfGrade1() {
+    XCTAssertEqual((|!|e1).0, 1)
+    XCTAssertEqual((|!|e1).1, e023.1)
+    XCTAssertEqual((|!|e2).0, -1)
+    XCTAssertEqual((|!|e2).1, e013.1)
+    XCTAssertEqual((|!|e3).0, 1)
+    XCTAssertEqual((|!|e3).1, e012.1)
+  }
+  
   func testDualOfGrade2() {
     XCTAssertEqual(dual(e12).0, -1)
-    XCTAssertEqual(dual(e12).1, e03.1)
+    XCTAssertEqual(dual(e12).1.first!, e3.1)
     XCTAssertEqual(dual(e21).0, 1)
-    XCTAssertEqual(dual(e21).1, e03.1)
+    XCTAssertEqual(dual(e21).1.first!, e3.1)
     XCTAssertEqual(dual(e13).0, 1)
-    XCTAssertEqual(dual(e13).1, e02.1)
+    XCTAssertEqual(dual(e13).1.first!, e2.1)
     XCTAssertEqual(dual(e31).0, -1)
-    XCTAssertEqual(dual(e31).1, e02.1)
+    XCTAssertEqual(dual(e31).1.first!, e2.1)
     XCTAssertEqual(dual(e23).0, -1)
-    XCTAssertEqual(dual(e23).1, e01.1)
+    XCTAssertEqual(dual(e23).1.first!, e1.1)
     XCTAssertEqual(dual(e32).0, 1)
-    XCTAssertEqual(dual(e32).1, e01.1)
+    XCTAssertEqual(dual(e32).1.first!, e1.1)
   }
   
   func testDualOfGrade3() {
@@ -1345,9 +1368,86 @@ final class bivectorTests: XCTestCase  {
     XCTAssertEqual(conjugate(e11).0, 1)
     XCTAssertEqual(conjugate(e22).0, 1)
     XCTAssertEqual(conjugate(e33).0, 1)
+    XCTAssertEqual(conjugate(e11).1, [])
+    XCTAssertEqual(conjugate(e22).1, [])
+    XCTAssertEqual(conjugate(e33).1, [])
     
     XCTAssertEqual(conjugate((10 |*| e11)).0, 10)
     XCTAssertEqual(conjugate((1.1 |*| e22)).0, 1.1)
     XCTAssertEqual(conjugate((3.14 |*| e33)).0, 3.14)
+  }
+  
+  func testConjugateOfMultigrade() {
+    let A = (1 |*| e0) |+| (2|*|e1) |+| (3|*|e12) |+| (4 |*| e123)
+    let A_conj = conjugate(A)
+    let expectedResult:[(Double, [e])] = [(1,[]),
+                                          (-2,[e(1)]),
+                                          (-3,[e(1), e(2)]),
+                                          (-4,[e(1),e(2),e(3)])]
+    
+    for (a_conj, e_res) in zip2(A_conj, expectedResult) {
+      XCTAssertEqual(a_conj.0, e_res.0)
+      XCTAssertEqual(a_conj.1, e_res.1)
+    }
+    
+    let A_gp_A_conj = A |*| A_conj
+    let A_gp_A_conj_expected_result = [(22.0, []),
+                                       (24.0, [e(3)]),
+                                       (-16.0, [e(2), e(3)])]
+    for (a_gp_a_conj, e_res) in zip2(A_gp_A_conj, A_gp_A_conj_expected_result) {
+      XCTAssertEqual(a_gp_a_conj.0, e_res.0)
+      XCTAssertEqual(a_gp_a_conj.1, e_res.1)
+    }
+  }
+  
+  func testRegressiveProductOfScalars() {
+    let rp_10 = 10 |&*| 10
+    XCTAssertEqual(rp_10.0, 0)
+    XCTAssertEqual(rp_10.1, [])
+    
+//    XCTAssertEqual(rp_10.0, 1)
+//    XCTAssertEqual(rp_10.1, [e(1),e(2),e(3)])
+    
+    let rp_e0 = e0 |&*| e0
+    XCTAssertEqual(rp_e0.0, 0)
+    XCTAssertEqual(rp_e0.1, [])
+    
+//    XCTAssertEqual(rp_e0.0, 1)
+//    XCTAssertEqual(rp_e0.1, [e(1),e(2),e(3)])
+    
+    let rp_pi = Float.pi |&*| Float.pi
+    XCTAssertEqual(rp_pi.0, 0)
+    XCTAssertEqual(rp_pi.1, [])
+    
+//    XCTAssertEqual(rp_pi.0, 1)
+//    XCTAssertEqual(rp_pi.1, [e(1),e(2),e(3)])
+    
+    let rp_e1 = e1 |&*| e1
+    XCTAssertEqual(rp_e1.0, 0)
+    XCTAssertEqual(rp_e1.1, [])
+    
+//    XCTAssertEqual(rp_e1.0, 1)
+//    XCTAssertEqual(rp_e1.1, [e(1), e(2),e(3)])
+    
+    let rp_e2 = e2 |&*| e2
+    XCTAssertEqual(rp_e2.0, 0)
+    XCTAssertEqual(rp_e2.1, [])
+    
+//    XCTAssertEqual(rp_e2.0, 1)
+//    XCTAssertEqual(rp_e2.1, [e(1), e(2),e(3)])
+    
+    let rp_e3 = e3 |&*| e3
+    XCTAssertEqual(rp_e3.0, 0)
+    XCTAssertEqual(rp_e3.1, [])
+    
+//    XCTAssertEqual(rp_e3.0, 1)
+//    XCTAssertEqual(rp_e3.1, [e(1), e(2),e(3)])
+  }
+  
+  // TODO: Add more tests for RegressiveProduct of grade2.. etc.
+  func testRegressiveProductOfGrade1() {
+    let rp_e1_e2 = e1 |&*| e2
+    XCTAssertEqual(rp_e1_e2.0, 0)
+    XCTAssertEqual(rp_e1_e2.1, [])
   }
 }

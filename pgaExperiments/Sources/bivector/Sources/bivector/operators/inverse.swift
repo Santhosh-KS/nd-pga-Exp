@@ -36,14 +36,17 @@ public postfix func |-||<A:Numeric & FloatingPoint>(_ basis:(A, [e])) -> (A, [e]
 // Not sure how to implement the same for domain with e(0) as scalar.
 // A |*| Inverse(A) = 1 is not being satisfied even after multiple trys.
 // May be using |*| is not to correct operation here. Need to revist this portion of code.
+// TODO: https://vixra.org/pdf/1901.0246v1.pdf
 public postfix func |-||<A:Numeric & FloatingPoint>(_ input:[(A, [e])]) -> [(A, [e])] {
   let conj = input.map(conjugate)
   print("input = ", input)
   print("Conjugate = ", conj)
   let dr = input |*| conj
   print("dr = ",dr)
-  let constdr = dr.map { pairs in pairs.0 * pairs.0 }.reduce(0, |+|)
+  let constdr = dr.map { pairs in pairs.0 * pairs.0 }.reduce(0, +)
+  print("constdr = ", constdr)
   let result = conj.map { pairs in (pairs.0/constdr, pairs.1)}
+//  let result = (1/constdr) |*| conj
   return result
 }
 

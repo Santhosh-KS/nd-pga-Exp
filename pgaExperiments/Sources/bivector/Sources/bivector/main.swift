@@ -37,8 +37,8 @@
 //
 //
 //print(printGeometricTable())
-////print(printInnerProductTable())
-////print(printOuterProductTable())
+//print(printInnerProductTable())
+//print(printOuterProductTable())
 //
 ////let tmp:(Double,[e]) = e012
 ////print(|~|e321)
@@ -130,11 +130,26 @@
 // [(Double, e)] |+| (Double, [e])
 // [(A,[e])], (A, [e])
 //e123
-var A = (1 ||| e0) |+| (2|||e1) |+| (3|||e12) |+| (4 ||| e123)
-
-//print("%%%%%%%%%%%%%%%%")
+//var A = (1 |*| e0) |+| (2|*|e1) |+| (3|*|e12) |+| (4 |*| e123)
+//
+////print("%%%%%%%%%%%%%%%%")
 //print("Input A = ", A)
 //print("Conjugate A = ", conjugate(A))
 //print(" A * A_conj = ", A |*| conjugate(A))
-print("A Inverse = ", A|-||)
-print("Id = ", A |*| (A|-||))
+//print("A Inverse = ", A|-||)
+//print("Id = ", A |*| (A|-||))
+//print(e13 |*| e1)
+//print(shorthand([e(3),e(1)]))
+
+//for a in A {
+//  print("dual(\(a)) = ",dual_3dpga(a))
+//}
+print(dual(10) )
+print(dual(10) |^| dual(10) )
+print(10 |&*| 10)
+print(10 |&*| e1)
+print(e1 |&*| e1)
+print(dual(e1))
+print(dual(dual(e1)))
+
+print(e1 |&*| e2)

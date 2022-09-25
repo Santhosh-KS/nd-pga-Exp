@@ -4,7 +4,6 @@ prefix operator |~|
 
 public prefix func |~|<A:Numeric & FloatingPoint>(_ item:(A,[e])) -> (A,[e]) {
   if item.1.isEmpty { return (1, []) }
-//  if item.1.first! == e(0) { return (-1, []) }
   let val = normalized(item)
   if grade(item) == 1 && item.1 == val.1 { return item }
   return (val.0 * -1, val.1 == [e(0)] ? [] : val.1  )
