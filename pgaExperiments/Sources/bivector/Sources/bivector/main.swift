@@ -36,9 +36,10 @@
 //print("e033", e033)
 //
 //
-//print(printGeometricTable())
+//print(printGeometricProductTable())
 //print(printInnerProductTable())
-print(printOuterProductTable())
+//print(printOuterProductTable())
+print(printRegressiveProductTable())
 //
 ////let tmp:(Double,[e]) = e012
 ////print(|~|e321)
@@ -152,7 +153,7 @@ print(printOuterProductTable())
 //print(dual(e1))
 //print(dual(dual(e1)))
 //
-//print(e1 |&*| e2)
+print(e1 |&*| e123)
 //print(e01 |*| e01)
 //
 //let v = (1, [e(0),e(1)]) |*| (1, [e(0),e(1)])

@@ -17,7 +17,7 @@ func getTable() -> [(Double, [e])] {
   return table
 }
 
-func printGeometricTable() -> String {
+func printGeometricProductTable() -> String {
   let table:[(Double, [e])] = getTable()
   return tabulate(table, with: |*|).joined(separator: "\n")
 }
@@ -30,6 +30,11 @@ func printInnerProductTable() -> String {
 func printOuterProductTable() -> String {
   let table:[(Double, [e])] = getTable()
   return tabulate(table, with: |^|).joined(separator: "\n")
+}
+
+func printRegressiveProductTable() -> String {
+  let table:[(Double, [e])] = getTable()
+  return tabulate(table, with: |&*|).joined(separator: "\n")
 }
 
 func shorthand(_ xs:[e]) -> String {
