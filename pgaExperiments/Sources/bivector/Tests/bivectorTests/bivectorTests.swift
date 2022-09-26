@@ -968,7 +968,7 @@ final class bivectorTests: XCTestCase  {
   func testGeometricProductTable() {
     let table:[(Double,[e])] = getTable()
     let geometricTable = tabulate(table, with: |*|).joined(separator: "\n")
-    XCTAssertEqual(geometricTable, printGeometricTable())
+    XCTAssertEqual(geometricTable, printGeometricProductTable())
   }
   
   func testInnerProductTable() {
@@ -1450,4 +1450,6 @@ final class bivectorTests: XCTestCase  {
     XCTAssertEqual(rp_e1_e2.0, 0)
     XCTAssertEqual(rp_e1_e2.1, [])
   }
+  
+ 
 }

@@ -39,7 +39,7 @@
 //print(printGeometricProductTable())
 //print(printInnerProductTable())
 //print(printOuterProductTable())
-print(printRegressiveProductTable())
+//print(printRegressiveProductTable())
 //
 ////let tmp:(Double,[e]) = e012
 ////print(|~|e321)
@@ -153,8 +153,21 @@ print(printRegressiveProductTable())
 //print(dual(e1))
 //print(dual(dual(e1)))
 //
-print(e1 |&*| e123)
+//print(e1 |&*| e123)
 //print(e01 |*| e01)
 //
 //let v = (1, [e(0),e(1)]) |*| (1, [e(0),e(1)])
 //print(v)
+let lhs = 10 |*| e0
+let rhs = lhs
+let gp:(Double, [e]) = lhs |*| rhs
+let gp_rev:(Double, [e]) = (rhs |*| |~|lhs)
+print(gp)
+print(gp_rev)
+
+let B_1:[(Double, [e])] = (lhs |*| rhs) |*| |~|lhs
+print(B_1)
+let B_2:[(Double, [e])] = lhs |*| (rhs |*| |~|lhs)
+print(B_2)
+
+print(3 |*| 4 |*| |~|5)

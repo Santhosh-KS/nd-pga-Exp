@@ -1,6 +1,6 @@
 precedencegroup RegressiveProductProcessingOrder {
   associativity:left
-  higherThan: AdditionEvaluation, ForwardApplication
+  higherThan: AdditionEvaluation, ForwardApplication, SandwichProductProcessingOrder
   lowerThan: MultiplicationPrecedence, AdditionPrecedence
 }
 
@@ -12,7 +12,7 @@ infix operator |&*|:RegressiveProductProcessingOrder
 // i.e
 // (a |&*| b) = dual(dual(a) |^| dual(b)) --- (1)
 // OR
-// (a |&*| b) = (dual(a) |^| dual(b))  --- (2)
+// (a |&*| b) = dual(a) |^| dual(b)  --- (2)
 // with eq(1) definition results are not matching with https://bivector.net/tools.html
 // where as eq(2) results match with the https://bivector.net/tools.html
 // Once this issue is fixed add more unittests.

@@ -1,20 +1,3 @@
-
-public func Inverse<A:Numeric & FloatingPoint>(of val:A) -> A {
-  val|-||
-}
-
-public func Inverse<A:Numeric & FloatingPoint>(of basis:(A,e)) -> (A, e) {
-  basis|-||
-}
-
-public func Inverse<A:Numeric & FloatingPoint>(of basis:e) -> (A,e) {
-  basis|-||
-}
-
-public func Inverse<A:Numeric & FloatingPoint>(of basis:(A,[e])) -> (A, [e]) {
-  basis|-||
-}
-
 postfix operator |-||
 
 public postfix func |-||<A:Numeric & FloatingPoint>(_ basis:(A,e)) -> (A, e) {
@@ -91,4 +74,21 @@ public postfix func |-||<A:Numeric & FloatingPoint>(_ input:[(A, [e])]) -> [(A, 
 public postfix func |-||<A:Numeric & FloatingPoint >(_ val:A) -> A {
   if val == 0  { return val }
   return 1/val
+}
+
+
+public func Inverse<A:Numeric & FloatingPoint>(of val:A) -> A {
+  val|-||
+}
+
+public func Inverse<A:Numeric & FloatingPoint>(of basis:(A,e)) -> (A, e) {
+  basis|-||
+}
+
+public func Inverse<A:Numeric & FloatingPoint>(of basis:e) -> (A,e) {
+  basis|-||
+}
+
+public func Inverse<A:Numeric & FloatingPoint>(of basis:(A,[e])) -> (A, [e]) {
+  basis|-||
 }
