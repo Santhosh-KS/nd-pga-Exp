@@ -36,7 +36,7 @@
 //print("e033", e033)
 //
 //
-//print(printGeometricProductTable())
+print(printGeometricProductTable())
 //print(printInnerProductTable())
 //print(printOuterProductTable())
 //print(printRegressiveProductTable())
@@ -158,16 +158,44 @@
 //
 //let v = (1, [e(0),e(1)]) |*| (1, [e(0),e(1)])
 //print(v)
-let lhs = 10 |*| e0
-let rhs = lhs
-let gp:(Double, [e]) = lhs |*| rhs
-let gp_rev:(Double, [e]) = (rhs |*| |~|lhs)
-print(gp)
-print(gp_rev)
+//let lhs = 10 |*| e0
+//let rhs = lhs
+//let gp:(Double, [e]) = lhs |*| rhs
+//let gp_rev:(Double, [e]) = (rhs |*| |~|lhs)
+//print(gp)
+//print(gp_rev)
+//
+//let B_1:[(Double, [e])] = (lhs |*| rhs) |*| |~|lhs
+//print(B_1)
+//let B_2:[(Double, [e])] = lhs |*| (rhs |*| |~|lhs)
+//print(B_2)
+//
+//print(3 |*| 4 |*| |~|5)
 
-let B_1:[(Double, [e])] = (lhs |*| rhs) |*| |~|lhs
-print(B_1)
-let B_2:[(Double, [e])] = lhs |*| (rhs |*| |~|lhs)
-print(B_2)
-
-print(3 |*| 4 |*| |~|5)
+//let a = (1.0, e(1))
+//let b = (1.0, e(2))
+//
+//print("\(a) <*> \(b) = ", a |<*>| b )
+//print("\(a) <*> \(a) = ", a |<*>| a )
+//print("\(b) <*> \(b) = ", b |<*>| b )
+//
+//print("defaultPoint = ",defaultPoint)
+//print("defaultPlane = ",defaultPlane)
+//
+//let A = getPoint(x: 0, y: 0.8, z: 0) |> point
+//let B = getPoint(x: 0.8, y: -1, z: -0.8) |> point
+//let C = getPoint(x: -0.8, y: -1, z: -0.8) |> point
+//let D = getPoint(x: 0.8, y: -1, z: 0.8) |> point
+//let E = getPoint(x: -0.8, y: -1, z: 0.8) |> point
+//print("A = ", stringify(A))
+//print("A = ", getPoint(x: 0, y: 0.8, z: 0))
+//print("B = ", stringify(B))
+//print("B = ", getPoint(x: 0.8, y: -1, z: -0.8))
+//print("C = ", stringify(C))
+//print("C = ", getPoint(x: -0.8, y: -1, z: -0.8))
+//print("D = ", stringify(D))
+//print("D = ", getPoint(x: 0.8, y: -1, z: 0.8))
+//print("E = ", stringify(E))
+//print("E = ", getPoint(x: -0.8, y: -1, z: 0.8))
+////var A=point(0,.8,0), B=point(.8,-1,-.8), C=point(-.8,-1,-.8), D=point(.8,-1,.8), E=point(-.8,-1,.8);
+//print("E <&*> C = " , stringify(E |&*| C))

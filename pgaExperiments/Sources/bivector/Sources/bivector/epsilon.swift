@@ -117,6 +117,8 @@ public func grade<A:Numeric>(with val:UInt8, in exp:[(A,[e])]) -> [(A,[e])] {
   return retVal
 }
 
+
+
 enum domain:String {
   case VGA = "VectorSpace Geometric Algebra"
   case STA = "Space Time Algebra"

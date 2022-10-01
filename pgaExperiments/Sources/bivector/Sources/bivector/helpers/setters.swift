@@ -87,3 +87,19 @@ internal prefix func ^ <Root, Value>(kp: WritableKeyPath<Root, Value>)
   
   return prop(kp)
 }
+
+public func filterZeroElements<A:Numeric, B> (_ xs: [(A, B)]) -> [(A, B)] {
+  var nonZeroXs = [(A, B)]()
+  xs.forEach { pairs in
+    if pairs.0 != 0 { nonZeroXs.append(pairs)}
+  }
+  return nonZeroXs
+}
+
+public func arrafySecond<A:Numeric, B>(_ x:(A,B)) -> (A,[B]) {
+  x |> second { b in [b] }
+}
+
+public func arrafySecond<A:Numeric, B>(_ xs:[(A,B)]) -> [(A,[B])] {
+  (xs.map(arrafySecond) |> filterZeroElements)
+}

@@ -1,4 +1,6 @@
 postfix operator |-||
+// NOTE: Current version of Inverse is not correct!!
+
 
 public postfix func |-||<A:Numeric & FloatingPoint>(_ basis:(A,e)) -> (A, e) {
   (basis.0|-||, basis.1)
@@ -20,6 +22,7 @@ public postfix func |-||<A:Numeric & FloatingPoint>(_ basis:(A, [e])) -> (A, [e]
 // A |*| Inverse(A) = 1 is not being satisfied even after multiple trys.
 // May be using |*| is not to correct operation here. Need to revist this portion of code.
 // TODO: https://vixra.org/pdf/1901.0246v1.pdf
+// https://discourse.bivector.net/t/why-there-is-no-inverse-operator-defined-in-bivector-net/608
 public postfix func |-||<A:Numeric & FloatingPoint>(_ input:[(A, [e])]) -> [(A, [e])] {
   let conj = input.map(conjugate)
   print("input = ", input)

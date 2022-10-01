@@ -69,16 +69,38 @@ public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e]))  -> [(A,[e])] {
   }
 }
 
+
+
+public func |+|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[(A, e)])  -> [(A,[e])] {
+  (lhs |> arrafySecond) |+| (rhs |> arrafySecond)
+}
+
 public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, [e])])  -> [(A,[e])] {
-  return reduce(with: |+|, lhs + rhs)
+  return reduce(with: |+|, (lhs |> filterZeroElements) + (rhs |> filterZeroElements))
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, e))  -> [(A,[e])] {
-  lhs |+| (rhs.0, [rhs.1])
+  lhs |+| (rhs |> arrafySecond)
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, [e]))  -> [(A,[e])] {
-  (lhs.0, [lhs.1]) |+| rhs
+  (lhs |> arrafySecond) |+| rhs
+}
+
+public func |+|<A:Numeric> (_ lhs:[(A, e)], _ rhs:(A, e))  -> [(A,[e])] {
+  lhs.map(arrafySecond) |+| [rhs |> arrafySecond]
+}
+
+public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs:[(A, e)])  -> [(A,[e])] {
+  [lhs |> arrafySecond]  |+| rhs.map(arrafySecond)
+}
+
+public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:(A, e))  -> [(A,[e])] {
+  lhs |+| [rhs |> arrafySecond]
+}
+
+public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs: [(A, [e])])  -> [(A,[e])] {
+  [lhs |> arrafySecond] |+| rhs
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:e)  -> [(A,[e])] {
@@ -99,11 +121,11 @@ public func |+|<A:Numeric> (_ lhs:[e], _ rhs:(A, [e]))  -> [(A,[e])] {
 
 // [(A, e)] |+| (A, [e])
 public func |+|<A:Numeric> (_ lhs:[(A, e)], _ rhs:(A, [e]))  -> [(A,[e])] {
-  lhs.map { pairs in (pairs.0, [pairs.1]) } |+| [rhs]
+  lhs.map(arrafySecond) |+| [rhs]
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:[(A, e)])  -> [(A,[e])] {
-  [lhs] |+| rhs.map { pairs in (pairs.0, [pairs.1]) }
+  [lhs] |+| rhs.map(arrafySecond)
 }
 
   // [(A,[e])], (A, [e])

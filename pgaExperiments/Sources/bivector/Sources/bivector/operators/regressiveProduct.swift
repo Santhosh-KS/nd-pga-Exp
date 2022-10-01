@@ -83,5 +83,5 @@ public func |&*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,e)) -> (A, [e]) {
 
 public func |&*|<A:Numeric>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
 //  dual(dual(lhs) |^| dual(rhs))
-  dual(lhs) |^| dual(rhs)
+ reduce(with: |+|, dual(lhs) |^| dual(rhs))
 }

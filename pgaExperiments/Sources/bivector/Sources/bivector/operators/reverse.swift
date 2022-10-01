@@ -4,6 +4,8 @@ prefix operator |~|
 
 public prefix func |~|<A:Numeric>(_ item:(A,[e])) -> (A,[e]) {
   if item.1.isEmpty { return (1, []) }
+  // This Normalization is important.
+  // more dtails in this discussion thread. https://discourse.bivector.net/t/why-there-is-no-inverse-operator-defined-in-bivector-net/608
   let val = normalized(item)
   if grade(item) == 1 && item.1 == val.1 { return item }
   return (val.0 * -1, val.1 == [e(0)] ? [] : val.1  )

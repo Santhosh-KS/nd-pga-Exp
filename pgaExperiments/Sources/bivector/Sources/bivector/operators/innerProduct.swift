@@ -72,11 +72,11 @@ func |||<A:Numeric>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
 }
 
 func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,e)) -> (A, [e]) {
-  lhs ||| (rhs.0, [rhs.1])
+  lhs ||| (rhs |> arrafySecond)
 }
 
 func |||<A:Numeric>(_ lhs:(A,e), _ rhs:(A,[e])) -> (A, [e]) {
-  (lhs.0, [lhs.1]) ||| rhs
+  (lhs |> arrafySecond) ||| rhs
 }
 
 func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:e) -> (A, [e]) {

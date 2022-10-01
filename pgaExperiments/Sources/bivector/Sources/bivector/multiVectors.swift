@@ -14,7 +14,7 @@ public struct MultiVector<DataType:Numeric> {
 }
 
 extension MultiVector {
-  // Defualt init gives 3D-PGA R_3,0,1 domain
+  // Defualt init gives 3D-PGA R(3,0,1) domain
   public init() {
     self.Positive = 3
     self.Negetive = 0
