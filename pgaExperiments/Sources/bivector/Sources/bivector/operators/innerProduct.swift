@@ -36,7 +36,27 @@ func |||<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> A {
   (isNullBasis(lhs.1) ? 0 : (lhs.0 ||| rhs.0)) : 0
 }
 
+
 func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
+  if lhs.1.sorted() == rhs.1.sorted() {
+    if contains(lhs.1, e(0)) { return (0, []) }
+    else {
+      var retVal:(A, [e]) = normalized((lhs.0|||rhs.0, (lhs.1 + rhs.1)))
+      retVal.1 = (retVal.1 |> removeDuplicates)
+      return retVal
+    }
+  } else {
+    if contains(lhs.1, e(0)) && contains(rhs.1, e(0)) { return (0, []) }
+    for re in rhs.1 {
+      var retVal:(A, [e]) = normalized((lhs.0|||rhs.0, (lhs.1 + rhs.1)))
+      retVal.1 = (retVal.1 |> removeDuplicates)
+      if contains(lhs.1, re) { return  retVal }
+    }
+    return (0, [])
+  }
+}
+/*
+ func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
   if lhs.1.sorted() == rhs.1.sorted() {
     var lhsSorted:(A,[e]) = lhs
     var rhsSorted:(A,[e]) = rhs
@@ -60,6 +80,7 @@ func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
     return (0, [])
   }
 }
+ */
 
 func |||<A:Numeric>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
   var retVal = [(A, [e])]()

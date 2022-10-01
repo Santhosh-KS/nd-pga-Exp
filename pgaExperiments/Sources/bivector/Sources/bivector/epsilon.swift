@@ -45,13 +45,13 @@ func bubbleSort<A:Numeric> (_ xs: [e]) -> (A, [e]) {
     for j in 0..<sortedArray.count-i-1 {
       if sortedArray[j]>sortedArray[j + 1] {
         sortedArray.swapAt(j + 1, j)
-        if sortedArray[j] != e(0) {
+//        if sortedArray[j] != e(0) {
           retVal *= -1
-        }
+//        }
       }
     }
   }
-  if sortedArray[0] == e(0) { sortedArray  = Array(sortedArray.dropFirst()) }
+//  if sortedArray[0] == e(0) { sortedArray  = Array(sortedArray.dropFirst()) }
   return (retVal, sortedArray)
 }
 

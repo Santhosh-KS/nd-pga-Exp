@@ -2,7 +2,7 @@
 import Foundation
 
 func getTable() -> [(Double, [e])] {
-  let grade1 = [e1, e2, e3]
+  let grade1 = [e0, e1, e2, e3]
   var table:[(Double, [e])] = grade1.map { ($0.0, [$0.1]) }
   table += [(1,[e(0), e(1)]),
             (1,[e(0), e(2)]),
@@ -13,7 +13,8 @@ func getTable() -> [(Double, [e])] {
   table += [(1,[e(0), e(2), e(1)]),
             (1,[e(0), e(1),e(3)]),
             (1,[e(0), e(3), e(2)]),
-            (1,[e(1), e(2), e(3)])]
+            (1,[e(1), e(2), e(3)]),
+            (1,[e(0), e(1), e(2), e(3)])]
   return table
 }
 
@@ -94,7 +95,17 @@ func tabulate<A:Numeric & Comparable>(_ xs:[(A,[e])],
   return retVal
 }
 
+func stringify<A:Numeric>(_ vec:(A, [e])) -> String {
+  "\(vec.0)*e\(vec.1.map { String($0.index) }.joined())"
+}
 
+func stringify<A:Numeric>(_ vec:(A, e)) -> String {
+  stringify((vec.0, [vec.1]))
+}
+
+func stringify<A:Numeric>(_ vecs:[(A, [e])]) -> String {
+  vecs.map(stringify).joined(separator: " + ")
+}
 
 
 

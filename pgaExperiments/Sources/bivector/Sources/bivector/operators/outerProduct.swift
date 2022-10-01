@@ -27,7 +27,7 @@ public func |^|<A:Numeric> (_ lhs:e, _ rhs:[A]) -> (A, e) {
 }
 
 public func |^|<A:Numeric> (_ lhs:(A,e), _ rhs:(A, e)) -> (A, [e]) {
-  process(lhs, rhs) |> normalized
+  process(lhs, rhs) //|> normalized
 }
 
 public func |^|<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {

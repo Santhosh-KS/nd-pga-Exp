@@ -27,18 +27,6 @@ public extension Point where A == Float {
   }
 }
 
-func stringify<A:Numeric>(_ vec:(A, [e])) -> String {
-  "\(vec.0)*e\(vec.1.map { String($0.index) }.joined())"
-}
-
-func stringify<A:Numeric>(_ vec:(A, e)) -> String {
-  stringify((vec.0, [vec.1]))
-}
-
-func stringify<A:Numeric>(_ vecs:[(A, [e])]) -> String {
-  vecs.map(stringify).joined(separator: " + ")
-}
-
 
 extension Point: CustomStringConvertible {
   public var description: String {
