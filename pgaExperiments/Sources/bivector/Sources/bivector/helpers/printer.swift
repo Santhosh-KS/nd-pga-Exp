@@ -35,7 +35,7 @@ func printOuterProductTable() -> String {
 
 func printRegressiveProductTable() -> String {
   let table:[(Double, [e])] = getTable()
-  return tabulate(table, with: |&*|).joined(separator: "\n")
+  return tabulate(table, with: |^*|).joined(separator: "\n")
 }
 
 func shorthand(_ xs:[e]) -> String {
