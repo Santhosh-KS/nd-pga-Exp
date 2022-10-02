@@ -3,7 +3,6 @@ import Foundation
 precedencegroup AdditionEvaluation {
   associativity:left
   lowerThan:AdditionPrecedence, MultiplicationPrecedence
-  higherThan:ForwardApplication
 }
 
 infix operator |+|:AdditionEvaluation
@@ -17,7 +16,7 @@ public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[A])  -> A {
 }
 
 public func |+|<A:Numeric> (_ lhs:A, _ rhs:e)  -> [(A,[e])] {
-  [(lhs,[]), (1, [rhs])]
+  [(lhs, []), (rhs |> unit >>> arrayfySecond)]
 }
 
 public func |+|<A:Numeric> (_ lhs:e, _ rhs:A)  -> [(A,[e])] {
@@ -25,7 +24,7 @@ public func |+|<A:Numeric> (_ lhs:e, _ rhs:A)  -> [(A,[e])] {
 }
 
 public func |+|<A:Numeric> (_ lhs:[A], _ rhs:e)  -> [(A,[e])] {
-  [(lhs.reduce(0, |+|), []), (1, [rhs])]
+  [(lhs.reduce(0, |+|), []), (rhs |> unit >>> arrayfySecond)]
 }
 
 public func |+|<A:Numeric> (_ lhs:e, _ rhs:[A])  -> [(A,[e])] {
@@ -33,7 +32,7 @@ public func |+|<A:Numeric> (_ lhs:e, _ rhs:[A])  -> [(A,[e])] {
 }
 
 public func |+|<A:Numeric> (_ lhs:e, _ rhs:e)  -> [(A,e)] {
-  (1, lhs) |+| (1, rhs)
+  (lhs |> unit) |+| (rhs |> unit)
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, e))  -> [(A,e)] {
@@ -44,15 +43,15 @@ public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, e))  -> [(A,e)] {
 }
 
 public func |+|<A:Numeric> (_ lhs:[e], _ rhs:[e]) -> [(A,[e])] {
-  (1, lhs) |+| (1, rhs)
+  (lhs |> unit) |+| (rhs |> unit)
 }
 
 public func |+|<A:Numeric> (_ lhs:[e], _ rhs:e) -> [(A,[e])] {
-  lhs |+| [rhs]
+  lhs |+| (rhs |> arrayfy)
 }
 
 public func |+|<A:Numeric> (_ lhs:e, _ rhs:[e]) -> [(A,[e])] {
-  [lhs] |+| rhs
+  (lhs |> arrayfy) |+| rhs
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e]))  -> [(A,[e])] {
@@ -60,79 +59,75 @@ public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, [e]))  -> [(A,[e])] {
   if lhs.0 == 0 { return [rhs] }
   if rhs.0 == 0 { return [lhs] }
   if lhs.1.sorted() == rhs.1.sorted() {
-    let le = normalized(lhs)
-    let re = normalized(rhs)
+    let le = lhs |> normalized
+    let re = rhs |> normalized
     return [(le.0 + re.0, lhs.1.sorted())]
   }
   return [lhs, rhs].sorted { pair1, pair2 in
-     pair1.1.count < pair2.1.count
+    pair1.1.count < pair2.1.count
   }
 }
 
-
-
 public func |+|<A:Numeric> (_ lhs:[(A, e)], _ rhs:[(A, e)])  -> [(A,[e])] {
-  (lhs |> arrafySecond) |+| (rhs |> arrafySecond)
+  (lhs |> arrayfy) |+| (rhs |> arrayfy)
 }
 
 public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:[(A, [e])])  -> [(A,[e])] {
-  return reduce(with: |+|, (lhs |> filterZeroElements) + (rhs |> filterZeroElements))
+  return reduce(with: |+|, (lhs |> filter) + (rhs |> filter))
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:(A, e))  -> [(A,[e])] {
-  lhs |+| (rhs |> arrafySecond)
+  lhs |+| (rhs |> arrayfySecond)
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, [e]))  -> [(A,[e])] {
-  (lhs |> arrafySecond) |+| rhs
+  (lhs |> arrayfySecond) |+| rhs
 }
 
 public func |+|<A:Numeric> (_ lhs:[(A, e)], _ rhs:(A, e))  -> [(A,[e])] {
-  lhs.map(arrafySecond) |+| [rhs |> arrafySecond]
+  lhs.map(arrayfySecond) |+| (rhs |> arrayfySecond >>> arrayfy)
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs:[(A, e)])  -> [(A,[e])] {
-  [lhs |> arrafySecond]  |+| rhs.map(arrafySecond)
+  (lhs |> arrayfySecond >>> arrayfy)  |+| rhs.map(arrayfySecond)
 }
 
 public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:(A, e))  -> [(A,[e])] {
-  lhs |+| [rhs |> arrafySecond]
+  lhs |+| (rhs |> arrayfySecond >>> arrayfy)
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs: [(A, [e])])  -> [(A,[e])] {
-  [lhs |> arrafySecond] |+| rhs
+  (lhs |> arrayfySecond >>> arrayfy) |+| rhs
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:e)  -> [(A,[e])] {
-  lhs |+| (1, [rhs])
+  lhs |+| (rhs |> unit >>> arrayfySecond)
 }
 
 public func |+|<A:Numeric> (_ lhs:e, _ rhs:(A, [e]))  -> [(A,[e])] {
-  (1, [lhs]) |+| rhs
+  (lhs |> unit >>> arrayfySecond) |+| rhs
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:[e])  -> [(A,[e])] {
-  lhs |+| (1, rhs)
+  lhs |+| (rhs |> unit)
 }
 
 public func |+|<A:Numeric> (_ lhs:[e], _ rhs:(A, [e]))  -> [(A,[e])] {
-  (1, lhs) |+| rhs
+  (lhs |> unit) |+| rhs
 }
 
-// [(A, e)] |+| (A, [e])
 public func |+|<A:Numeric> (_ lhs:[(A, e)], _ rhs:(A, [e]))  -> [(A,[e])] {
-  lhs.map(arrafySecond) |+| [rhs]
+  lhs.map(arrayfySecond) |+| (rhs |> arrayfy)
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:[(A, e)])  -> [(A,[e])] {
-  [lhs] |+| rhs.map(arrafySecond)
+  (lhs |> arrayfy) |+| rhs.map(arrayfySecond)
 }
 
-  // [(A,[e])], (A, [e])
 public func |+|<A:Numeric> (_ lhs:[(A, [e])], _ rhs:(A, [e]))  -> [(A,[e])] {
-  lhs |+| [rhs]
+  lhs |+| (rhs |> arrayfy)
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:[(A, [e])])  -> [(A,[e])] {
-  [lhs] |+| rhs
+  (lhs |> arrayfy) |+| rhs
 }

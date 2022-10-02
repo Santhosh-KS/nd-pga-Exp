@@ -88,7 +88,7 @@ internal prefix func ^ <Root, Value>(kp: WritableKeyPath<Root, Value>)
   return prop(kp)
 }
 
-public func filterZeroElements<A:Numeric, B> (_ xs: [(A, B)]) -> [(A, B)] {
+public func filter<A:Numeric, B> (_ xs: [(A, B)]) -> [(A, B)] {
   var nonZeroXs = [(A, B)]()
   xs.forEach { pairs in
     if pairs.0 != 0 { nonZeroXs.append(pairs)}
@@ -96,10 +96,22 @@ public func filterZeroElements<A:Numeric, B> (_ xs: [(A, B)]) -> [(A, B)] {
   return nonZeroXs
 }
 
-public func arrafySecond<A:Numeric, B>(_ x:(A,B)) -> (A,[B]) {
+public func unit<A:Numeric,B>(_ x:B) -> (A, B) {
+  (1, x)
+}
+
+public func arrayfy<A:Numeric, B>(_ x:B) -> (A,[B]) {
+  x |> unit >>> arrayfySecond
+}
+
+public func arrayfySecond<A:Numeric, B>(_ x:(A,B)) -> (A,[B]) {
   x |> second { b in [b] }
 }
 
-public func arrafySecond<A:Numeric, B>(_ xs:[(A,B)]) -> [(A,[B])] {
-  (xs.map(arrafySecond) |> filterZeroElements)
+public func arrayfy<A:Numeric, B>(_ xs:[(A,B)]) -> [(A,[B])] {
+  (xs.map(arrayfySecond) |> filter)
+}
+
+public func arrayfy<A:Numeric, B>(_ xs:(A,[B])) -> [(A,[B])] {
+  [xs]
 }

@@ -7,9 +7,6 @@ precedencegroup GeometricProductProcessingOrder {
   lowerThan: MultiplicationPrecedence, AdditionPrecedence
 }
 
-// a  *  b = a . b + a ^ b -- (1)
-// a |*| b = a|||b + a|^|b --> Notation Convention equivalent of eq(1)
-
 infix operator |*|:GeometricProductProcessingOrder
 
 public func |*|<A:Numeric>(_ lhs:A, _ rhs:A) -> A {
@@ -41,15 +38,15 @@ public func |*|<A:Numeric> (_ lhs:(A,e), _ rhs:(A, e)) -> (A, [e]) {
 }
 
 public func |*|<A:Numeric>(_ lhs:e, _ rhs:e) -> (A, [e]) {
-  (1,lhs) |*| (1,rhs)
+  (lhs |> unit) |*| (rhs |> unit)
 }
 
 public func |*|<A:Numeric> (_ lhs:e, _ rhs:(A, e)) -> (A, [e]) {
-  (1,lhs) |*| rhs
+  (lhs |> unit) |*| rhs
 }
 
 public func |*|<A:Numeric> (_ lhs:(A, e), _ rhs:e) -> (A, [e]) {
-  lhs |*| (1, rhs)
+  lhs |*| (rhs |> unit)
 }
 
 public func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> [(A, [e])] {
@@ -57,31 +54,31 @@ public func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> [(A, [e])] {
 }
 
 public func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,e)) -> [(A, [e])] {
-  lhs |*| (rhs |> arrafySecond)
+  lhs |*| (rhs |> arrayfySecond)
 }
 
 public func |*|<A:Numeric>(_ lhs:(A,e), _ rhs:(A,[e])) -> [(A, [e])] {
-  (lhs |> arrafySecond) |*| rhs
+  (lhs |> arrayfySecond) |*| rhs
 }
 
 public func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:e) -> [(A, [e])] {
-  lhs |*| (1, [rhs])
+  lhs |*| (rhs |> arrayfy)
 }
 
 public func |*|<A:Numeric>(_ lhs:e, _ rhs: (A,[e])) -> [(A, [e])] {
-  (1, [lhs]) |*| rhs
+  (lhs |> arrayfy) |*| rhs
 }
 
 public func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:[e]) -> [(A, [e])] {
-  lhs |*| (1, rhs)
+  lhs |*| (rhs |> unit)
 }
 
 public func |*|<A:Numeric>(_ lhs:[e], _ rhs: (A,[e])) -> [(A, [e])] {
-  (1, lhs) |*| rhs
+  (lhs |> unit) |*| rhs
 }
 
 public func |*|<A:Numeric>(_ lhs:[e], _ rhs: [e]) -> [(A, [e])] {
-  (1, lhs) |*| (1, rhs)
+  (lhs |> unit) |*| (rhs |> unit)
 }
 
 public func |*|<A:Numeric>(_ lhs:A, _ rhs:(A,[e])) -> (A, [e]) {

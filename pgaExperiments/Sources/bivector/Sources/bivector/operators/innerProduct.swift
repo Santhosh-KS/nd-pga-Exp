@@ -28,7 +28,7 @@ func |||<A:Numeric>(_ lhs:e, _ rhs:[A]) -> (A, e) {
 }
 
 func |||<A:Numeric>(_ lhs:e, _ rhs:e) -> A {
-  (1, lhs) ||| (1, rhs)
+  (lhs |> unit) ||| (rhs |> unit)
 }
 
 func |||<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> A {
@@ -93,45 +93,45 @@ func |||<A:Numeric>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
 }
 
 func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,e)) -> (A, [e]) {
-  lhs ||| (rhs |> arrafySecond)
+  lhs ||| (rhs |> arrayfySecond)
 }
 
 func |||<A:Numeric>(_ lhs:(A,e), _ rhs:(A,[e])) -> (A, [e]) {
-  (lhs |> arrafySecond) ||| rhs
+  (lhs |> arrayfySecond) ||| rhs
 }
 
 func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:e) -> (A, [e]) {
-  lhs ||| (1, [rhs])
+  lhs ||| (rhs |> arrayfy)
 }
 
 func |||<A:Numeric>(_ lhs:e, _ rhs:(A,[e])) -> (A, [e]) {
-  (1, [lhs]) ||| rhs
+  (lhs |> arrayfy) ||| rhs
 }
 
 func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:[e]) -> (A, [e]) {
-  lhs ||| (1, rhs)
+  lhs ||| (rhs |> unit)
 }
 
 func |||<A:Numeric>(_ lhs:[e], _ rhs:(A,[e])) -> (A, [e]) {
-  (1, lhs) ||| rhs
+  (lhs |> unit) ||| rhs
 }
 
 func |||<A:Numeric>(_ lhs:[e], _ rhs:[e]) -> (A, [e]) {
-  (1, lhs) ||| (1, rhs)
+  (lhs |> unit) ||| (rhs |> unit)
 }
 
 public func |||<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> (A,e) {
-  (lhs|||rhs.0, rhs.1)
+  (lhs ||| rhs.0, rhs.1)
 }
 
 public func |||<A:Numeric> (_ lhs:(A,e), _ rhs:A) -> (A, e) {
-  (lhs.0|||rhs, lhs.1)
+  (lhs.0 ||| rhs, lhs.1)
 }
 
 public func |||<A:Numeric> (_ lhs:A, _ rhs:(A, [e])) -> (A,[e]) {
-  (lhs|||rhs.0, rhs.1)
+  (lhs ||| rhs.0, rhs.1)
 }
 
 public func |||<A:Numeric> (_ lhs:(A,[e]), _ rhs:A) -> (A, [e]) {
-  (lhs.0|||rhs, lhs.1)
+  (lhs.0 ||| rhs, lhs.1)
 }

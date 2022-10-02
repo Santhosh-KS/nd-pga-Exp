@@ -5,8 +5,8 @@ func dual<A:Numeric>(with pseudoScalar:(A,[e]), of input:(A,[e])) -> (A,[e]) {
 }
 
 func dual<A:Numeric>(_ input:(A,[e])) -> (A, [e]) {
-  let pseudoScalar:(A,[e]) = (1, [e(1), e(2), e(3)])
-  return dual(with: pseudoScalar, of: input)
+  let pseudoScalar:(A,[e]) = (1, [e(0), e(1), e(2), e(3)])
+  return (pseudoScalar, input) |> dual(with:of:)
 }
 
 func dual<A:Numeric>(_ input:[(A,[e])]) -> [(A, [e])] {
@@ -14,48 +14,48 @@ func dual<A:Numeric>(_ input:[(A,[e])]) -> [(A, [e])] {
 }
 
 func dual<A:Numeric>(_ input:(A,e)) -> (A, [e]) {
-  dual((input.0, [input.1]))
+  input |> arrayfySecond >>> dual
 }
 
 func dual<A:Numeric>(_ input:e) -> (A, [e]) {
-  dual((1, [input]))
+  (input |> unit) |> arrayfySecond >>> dual
 }
 
 func dual<A:Numeric>(_ input:[e]) -> (A, [e]) {
-  dual((1, input))
+  (input |> unit) |> dual
 }
 
 func dual<A:Numeric>(_ input:A) -> (A, [e]) {
-  dual((input, e(0)))
+  (input, e(0)) |> dual
 }
 
-let dual_in_3dpga:((Double, [e])) -> ((Double, [e])) = curry(dual(with:of:))(e123)
+//let dual_in_3dpga:((Double, [e])) -> ((Double, [e])) = curry(dual(with:of:))(e123)
 
 prefix operator |!|
 
 public prefix func |!|<A:Numeric>(_ input:(A,e)) -> (A, [e]) {
-  dual(input)
+  input |> dual
 }
 
 prefix func |!|<A:Numeric>(_ input:(A,[e])) -> (A, [e]) {
-  dual(input)
+  input |> dual
 }
 
 prefix func |!|<A:Numeric>(_ input:[(A,[e])]) -> [(A, [e])] {
-  dual(input)
+  input |> dual
 }
 
 prefix func |!|<A:Numeric>(_ input:e) -> (A, [e]) {
-  dual(input)
+  input |> dual
 }
 
 prefix func |!|<A:Numeric>(_ input:[e]) -> (A, [e]) {
-  dual(input)
+  input |> dual
 }
 prefix func |!|<A:Numeric>(_ input:A) -> (A, [e]) {
-  dual(input)
+  input |> dual
 }
 
 prefix func |!|<A:Numeric>(_ input:[A]) -> (A, [e]) {
-  dual(input.reduce(0, |+|))
+  input.reduce(0, |+|) |> dual
 }
