@@ -1,6 +1,13 @@
 func dual<A:Numeric>(with pseudoScalar:(A,[e]), of input:(A,[e])) -> (A,[e]) {
-  let retVal = (input |*| pseudoScalar)
-  if retVal.isEmpty  { return pseudoScalar }
+  var retVal = [(A,[e])]()
+  if input.1 == [e(0)] || grade(input) == 3 {
+    retVal = (pseudoScalar |*| input)
+  } else {
+    retVal = (input |*| pseudoScalar)
+  }
+  if retVal.isEmpty  {
+    return (pseudoScalar.0 * input.0, Array(pseudoScalar.1.dropFirst()))
+  }
   else { return retVal.first! }
 }
 
@@ -18,11 +25,11 @@ func dual<A:Numeric>(_ input:(A,e)) -> (A, [e]) {
 }
 
 func dual<A:Numeric>(_ input:e) -> (A, [e]) {
-  (input |> unitVector) |> arrayfySecond >>> dual
+  input |> unitVector >>> arrayfySecond >>> dual
 }
 
 func dual<A:Numeric>(_ input:[e]) -> (A, [e]) {
-  (input |> unitVector) |> dual
+  input |> unitVector >>> dual
 }
 
 func dual<A:Numeric>(_ input:A) -> (A, [e]) {

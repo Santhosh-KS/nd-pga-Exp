@@ -100,7 +100,7 @@ final class geometricProductTests: XCTestCase  {
     
     let outer_1e00_1e0 = (1, [e(0),e(0)]) |*| (1, e(0))
     XCTAssert(outer_1e00_1e0.isEmpty)
-    
+
     
     let outer_1e1_1e1 = (1, [e(1)]) |*| (1, e(1))
     XCTAssert(outer_1e1_1e1.first!.1.isEmpty)

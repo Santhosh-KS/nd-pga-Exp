@@ -36,7 +36,7 @@
 //print("e033", e033)
 //
 //
-//print(printGeometricProductTable())
+print(printGeometricProductTable())
 //let e0_e1:(Double, [e]) = (1, e(0)) |*| (1, e(1))
 //print(e0_e1)
 //print(printInnerProductTable())
@@ -201,4 +201,11 @@
 //print("E = ", getPoint(x: -0.8, y: -1, z: 0.8))
 ////var A=point(0,.8,0), B=point(.8,-1,-.8), C=point(-.8,-1,-.8), D=point(.8,-1,.8), E=point(-.8,-1,.8);
 //print("E <&*> C = " , stringify(E |&*| C))
-print(  (1, e(0)) |*| (1, [e(0)]))
+let a = dual(e123)
+print("dual a = ",a)
+//let pseudoScalar:(Double, [e]) = (1, [e(0), e(1), e(2), e(3)])
+//let dot = pseudoScalar |*| e0
+//print("dot = ", dot)
+//let wedge = pseudoScalar |^| a
+//print("wedge = ", wedge)
+//print( dot |+| wedge)

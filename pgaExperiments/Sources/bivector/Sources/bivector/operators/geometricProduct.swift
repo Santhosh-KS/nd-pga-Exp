@@ -4,7 +4,7 @@ precedencegroup GeometricProductProcessingOrder {
   associativity:left
   higherThan: AdditionEvaluation, ForwardApplication,
   RegressiveProductProcessingOrder, SandwichProductProcessingOrder
-  lowerThan: MultiplicationPrecedence, AdditionPrecedence
+  lowerThan: MultiplicationPrecedence, AdditionPrecedence, AssignmentPrecedence
 }
 
 infix operator |*|:GeometricProductProcessingOrder

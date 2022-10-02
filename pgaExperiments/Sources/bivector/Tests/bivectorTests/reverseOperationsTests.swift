@@ -1,6 +1,6 @@
 import XCTest
 
-final class ReverseOperationsTests: XCTestCase {
+final class reverseOperationsTests: XCTestCase {
   
   func testReverseOfConstants() {
     XCTAssertEqual(|~|11, 11)
@@ -38,19 +38,19 @@ final class ReverseOperationsTests: XCTestCase {
     XCTAssertEqual((|~|e01).1, e01.1)
     
     XCTAssertEqual((|~|e10).0, 1)
-    XCTAssertEqual((|~|e10).1, e10.1)
+    XCTAssertEqual((|~|e10).1, e01.1)
     
     XCTAssertEqual((|~|e02).0, -1)
     XCTAssertEqual((|~|e02).1, e02.1)
     
     XCTAssertEqual((|~|e20).0, 1)
-    XCTAssertEqual((|~|e20).1, e20.1)
+    XCTAssertEqual((|~|e20).1, e02.1)
     
     XCTAssertEqual((|~|e03).0, -1)
     XCTAssertEqual((|~|e03).1, e03.1)
     
     XCTAssertEqual((|~|e30).0, 1)
-    XCTAssertEqual((|~|e30).1, e30.1)
+    XCTAssertEqual((|~|e30).1, e03.1)
     
     XCTAssertEqual((|~|e11).0, 1)
     XCTAssert((|~|e11).1.isEmpty)
@@ -62,32 +62,32 @@ final class ReverseOperationsTests: XCTestCase {
     XCTAssertEqual((|~|e22).0, 1)
     XCTAssert((|~|e22).1.isEmpty)
     XCTAssertEqual((|~|e21).0, 1)
-    XCTAssertEqual((|~|e21).1, e21.1)
+    XCTAssertEqual((|~|e21).1, e12.1)
     XCTAssertEqual((|~|e23).0, -1)
     XCTAssertEqual((|~|e23).1, e23.1)
     
     XCTAssertEqual((|~|e33).0, 1)
     XCTAssert((|~|e33).1.isEmpty)
     XCTAssertEqual((|~|e31).0, 1)
-    XCTAssertEqual((|~|e31).1, e31.1)
+    XCTAssertEqual((|~|e31).1, e13.1)
     XCTAssertEqual((|~|e32).0, 1)
-    XCTAssertEqual((|~|e32).1, e32.1)
+    XCTAssertEqual((|~|e32).1, e23.1)
   }
   
   func testReverseOfGrade3() {
-    XCTAssertEqual((|~|e123).0, -1)
+    XCTAssertEqual((|~|e123).0, 1)
     XCTAssertEqual((|~|e123).1, e123.1)
     
-    XCTAssertEqual((|~|e213).0, 1)
+    XCTAssertEqual((|~|e213).0, -1)
     XCTAssertEqual((|~|e213).1, e123.1)
     
-    XCTAssertEqual((|~|e231).0, -1)
+    XCTAssertEqual((|~|e231).0, 1)
     XCTAssertEqual((|~|e231).1, e123.1)
     
-    XCTAssertEqual((|~|e312).0, -1)
+    XCTAssertEqual((|~|e312).0, 1)
     XCTAssertEqual((|~|e312).1, e123.1)
     
-    XCTAssertEqual((|~|e321).0, 1)
+    XCTAssertEqual((|~|e321).0, -1)
     XCTAssertEqual((|~|e321).1, e123.1)
   }
 }
