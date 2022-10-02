@@ -41,7 +41,7 @@
 //print(e0_e1)
 //print(printInnerProductTable())
 //print(printOuterProductTable())
-print(printRegressiveProductTable())
+//print(printRegressiveProductTable())
 //
 ////let tmp:(Double,[e]) = e012
 ////print(|~|e321)
@@ -201,3 +201,4 @@ print(printRegressiveProductTable())
 //print("E = ", getPoint(x: -0.8, y: -1, z: 0.8))
 ////var A=point(0,.8,0), B=point(.8,-1,-.8), C=point(-.8,-1,-.8), D=point(.8,-1,.8), E=point(-.8,-1,.8);
 //print("E <&*> C = " , stringify(E |&*| C))
+print(  (1, e(0)) |*| (1, [e(0)]))
