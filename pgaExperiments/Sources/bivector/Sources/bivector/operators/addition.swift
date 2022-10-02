@@ -16,7 +16,7 @@ public func |+|<A:Numeric> (_ lhs:[A], _ rhs:[A])  -> A {
 }
 
 public func |+|<A:Numeric> (_ lhs:A, _ rhs:e)  -> [(A,[e])] {
-  [(lhs, []), (rhs |> unit >>> arrayfySecond)]
+  [(lhs, []), (rhs |> unitVector >>> arrayfySecond)]
 }
 
 public func |+|<A:Numeric> (_ lhs:e, _ rhs:A)  -> [(A,[e])] {
@@ -24,7 +24,7 @@ public func |+|<A:Numeric> (_ lhs:e, _ rhs:A)  -> [(A,[e])] {
 }
 
 public func |+|<A:Numeric> (_ lhs:[A], _ rhs:e)  -> [(A,[e])] {
-  [(lhs.reduce(0, |+|), []), (rhs |> unit >>> arrayfySecond)]
+  [(lhs.reduce(0, |+|), []), (rhs |> unitVector >>> arrayfySecond)]
 }
 
 public func |+|<A:Numeric> (_ lhs:e, _ rhs:[A])  -> [(A,[e])] {
@@ -32,7 +32,7 @@ public func |+|<A:Numeric> (_ lhs:e, _ rhs:[A])  -> [(A,[e])] {
 }
 
 public func |+|<A:Numeric> (_ lhs:e, _ rhs:e)  -> [(A,e)] {
-  (lhs |> unit) |+| (rhs |> unit)
+  (lhs |> unitVector) |+| (rhs |> unitVector)
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, e))  -> [(A,e)] {
@@ -43,7 +43,7 @@ public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs:(A, e))  -> [(A,e)] {
 }
 
 public func |+|<A:Numeric> (_ lhs:[e], _ rhs:[e]) -> [(A,[e])] {
-  (lhs |> unit) |+| (rhs |> unit)
+  (lhs |> unitVector) |+| (rhs |> unitVector)
 }
 
 public func |+|<A:Numeric> (_ lhs:[e], _ rhs:e) -> [(A,[e])] {
@@ -101,19 +101,19 @@ public func |+|<A:Numeric> (_ lhs:(A, e), _ rhs: [(A, [e])])  -> [(A,[e])] {
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:e)  -> [(A,[e])] {
-  lhs |+| (rhs |> unit >>> arrayfySecond)
+  lhs |+| (rhs |> unitVector >>> arrayfySecond)
 }
 
 public func |+|<A:Numeric> (_ lhs:e, _ rhs:(A, [e]))  -> [(A,[e])] {
-  (lhs |> unit >>> arrayfySecond) |+| rhs
+  (lhs |> unitVector >>> arrayfySecond) |+| rhs
 }
 
 public func |+|<A:Numeric> (_ lhs:(A, [e]), _ rhs:[e])  -> [(A,[e])] {
-  lhs |+| (rhs |> unit)
+  lhs |+| (rhs |> unitVector)
 }
 
 public func |+|<A:Numeric> (_ lhs:[e], _ rhs:(A, [e]))  -> [(A,[e])] {
-  (lhs |> unit) |+| rhs
+  (lhs |> unitVector) |+| rhs
 }
 
 public func |+|<A:Numeric> (_ lhs:[(A, e)], _ rhs:(A, [e]))  -> [(A,[e])] {

@@ -24,11 +24,11 @@ public prefix func |~|<A:Numeric>(_ items:[(A,e)]) -> [(A,e)] {
 }
 
 public prefix func |~|<A:Numeric>(_ item:e) -> (A,e) {
-  |~|(item |> unit)
+  |~|(item |> unitVector)
 }
 
 public prefix func |~|<A:Numeric>(_ item:[e]) -> (A,[e]) {
- |~|(item |> unit)
+ |~|(item |> unitVector)
 }
 
 public prefix func |~|<A:Numeric>(_ item:A) -> A {

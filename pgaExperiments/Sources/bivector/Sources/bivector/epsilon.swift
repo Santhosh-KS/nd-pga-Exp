@@ -56,7 +56,7 @@ func bubbleSort<A:Numeric> (_ xs: [e]) -> (A, [e]) {
 }
 
 public func process<A:Numeric> (_ lhs:e, _ rhs:e) -> (A, [e]) {
-  process((1, lhs), (1,rhs))
+  ((lhs |> unitVector), (rhs |> unitVector)) |> process
 }
 
 public func process<A:Numeric> (_ lhs:(A,e), _ rhs:(A,e)) -> (A, [e]) {
@@ -77,7 +77,7 @@ public func normalized<A:Numeric> (_ exp:(A, [e])) -> (A, [e]) {
 }
 
 public func normalized<A:Numeric> (_ exp:(A, e)) -> (A, [e]) {
-  (exp.0, [exp.1])
+  exp |> arrayfySecond
 }
 
 public func removeDuplicates(_ xs:[e]) -> [e] {

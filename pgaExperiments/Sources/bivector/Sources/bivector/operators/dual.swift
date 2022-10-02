@@ -18,11 +18,11 @@ func dual<A:Numeric>(_ input:(A,e)) -> (A, [e]) {
 }
 
 func dual<A:Numeric>(_ input:e) -> (A, [e]) {
-  (input |> unit) |> arrayfySecond >>> dual
+  (input |> unitVector) |> arrayfySecond >>> dual
 }
 
 func dual<A:Numeric>(_ input:[e]) -> (A, [e]) {
-  (input |> unit) |> dual
+  (input |> unitVector) |> dual
 }
 
 func dual<A:Numeric>(_ input:A) -> (A, [e]) {

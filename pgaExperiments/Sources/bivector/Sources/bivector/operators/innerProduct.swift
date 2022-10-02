@@ -28,7 +28,7 @@ func |||<A:Numeric>(_ lhs:e, _ rhs:[A]) -> (A, e) {
 }
 
 func |||<A:Numeric>(_ lhs:e, _ rhs:e) -> A {
-  (lhs |> unit) ||| (rhs |> unit)
+  (lhs |> unitVector) ||| (rhs |> unitVector)
 }
 
 func |||<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> A {
@@ -109,15 +109,15 @@ func |||<A:Numeric>(_ lhs:e, _ rhs:(A,[e])) -> (A, [e]) {
 }
 
 func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:[e]) -> (A, [e]) {
-  lhs ||| (rhs |> unit)
+  lhs ||| (rhs |> unitVector)
 }
 
 func |||<A:Numeric>(_ lhs:[e], _ rhs:(A,[e])) -> (A, [e]) {
-  (lhs |> unit) ||| rhs
+  (lhs |> unitVector) ||| rhs
 }
 
 func |||<A:Numeric>(_ lhs:[e], _ rhs:[e]) -> (A, [e]) {
-  (lhs |> unit) ||| (rhs |> unit)
+  (lhs |> unitVector) ||| (rhs |> unitVector)
 }
 
 public func |||<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> (A,e) {

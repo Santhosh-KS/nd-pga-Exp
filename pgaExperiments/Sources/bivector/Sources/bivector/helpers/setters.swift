@@ -96,12 +96,12 @@ public func filter<A:Numeric, B> (_ xs: [(A, B)]) -> [(A, B)] {
   return nonZeroXs
 }
 
-public func unit<A:Numeric,B>(_ x:B) -> (A, B) {
+public func unitVector<A:Numeric,B>(_ x:B) -> (A, B) {
   (1, x)
 }
 
 public func arrayfy<A:Numeric, B>(_ x:B) -> (A,[B]) {
-  x |> unit >>> arrayfySecond
+  x |> unitVector >>> arrayfySecond
 }
 
 public func arrayfySecond<A:Numeric, B>(_ x:(A,B)) -> (A,[B]) {
