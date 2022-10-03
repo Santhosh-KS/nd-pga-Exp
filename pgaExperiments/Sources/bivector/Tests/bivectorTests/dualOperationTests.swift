@@ -1,6 +1,6 @@
 
 import XCTest
-
+/*
 final class dualOperationTests: XCTestCase {
   
   func testDualOfGrade0() {
@@ -57,3 +57,4 @@ final class dualOperationTests: XCTestCase {
   }
   
 }
+*/

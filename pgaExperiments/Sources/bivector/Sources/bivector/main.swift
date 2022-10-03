@@ -36,10 +36,11 @@
 //print("e033", e033)
 //
 //
-//print(printGeometricProductTable())
+
+print(printGeometricProductTable())
 //let e0_e1:(Double, [e]) = (1, e(0)) |*| (1, e(1))
 //print(e0_e1)
-print(printInnerProductTable())
+//print(printInnerProductTable())
 //print(printOuterProductTable())
 //print(printRegressiveProductTable())
 //
@@ -200,12 +201,17 @@ print(printInnerProductTable())
 //print("E = ", stringify(E))
 //print("E = ", getPoint(x: -0.8, y: -1, z: 0.8))
 ////var A=point(0,.8,0), B=point(.8,-1,-.8), C=point(-.8,-1,-.8), D=point(.8,-1,.8), E=point(-.8,-1,.8);
-//print("E <&*> C = " , stringify(E |&*| C))
+//print("E <&*> 7C = " , stringify(E |&*| C))
 //let a = e01
 //let b = e123
 //
-//let dot_p = e12 ||| e0
-//print(dot_p)
+//let dot_ab = a ||| b
+//print("a|b = ", dot_ab)
+//
+//let wedge_ab = a |^| b
+//print("a^b = ", wedge_ab)
+//let gp_ab = a |*| b
+//print("gp = ",gp_ab)
 //let wedg_p = e01 |^| e123
 //print(wedg_p)
 

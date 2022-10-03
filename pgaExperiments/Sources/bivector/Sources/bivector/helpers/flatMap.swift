@@ -31,7 +31,7 @@ internal func compactMap<A>(_ a:[[A]]) -> [[A]] {
 }
 
 
-internal func compactMap<A:Numeric>(_ xs:[(A, [e])]) -> [(A, [e])] {
+internal func compactMap<A:Numeric & FloatingPoint>(_ xs:[(A, [e])]) -> [(A, [e])] {
   var retVal = [(A,[e])]()
   xs.forEach { pair in
     if pair != wedge0() {

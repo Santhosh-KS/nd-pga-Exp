@@ -1,5 +1,5 @@
 import XCTest
-
+/*
 final class outerProductTests: XCTestCase  {
   func testScalarOuterProdGrade1() {
     let e2 = e(2) |^| 22
@@ -178,3 +178,4 @@ final class outerProductTests: XCTestCase  {
   }
   
 }
+*/

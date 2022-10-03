@@ -1,5 +1,5 @@
 import XCTest
-
+/*
 final class conjugateOperationTests: XCTestCase  {
   
   func testGrade2AddGrade2() {
@@ -161,3 +161,4 @@ final class conjugateOperationTests: XCTestCase  {
    }
    */
 }
+*/

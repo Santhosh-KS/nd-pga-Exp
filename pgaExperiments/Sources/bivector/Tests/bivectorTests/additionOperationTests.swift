@@ -2,10 +2,13 @@ import XCTest
 
 final class additionOperationTests: XCTestCase {
   func testScalarAddition() {
-    XCTAssertEqual(10 |+| 15, 10+15)
+    let a:Float = 10
+    let b:Float = 15
+    XCTAssertEqual(a |+| b, a+b)
     
-    XCTAssertEqual([1,2,3,4] |+| [5,6,7,8,9], 1+2+3+4+5+6+7+8)
-    XCTAssertEqual([1,2,3,4] |+| [5,6,7,8,9], [1,2,3,4,5,6,7,8].reduce(0, +))
+//    let c:[Float] = [1,2,3,4]
+//    let d:[Float] = [5,6,7,8,9]
+//    XCTAssertEqual(c |+| d, (c+d).reduce(0, +))
   }
   
   func testScalarAddGrade1() {

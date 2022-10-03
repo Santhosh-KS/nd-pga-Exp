@@ -1,3 +1,4 @@
+
 import Foundation
 
 precedencegroup GeometricProductProcessingOrder {
@@ -9,102 +10,101 @@ precedencegroup GeometricProductProcessingOrder {
 
 infix operator |*|:GeometricProductProcessingOrder
 
-public func |*|<A:Numeric>(_ lhs:A, _ rhs:A) -> A {
-  lhs ||| rhs |+| lhs |^| rhs
+func |*|<A:Numeric & FloatingPoint>(_ lhs:A, _ rhs:A) -> A {
+  lhs * rhs
 }
 
-public func |*|<A:Numeric>(_ lhs:[A], _ rhs:[A]) -> A {
-  lhs ||| rhs |+| lhs |^| rhs
+func |*|<A:Numeric & FloatingPoint>(_ lhs:[A], _ rhs:[A]) -> A {
+  lhs.reduce(1, |*|) |*| rhs.reduce(1, |*|)
 }
 
-public func |*|<A:Numeric>(_ lhs:A, _ rhs:e) -> (A,e) {
-  lhs |^| rhs
+func |*|<A:Numeric & FloatingPoint>(_ lhs:A, _ rhs:e) -> (A, [e]) {
+  (lhs, []) |*| (rhs |> unitVector >>> arrayfySecond)
 }
 
-public func |*|<A:Numeric>(_ lhs:e, _ rhs:A) -> (A,e) {
-  lhs |^| rhs
+func |*|<A:Numeric & FloatingPoint>(_ lhs:e, _ rhs:A) -> (A, [e]) {
+  (lhs |> unitVector >>> arrayfySecond) |*| (rhs, [])
 }
 
-public func |*|<A:Numeric>(_ lhs:[A], _ rhs:e) -> (A,e) {
-  lhs |^| rhs
+func |*|<A:Numeric & FloatingPoint>(_ lhs:[A], _ rhs:e) -> (A, [e]) {
+  (lhs.reduce(1, *), []) |*| (rhs |> unitVector >>> arrayfySecond)
 }
 
-public func |*|<A:Numeric>(_ lhs:e, _ rhs:[A]) -> (A,e) {
-  rhs |^| lhs
+func |*|<A:Numeric & FloatingPoint>(_ lhs:e, _ rhs:[A]) -> (A, [e]) {
+  (lhs |> unitVector >>> arrayfySecond) |*| (rhs.reduce(1, *), [])
 }
 
-public func |*|<A:Numeric> (_ lhs:(A,e), _ rhs:(A, e)) -> (A, [e]) {
-  (lhs |^| rhs)
-}
-
-public func |*|<A:Numeric>(_ lhs:e, _ rhs:e) -> (A, [e]) {
+func |*|<A:Numeric & FloatingPoint>(_ lhs:e, _ rhs:e) -> (A, [e]) {
   (lhs |> unitVector) |*| (rhs |> unitVector)
 }
 
-public func |*|<A:Numeric> (_ lhs:e, _ rhs:(A, e)) -> (A, [e]) {
-  (lhs |> unitVector) |*| rhs
+func |*|<A:Numeric & FloatingPoint>(_ lhs:(A,e), _ rhs:(A,e)) -> (A, [e]) {
+  (lhs |> arrayfySecond) |*| (rhs |> arrayfySecond)
 }
 
-public func |*|<A:Numeric> (_ lhs:(A, e), _ rhs:e) -> (A, [e]) {
-  lhs |*| (rhs |> unitVector)
+func evaluateResidual<A:Numeric & FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A, [e])) -> (A, [e]) {
+  var retVal:(A, [e]) = normalized((lhs.0|*|rhs.0, (lhs.1 + rhs.1)))
+  retVal.1 = (retVal.1 |> removeDuplicates)
+  return retVal
 }
 
-public func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> [(A, [e])] {
-  (lhs ||| rhs |+| lhs |^| rhs) |> compactMap
+func |*|<A:Numeric & FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
+  if contains(lhs.1, e(0)) && contains(rhs.1, e(0)) { return (0, []) }
+  else {
+    return evaluateResidual(lhs, rhs)
+  }
 }
 
-public func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,e)) -> [(A, [e])] {
-  lhs |*| (rhs |> arrayfySecond)
-}
-
-public func |*|<A:Numeric>(_ lhs:(A,e), _ rhs:(A,[e])) -> [(A, [e])] {
-  (lhs |> arrayfySecond) |*| rhs
-}
-
-public func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:e) -> [(A, [e])] {
-  lhs |*| (rhs |> arrayfy)
-}
-
-public func |*|<A:Numeric>(_ lhs:e, _ rhs: (A,[e])) -> [(A, [e])] {
-  (lhs |> arrayfy) |*| rhs
-}
-
-public func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:[e]) -> [(A, [e])] {
-  lhs |*| (rhs |> unitVector)
-}
-
-public func |*|<A:Numeric>(_ lhs:[e], _ rhs: (A,[e])) -> [(A, [e])] {
-  (lhs |> unitVector) |*| rhs
-}
-
-public func |*|<A:Numeric>(_ lhs:[e], _ rhs: [e]) -> [(A, [e])] {
-  (lhs |> unitVector) |*| (rhs |> unitVector)
-}
-
-public func |*|<A:Numeric>(_ lhs:A, _ rhs:(A,[e])) -> (A, [e]) {
-  ((lhs, []) |*| rhs).first!
-}
-
-public func |*|<A:Numeric>(_ lhs:(A,[e]), _ rhs:A) -> (A, [e]) {
-  (lhs |*| (rhs, [])).first!
-}
-
-public func |*|<A:Numeric>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
+func |*|<A:Numeric & FloatingPoint>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
   var retVal = [(A, [e])]()
   for lmlv in lhs {
     for rmlv in rhs {
-      let prod = (lmlv |*| rmlv)
-      if !prod.isEmpty { retVal.append(prod.first!)}
+      retVal.append((lmlv |*| rmlv))
     }
   }
-  return reduce(with: |+|, retVal) |> compactMap
+  return reduce(with: |+|, retVal |> compactMap)
 }
 
-public func |*|<A:Numeric> (_ lhs:A, _ rhs:(A, e)) -> (A,e) {
-  (lhs|*|rhs.0, rhs.1)
+func |*|<A:Numeric & FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A,e)) -> (A, [e]) {
+  lhs |*| (rhs |> arrayfySecond)
 }
 
-public func |*|<A:Numeric> (_ lhs:(A,e), _ rhs:A) -> (A, e) {
-  (lhs.0|*|rhs, lhs.1)
+func |*|<A:Numeric & FloatingPoint>(_ lhs:(A,e), _ rhs:(A,[e])) -> (A, [e]) {
+  (lhs |> arrayfySecond) |*| rhs
 }
 
+func |*|<A:Numeric & FloatingPoint>(_ lhs:(A,[e]), _ rhs:e) -> (A, [e]) {
+  lhs |*| (rhs |> arrayfy)
+}
+
+func |*|<A:Numeric & FloatingPoint>(_ lhs:e, _ rhs:(A,[e])) -> (A, [e]) {
+  (lhs |> arrayfy) |*| rhs
+}
+
+func |*|<A:Numeric & FloatingPoint>(_ lhs:(A,[e]), _ rhs:[e]) -> (A, [e]) {
+  lhs |*| (rhs |> unitVector)
+}
+
+func |*|<A:Numeric & FloatingPoint>(_ lhs:[e], _ rhs:(A,[e])) -> (A, [e]) {
+  (lhs |> unitVector) |*| rhs
+}
+
+func |*|<A:Numeric & FloatingPoint>(_ lhs:[e], _ rhs:[e]) -> (A, [e]) {
+  (lhs |> unitVector) |*| (rhs |> unitVector)
+}
+
+public func |*|<A:Numeric & FloatingPoint> (_ lhs:A, _ rhs:(A, e)) -> (A,e) {
+  (lhs |*| rhs.0, rhs.1)
+}
+
+public func |*|<A:Numeric & FloatingPoint> (_ lhs:(A,e), _ rhs:A) -> (A, e) {
+  (lhs.0 |*| rhs, lhs.1)
+}
+
+public func |*|<A:Numeric & FloatingPoint> (_ lhs:A, _ rhs:(A, [e])) -> (A,[e]) {
+  (lhs |*| rhs.0, rhs.1)
+}
+
+public func |*|<A:Numeric & FloatingPoint> (_ lhs:(A,[e]), _ rhs:A) -> (A, [e]) {
+  (lhs.0 |*| rhs, lhs.1)
+}
