@@ -1,5 +1,5 @@
 import XCTest
-/*
+
 final class innerProductTests: XCTestCase {
   
   func testScalarInnerProdGrade1() {
@@ -173,4 +173,4 @@ final class innerProductTests: XCTestCase {
     XCTAssertEqual(inner_1e12_1e12.0, -1)
   }
 }
-*/
+

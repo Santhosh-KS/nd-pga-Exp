@@ -24,12 +24,12 @@ extension e:CustomStringConvertible {
 
 extension e:Hashable { }
 
-public func sign<A:Numeric & FloatingPoint>(_ lhs:e, _ rhs:e) -> A {
+public func sign<A:FloatingPoint>(_ lhs:e, _ rhs:e) -> A {
   if lhs > rhs { return A.zero - 1}
   return A.zero + 1
 }
 
-public func sign<A:Numeric & FloatingPoint>(_ xs:[e]) -> A  {
+public func sign<A:FloatingPoint>(_ xs:[e]) -> A  {
   let sorted = xs.sorted()
   if xs == sorted { return A.zero + 1 }
     // TODO: Use different approach than bubblesort
@@ -37,7 +37,7 @@ public func sign<A:Numeric & FloatingPoint>(_ xs:[e]) -> A  {
   
 }
 
-func bubbleSort<A:Numeric & FloatingPoint> (_ xs: [e]) -> (A, [e]) {
+func bubbleSort<A:FloatingPoint> (_ xs: [e]) -> (A, [e]) {
   guard xs.count > 1 else { return (1, xs)}
   var sortedArray = xs
   var retVal:A = A.zero + 1
@@ -52,11 +52,11 @@ func bubbleSort<A:Numeric & FloatingPoint> (_ xs: [e]) -> (A, [e]) {
   return (retVal, sortedArray)
 }
 
-public func process<A:Numeric & FloatingPoint> (_ lhs:e, _ rhs:e) -> (A, [e]) {
+public func process<A:FloatingPoint> (_ lhs:e, _ rhs:e) -> (A, [e]) {
   ((lhs |> unitVector), (rhs |> unitVector)) |>  process 
 }
 
-public func process<A:Numeric & FloatingPoint> (_ lhs:(A,e), _ rhs:(A,e)) -> (A, [e]) {
+public func process<A:FloatingPoint> (_ lhs:(A,e), _ rhs:(A,e)) -> (A, [e]) {
   isEqualBasis(lhs.1, rhs.1) ? (lhs.0 * rhs.0, []) : (lhs.0 * rhs.0, [lhs.1, rhs.1])
 }
 
@@ -68,12 +68,12 @@ public func isNullBasis(_ b:e) -> Bool {
   b == e(0)
 }
 
-public func normalized<A:Numeric & FloatingPoint> (_ exp:(A, [e])) -> (A, [e]) {
+public func normalized<A:FloatingPoint> (_ exp:(A, [e])) -> (A, [e]) {
   let sign:(A, [e]) = bubbleSort(exp.1)
   return (exp.0 * sign.0, sign.1 == [e(0)] ? [] : sign.1)
 }
 
-public func normalized<A:Numeric & FloatingPoint> (_ exp:(A, e)) -> (A, [e]) {
+public func normalized<A:FloatingPoint> (_ exp:(A, e)) -> (A, [e]) {
   exp |> arrayfySecond
 }
 
@@ -99,11 +99,11 @@ public func contains(_ xs:[e], _ val:e) -> Bool {
   return false
 }
 
-public func grade<A:Numeric & FloatingPoint>(_ exp:(A,[e])) -> UInt8 {
+public func grade<A:FloatingPoint>(_ exp:(A,[e])) -> UInt8 {
   exp.1.isEmpty ? 0 : (exp.1 == [e(0)] ?  0 : UInt8(exp.1.count))
 }
 
-public func grade<A:Numeric & FloatingPoint>(with val:UInt8, in exp:[(A,[e])]) -> [(A,[e])] {
+public func grade<A:FloatingPoint>(with val:UInt8, in exp:[(A,[e])]) -> [(A,[e])] {
   var retVal = [(A,[e])]()
   for xp in exp {
     let grd = grade(xp)

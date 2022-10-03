@@ -1,25 +1,25 @@
 import Foundation
 
-internal func wedge0<A:Numeric & FloatingPoint>() -> (A,[e]) { (A.zero, []) }
+internal func wedge0<A:FloatingPoint>() -> (A,[e]) { (A.zero, []) }
 
 
-internal func getBaseVectors<A:Numeric & FloatingPoint>(_ mulVecs:[(A,[e])]) -> [[e]] {
+internal func getBaseVectors<A:FloatingPoint>(_ mulVecs:[(A,[e])]) -> [[e]] {
   mulVecs.map { pairs in
     pairs.1.sorted(by: <)
   }
 }
 
-internal func getBaseVectors<A:Numeric & FloatingPoint>(_ mulVecs:[(A,e)]) -> [e] {
+internal func getBaseVectors<A:FloatingPoint>(_ mulVecs:[(A,e)]) -> [e] {
   mulVecs.map { pairs in
     pairs.1
   }.sorted(by: <)
 }
 
-internal func getBaseVectors<A:Numeric & FloatingPoint>(_ mulVec:(A,[e])) -> [e] {
+internal func getBaseVectors<A:FloatingPoint>(_ mulVec:(A,[e])) -> [e] {
   mulVec.1.sorted(by: <)
 }
 
-internal func getBaseVectors<A:Numeric & FloatingPoint>(_ vec:(A,e)) -> e {
+internal func getBaseVectors<A:FloatingPoint>(_ vec:(A,e)) -> e {
   vec.1
 }
 
@@ -27,11 +27,11 @@ internal func getBaseVectors(_ vec:e ) -> e {
   vec
 }
 
-internal func getBaseVectors<A:Numeric & FloatingPoint>(_ cons:A ) -> e {
+internal func getBaseVectors<A:FloatingPoint>(_ cons:A ) -> e {
   e(0)
 }
 
-internal func basis<A:Numeric & FloatingPoint>(_ es:[(A, e)]) -> [[(A, e)]] {
+internal func basis<A:FloatingPoint>(_ es:[(A, e)]) -> [[(A, e)]] {
   if es.isEmpty { return [es] }
   let first = es.first!
   var dropped  = es.dropFirst()
@@ -106,7 +106,7 @@ internal func flipSign(withRef bv:[e], on target:[e]) -> Bool  {
   return count%2 != 0 ? true : false
 }
 
-internal func swap<A:Numeric & FloatingPoint>(_ mulvec:(A, [e])) -> (A, [e]) {
+internal func swap<A:FloatingPoint>(_ mulvec:(A, [e])) -> (A, [e]) {
   // TODO: This swap works only multivector with 2 vectors [[e1,e2], [e2,e3]] etc
   // and doesn't work for multivectors for > 2 vectors [[e1,e2,e3], [e2,e3,e1]]
   if mulvec.1.isEmpty { return wedge0() }
@@ -122,11 +122,11 @@ internal func swap<A:Numeric & FloatingPoint>(_ mulvec:(A, [e])) -> (A, [e]) {
   return res
 }
 
-internal func simplify<A:Numeric & FloatingPoint>(_ mulVecs:[(A,[e])]) -> [(A,[e])] {
+internal func simplify<A:FloatingPoint>(_ mulVecs:[(A,[e])]) -> [(A,[e])] {
   reduce(with: |+|, mulVecs.map(swap))
 }
 
-internal func reduce<A:Numeric & FloatingPoint>(toMultivector xs: [(A, [e])]) -> [(A, [e])] {
+internal func reduce<A:FloatingPoint>(toMultivector xs: [(A, [e])]) -> [(A, [e])] {
   var compactResult = [(A,[e])]()
   if xs.isEmpty { return compactResult }
   var previousPairs:(A,[e]) = xs.first!
@@ -148,7 +148,7 @@ internal func reduce<A:Numeric & FloatingPoint>(toMultivector xs: [(A, [e])]) ->
 //}
 
 //[[(A, [e])]]
-func reduce<A:Numeric & FloatingPoint>(with f:@escaping (A,A) -> A,
+func reduce<A:FloatingPoint>(with f:@escaping (A,A) -> A,
                        _ xs:[[(A, [e])]]) -> [(A, [e])] {
   reduce( with:f,xs |> flatmap) |> compactMap 
 }
@@ -174,12 +174,12 @@ internal func reduce<A>(with f:@escaping (A, A) -> A,
 }
 
 //[[(A, e)]]
-func reduce<A:Numeric & FloatingPoint>(with f:@escaping (A,A) -> A,
+func reduce<A:FloatingPoint>(with f:@escaping (A,A) -> A,
                        _ xs:[[(A, e)]]) -> [(A, e)] {
   reduce( with:f,xs |> flatmap)
 }
 
-internal func reduce<A:Numeric & FloatingPoint>(with f:@escaping (A, A) -> A,
+internal func reduce<A:FloatingPoint>(with f:@escaping (A, A) -> A,
                         _ xs:[(A,e)]) -> [(A,e)] {
   var result = [(A,e)]()
   xs.forEach { pair in
@@ -197,7 +197,7 @@ internal func reduce<A:Numeric & FloatingPoint>(with f:@escaping (A, A) -> A,
   return result
 }
 
-internal func reduce<A:Numeric & FloatingPoint>(_ xs:[(A,e)]) -> [(A,e)] {
+internal func reduce<A:FloatingPoint>(_ xs:[(A,e)]) -> [(A,e)] {
   var result = [(A,e)]()
   xs.forEach { pair in
     var index = 0
@@ -244,7 +244,7 @@ func complement(_ vec:[e]) -> [e] {
   else { return [e(0)] }
 }
 
-public func antiCommutativity<A:Numeric & FloatingPoint>(_ es:[e]) -> (A, [e]) {
+public func antiCommutativity<A:FloatingPoint>(_ es:[e]) -> (A, [e]) {
   if !es.isEmpty && es.count == 1 {
     return (A.zero+1, es)
   }
@@ -253,7 +253,7 @@ public func antiCommutativity<A:Numeric & FloatingPoint>(_ es:[e]) -> (A, [e]) {
 
 //[(A, [e])]
 
-//public func compactMap<A:Numeric & FloatingPoint>(_ xs:[(A, [e])]) -> [(A, [e])] {
+//public func compactMap<A:FloatingPoint>(_ xs:[(A, [e])]) -> [(A, [e])] {
 //  var retVal = [(A, [e])]()
 //  for (val, xes) in xs {
 //    if val != 0 && !xes.isEmpty { retVal.append((val,xes)) }

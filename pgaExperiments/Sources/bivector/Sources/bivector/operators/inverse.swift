@@ -3,15 +3,15 @@
 //// NOTE: Current version of Inverse is not correct!!
 //
 //
-//public postfix func |-||<A:Numeric & FloatingPoint>(_ basis:(A,e)) -> (A, e) {
+//public postfix func |-||<A:FloatingPoint>(_ basis:(A,e)) -> (A, e) {
 //  (basis.0|-||, basis.1)
 //}
 //
-//public postfix func |-||<A:Numeric & FloatingPoint>(_ basis:e) -> (A, e) {
+//public postfix func |-||<A:FloatingPoint>(_ basis:e) -> (A, e) {
 //  (1, basis)|-||
 //}
 //
-//public postfix func |-||<A:Numeric & FloatingPoint>(_ basis:(A, [e])) -> (A, [e]) {
+//public postfix func |-||<A:FloatingPoint>(_ basis:(A, [e])) -> (A, [e]) {
 //  let reverse = |~|(A(1), basis.1)
 //  let reveresedScalar = Inverse(of: basis.0) ||| reverse.0
 //  return ( reveresedScalar , reverse.1)
@@ -24,7 +24,7 @@
 //// May be using |*| is not to correct operation here. Need to revist this portion of code.
 //// TODO: https://vixra.org/pdf/1901.0246v1.pdf
 //// https://discourse.bivector.net/t/why-there-is-no-inverse-operator-defined-in-bivector-net/608
-//public postfix func |-||<A:Numeric & FloatingPoint>(_ input:[(A, [e])]) -> [(A, [e])] {
+//public postfix func |-||<A:FloatingPoint>(_ input:[(A, [e])]) -> [(A, [e])] {
 //  let conj = input.map(conjugate)
 //  print("input = ", input)
 //  print("Conjugate = ", conj)
@@ -38,7 +38,7 @@
 //}
 //
 ///*
-// public postfix func |-||<A:Numeric & FloatingPoint>(_ input:[(A, [e])]) -> [(A, [e])] {
+// public postfix func |-||<A:FloatingPoint>(_ input:[(A, [e])]) -> [(A, [e])] {
 //  let conj = input.map(conjugate)
 //  print("input = ", input)
 //  print("Conjugate = ", conj)
@@ -81,18 +81,18 @@
 //}
 //
 //
-//public func Inverse<A:Numeric & FloatingPoint>(of val:A) -> A {
+//public func Inverse<A:FloatingPoint>(of val:A) -> A {
 //  val|-||
 //}
 //
-//public func Inverse<A:Numeric & FloatingPoint>(of basis:(A,e)) -> (A, e) {
+//public func Inverse<A:FloatingPoint>(of basis:(A,e)) -> (A, e) {
 //  basis|-||
 //}
 //
-//public func Inverse<A:Numeric & FloatingPoint>(of basis:e) -> (A,e) {
+//public func Inverse<A:FloatingPoint>(of basis:e) -> (A,e) {
 //  basis|-||
 //}
 //
-//public func Inverse<A:Numeric & FloatingPoint>(of basis:(A,[e])) -> (A, [e]) {
+//public func Inverse<A:FloatingPoint>(of basis:(A,[e])) -> (A, [e]) {
 //  basis|-||
 //}

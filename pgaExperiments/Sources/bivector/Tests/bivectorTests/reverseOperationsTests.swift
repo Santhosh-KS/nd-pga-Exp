@@ -1,7 +1,7 @@
 import XCTest
-/*
+
 final class reverseOperationsTests: XCTestCase {
-  
+  /*
   func testReverseOfConstants() {
     XCTAssertEqual(|~|11, 11)
     XCTAssertEqual(|~|Float.pi, Float.pi)
@@ -21,11 +21,11 @@ final class reverseOperationsTests: XCTestCase {
     XCTAssertEqual((|~|e3).1, e3.1)
     
     XCTAssertEqual(grade(e113), 1)
-    XCTAssertEqual((|~|e113).0, 1)
+    XCTAssertEqual((|~|e113).0, -1)
     XCTAssertEqual((|~|e113).1, e113.1)
     
     XCTAssertEqual(grade(e131), 1)
-    XCTAssertEqual((|~|e131).0, -1)
+    XCTAssertEqual((|~|e131).0, 1)
     XCTAssertEqual((|~|e131).1, e131.1)
     
   }
@@ -90,5 +90,6 @@ final class reverseOperationsTests: XCTestCase {
     XCTAssertEqual((|~|e321).0, -1)
     XCTAssertEqual((|~|e321).1, e123.1)
   }
+  */
 }
-*/
+

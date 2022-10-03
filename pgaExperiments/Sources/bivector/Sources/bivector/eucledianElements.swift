@@ -1,7 +1,7 @@
 import Foundation
 
 // https://bivector.net/3DPGA.pdf
-public struct Point<A:Numeric & FloatingPoint> {
+public struct Point<A:FloatingPoint> {
   var x:(A, [e])
   var y:(A, [e])
   var z:(A, [e])
@@ -34,17 +34,17 @@ extension Point: CustomStringConvertible {
   }
 }
 
-public func idealPoint<A:Numeric & FloatingPoint>(_ p:Point<A>) -> [(A, [e])] {
+public func idealPoint<A:FloatingPoint>(_ p:Point<A>) -> [(A, [e])] {
   p
   |> set(^\Point.c , (0, []))
   |> point
 }
 
-public func direction<A:Numeric & FloatingPoint>(_ p:Point<A>) -> [(A, [e])] {
+public func direction<A:FloatingPoint>(_ p:Point<A>) -> [(A, [e])] {
   p |> idealPoint
 }
 
-public func point<A:Numeric & FloatingPoint>(_ p:Point<A>) -> [(A, [e])] {
+public func point<A:FloatingPoint>(_ p:Point<A>) -> [(A, [e])] {
   p.x |+| p.y |+| p.z |+| p.c
 }
 
@@ -56,7 +56,7 @@ public let defaultPoint = P
 
 //Plane ax + by + cz + d = 0
 //p = ae1 + be2 + ce3 + de0
-public struct Plane<A:Numeric & FloatingPoint> {
+public struct Plane<A:FloatingPoint> {
   var a:(A, e)
   var b:(A, e)
   var c:(A, e)
@@ -81,14 +81,14 @@ extension Plane:CustomStringConvertible {
   }
 }
 
-public func plane<A:Numeric & FloatingPoint>(_ p:Plane<A>) -> [(A, [e])] {
+public func plane<A:FloatingPoint>(_ p:Plane<A>) -> [(A, [e])] {
   p.a |+| p.b |+| p.c |+| p.d
 }
 
 let p = Plane<Double>.default()
 public let defaultPlane = p
 
-public func getPoint<A:Numeric & FloatingPoint>(x:A,y:A,z:A,c:A=1) -> Point<Double> {
+public func getPoint<A:FloatingPoint>(x:A,y:A,z:A,c:A=1) -> Point<Double> {
   P |> set(^\.x.0, x as! Double)
   |> set(^\.y.0, y as! Double)
   |> set(^\.z.0, z as! Double)
