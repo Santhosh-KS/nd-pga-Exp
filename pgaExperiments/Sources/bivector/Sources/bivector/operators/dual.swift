@@ -13,7 +13,8 @@ func dual<A:Numeric>(with pseudoScalar:(A,[e]), of input:(A,[e])) -> (A,[e]) {
 
 func dual<A:Numeric>(_ input:(A,[e])) -> (A, [e]) {
   let pseudoScalar:(A,[e]) = (1, [e(0), e(1), e(2), e(3)])
-  return (pseudoScalar, input) |> dual(with:of:)
+//  return (pseudoScalar, input) |> dual(with:of:)
+  return dual(with: pseudoScalar, of: input)
 }
 
 func dual<A:Numeric>(_ input:[(A,[e])]) -> [(A, [e])] {

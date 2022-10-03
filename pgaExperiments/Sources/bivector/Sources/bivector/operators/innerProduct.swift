@@ -36,51 +36,47 @@ func |||<A:Numeric>(_ lhs:(A,e), _ rhs:(A,e)) -> A {
   (isNullBasis(lhs.1) ? 0 : (lhs.0 ||| rhs.0)) : 0
 }
 
+func evaluate<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A, [e])) -> (A, [e]) {
+  var retVal:(A, [e]) = normalized((lhs.0|||rhs.0, (lhs.1 + rhs.1)))
+  retVal.1 = (retVal.1 |> removeDuplicates)
+  return retVal
+}
 
 func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
-  if lhs.1.sorted() == rhs.1.sorted() {
-    if contains(lhs.1, e(0)) { return (0, []) }
+  let lhsGrade = grade(lhs)
+  let rhsGrade = grade(rhs)
+  if (lhsGrade == 0 || rhsGrade == 0) { return (0, []) }
+  if lhsGrade == 1 {
+    if lhs.1 == [e(0)] || rhs.1 == [e(0)] { return (0, []) }
+    if !contains(rhs.1, lhs.1.first!) { return (0, []) }
     else {
-      var retVal:(A, [e]) = normalized((lhs.0|||rhs.0, (lhs.1 + rhs.1)))
-      retVal.1 = (retVal.1 |> removeDuplicates)
-      return retVal
+      return evaluate(lhs, rhs)
     }
-  } else {
-    if contains(lhs.1, e(0)) && contains(rhs.1, e(0)) { return (0, []) }
-    for re in rhs.1 {
-      var retVal:(A, [e]) = normalized((lhs.0|||rhs.0, (lhs.1 + rhs.1)))
-      retVal.1 = (retVal.1 |> removeDuplicates)
-      if contains(lhs.1, re) { return  retVal }
+  }
+  else {
+    if contains(rhs.1, e(0)) && contains(lhs.1, e(0)) { return (0, [])}
+    if rhsGrade == 1 {
+      if !contains(lhs.1, rhs.1.first!) { return (0, []) }
+      else {
+        return evaluate(lhs, rhs)
+      }
     }
-    return (0, [])
+    else {
+      var matchCount = 0
+      for x in 0..<grade(lhs) {
+        if contains(rhs.1, lhs.1[Int(x)]) { matchCount += 1 }
+      }
+      if matchCount == grade(lhs) { return evaluate(lhs, rhs) }
+      
+      matchCount = 0
+      for x in 0..<grade(rhs) {
+        if contains(lhs.1, rhs.1[Int(x)]) { matchCount += 1 }
+      }
+      if matchCount == grade(rhs) { return evaluate(lhs, rhs) }
+      else { return (0, []) }
+    }
   }
 }
-/*
- func |||<A:Numeric>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
-  if lhs.1.sorted() == rhs.1.sorted() {
-    var lhsSorted:(A,[e]) = lhs
-    var rhsSorted:(A,[e]) = rhs
-    if lhs.1.contains(e(0)) {
-      lhsSorted = (lhs.0, Array(lhs.1.dropFirst()))
-      rhsSorted = (rhs.0, Array(rhs.1.dropFirst()))
-    }
-    if lhs.1.count == 1 && lhs.1 == [e(0)] { return (lhs.0, [])}
-    else {
-      var retVal:(A, [e]) = normalized((lhsSorted.0|||rhsSorted.0, (lhsSorted.1 + rhsSorted.1)))
-      retVal.1 = (retVal.1 |> removeDuplicates)
-      return retVal
-    }
-  } else {
-    if contains(lhs.1, e(0)) && contains(rhs.1, e(0)) { return (rhs.0, []) }
-    for re in rhs.1 {
-      var retVal:(A, [e]) = normalized((lhs.0|||rhs.0, (lhs.1 + rhs.1)))
-      retVal.1 = (retVal.1 |> removeDuplicates)
-      if contains(lhs.1, re) { return  retVal }
-    }
-    return (0, [])
-  }
-}
- */
 
 func |||<A:Numeric>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
   var retVal = [(A, [e])]()

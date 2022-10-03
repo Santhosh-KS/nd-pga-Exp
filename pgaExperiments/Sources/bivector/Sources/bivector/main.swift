@@ -39,7 +39,7 @@
 //print(printGeometricProductTable())
 //let e0_e1:(Double, [e]) = (1, e(0)) |*| (1, e(1))
 //print(e0_e1)
-//print(printInnerProductTable())
+print(printInnerProductTable())
 //print(printOuterProductTable())
 //print(printRegressiveProductTable())
 //
@@ -201,19 +201,24 @@
 //print("E = ", getPoint(x: -0.8, y: -1, z: 0.8))
 ////var A=point(0,.8,0), B=point(.8,-1,-.8), C=point(-.8,-1,-.8), D=point(.8,-1,.8), E=point(-.8,-1,.8);
 //print("E <&*> C = " , stringify(E |&*| C))
-let a = e1
-let b = e01
+//let a = e01
+//let b = e123
+//
+//let dot_p = e12 ||| e0
+//print(dot_p)
+//let wedg_p = e01 |^| e123
+//print(wedg_p)
 
-let dual_a = dual(a)
-print("a = ", stringify(a))
-print("dual(a) = \(stringify(dual_a))")
-let dual_b = dual(b)
-print("b = ", stringify(b))
-print("dual(b) = \(stringify(dual_b))")
-
-////let r = dual(a) |^| dual(b)
-let r = a |^*| b
-print("r = \(stringify(r))")
+//let dual_a = dual(a)
+//print("a = ", stringify(a))
+//print("dual(a) = \(stringify(dual_a))")
+//let dual_b = dual(b)
+//print("b = ", stringify(b))
+//print("dual(b) = \(stringify(dual_b))")
+//
+//////let r = dual(a) |^| dual(b)
+//let r = a |^*| b
+//print("r = \(stringify(r))")
 //let dual_r = dual(r)
 //print("dual_r = \(stringify(dual_r))")
 //print("dual a = ",a)
