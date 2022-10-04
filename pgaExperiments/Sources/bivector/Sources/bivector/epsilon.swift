@@ -103,6 +103,10 @@ public func grade<A:FloatingPoint>(_ exp:(A,[e])) -> UInt8 {
   exp.1.isEmpty ? 0 : (exp.1 == [e(0)] ?  0 : UInt8(exp.1.count))
 }
 
+public func grade<A:FloatingPoint>(_ exp:A) -> UInt8 {
+  0
+}
+
 public func grade<A:FloatingPoint>(with val:UInt8, in exp:[(A,[e])]) -> [(A,[e])] {
   var retVal = [(A,[e])]()
   for xp in exp {
@@ -125,7 +129,7 @@ let e0 = 1.0 |*| e(0)
 let e1 = 1.0 |*| e(1)
 let e2 = 1.0 |*| e(2)
 let e3 = 1.0 |*| e(3)
-//let e00 = (e0 |*| e0)
+let e00 = e0 |*| e0
 let e01 = e0 |*| e1
 let e02 = e0 |*| e2
 let e03 = e0 |*| e3

@@ -59,9 +59,7 @@ final class printTableTests: XCTestCase {
   func testOuterProductTable() {
     let table:[(Double,[e])] = getTable()
     let outerProduct = tabulate(table, with: |^|).joined(separator: "\n")
-    print(outerProduct)
     XCTAssertEqual(outerProduct, printOuterProductTable())
-    
     let const_outerProduct = """
     ||e0|e1|e2|e3|e01|e02|e03|e12|e31|e23|e021|e013|e032|e123|e0123|
     :---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:
@@ -82,6 +80,16 @@ final class printTableTests: XCTestCase {
     |e0123 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
     """
     XCTAssertEqual(const_outerProduct, outerProduct)
+  }
+  
+  func testReverseTable() {
+    let result = printReverseTable()
+    let const_result = """
+        ||e0|e1|e2|e3|e01|e02|e03|e12|e31|e23|e021|e013|e032|e123|e0123|
+        :---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+        |Reverse|-1.0*e0 | -1.0*e1 | -1.0*e2 | -1.0*e3 | -1.0*e01 | -1.0*e02 | -1.0*e03 | -1.0*e12 | 1.0*e13 | -1.0*e23 | -1.0*e012 | 1.0*e013 | -1.0*e023 | 1.0*e123 | 1.0*e0123|
+        """
+    XCTAssertEqual(result, const_result)
   }
   
 }

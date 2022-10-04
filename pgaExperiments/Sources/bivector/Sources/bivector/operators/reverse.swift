@@ -3,12 +3,18 @@ import Foundation
 prefix operator |~|
 
 public prefix func |~|<A:FloatingPoint>(_ item:(A,[e])) -> (A,[e]) {
-  if item.1.isEmpty { return (1, []) }
+//  if item.1.isEmpty { return (1, []) }
   // This Normalization is important.
   // more dtails in this discussion thread. https://discourse.bivector.net/t/why-there-is-no-inverse-operator-defined-in-bivector-net/608
+  let itemGrade = item |> grade
   let val = normalized(item)
-  if (grade(item) != 2) { return item }
-  return (val.0, val.1 == [e(0)] ? [] : val.1  )
+  if itemGrade == 0 {
+    return (item.0 * -1, item.1)
+  }
+  else if (itemGrade == 1 || itemGrade == 2 ) {
+    return (val.0 * -1, val.1 == [e(0)] ? [] : val.1  )
+  }
+  else { return val }
 }
 
 public prefix func |~|<A:Numeric & FloatingPoint >(_ items:[(A,[e])]) -> [(A,[e])] {
@@ -16,7 +22,6 @@ public prefix func |~|<A:Numeric & FloatingPoint >(_ items:[(A,[e])]) -> [(A,[e]
 }
 
 public prefix func |~|<A:FloatingPoint>(_ item:(A,e)) -> (A,[e]) {
-//  return (item.0 * -1, item.1)
   |~|(item |> arrayfySecond)
 }
 

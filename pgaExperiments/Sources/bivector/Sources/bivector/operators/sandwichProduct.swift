@@ -3,7 +3,7 @@ precedencegroup SandwichProductProcessingOrder {
   higherThan: AdditionEvaluation, ForwardApplication
   lowerThan: MultiplicationPrecedence, AdditionPrecedence
 }
-
+/*
 infix operator |<*>|:SandwichProductProcessingOrder
 
 public func |<*>|<A:FloatingPoint>(_ lhs:A, _ rhs:A) -> A {
@@ -81,3 +81,4 @@ public func |<*>|<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:e) -> (A, [e]) {
 public func |<*>|<A:FloatingPoint>(_ lhs:e, _ rhs: (A,[e])) -> (A, [e]) {
   (lhs |> unitVector >>> arrayfySecond) |<*>| rhs
 }
+*/
