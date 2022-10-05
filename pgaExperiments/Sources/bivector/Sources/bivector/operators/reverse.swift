@@ -8,11 +8,8 @@ public prefix func |~|<A:FloatingPoint>(_ item:(A,[e])) -> (A,[e]) {
   // more dtails in this discussion thread. https://discourse.bivector.net/t/why-there-is-no-inverse-operator-defined-in-bivector-net/608
   let itemGrade = item |> grade
   let val = normalized(item)
-  if itemGrade == 0 {
-    return (item.0 * -1, item.1)
-  }
-  else if (itemGrade == 1 || itemGrade == 2 ) {
-    return (val.0 * -1, val.1 == [e(0)] ? [] : val.1  )
+  if (itemGrade == 0 || itemGrade == 1 || itemGrade == 2 ) {
+    return (val.0 * -1,  val.1  )
   }
   else { return val }
 }

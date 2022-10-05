@@ -31,25 +31,29 @@ final class reverseOperationsTests: XCTestCase {
   }
   
   func testReverseOfGrade2() {
-    XCTAssertEqual((|~|e00).0, -1)
+    XCTAssertEqual((|~|e00).0, 0)
     XCTAssert((|~|e00).1.isEmpty)
+    
+    let e_00 = (1.0, [e(0),e(0)])
+    XCTAssertEqual((|~|e_00).0, -1)
+    XCTAssertEqual((|~|e_00).1, [e(0), e(0)])
     
     XCTAssertEqual((|~|e01).0, -1)
     XCTAssertEqual((|~|e01).1, e01.1)
     
-    XCTAssertEqual((|~|e10).0, -1)
+    XCTAssertEqual((|~|e10).0, 1)
     XCTAssertEqual((|~|e10).1, e01.1)
     
     XCTAssertEqual((|~|e02).0, -1)
     XCTAssertEqual((|~|e02).1, e02.1)
     
-    XCTAssertEqual((|~|e20).0, -1)
+    XCTAssertEqual((|~|e20).0, 1)
     XCTAssertEqual((|~|e20).1, e02.1)
     
     XCTAssertEqual((|~|e03).0, -1)
     XCTAssertEqual((|~|e03).1, e03.1)
     
-    XCTAssertEqual((|~|e30).0, -1)
+    XCTAssertEqual((|~|e30).0, 1)
     XCTAssertEqual((|~|e30).1, e03.1)
     
     XCTAssertEqual((|~|e11).0, -1)

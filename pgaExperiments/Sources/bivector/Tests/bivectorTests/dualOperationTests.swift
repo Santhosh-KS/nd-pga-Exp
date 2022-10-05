@@ -1,6 +1,6 @@
 
 import XCTest
-/*
+
 final class dualOperationTests: XCTestCase {
   
   func testDualOfGrade0() {
@@ -27,17 +27,17 @@ final class dualOperationTests: XCTestCase {
   }
   
   func testDualOfGrade2() {
-    XCTAssertEqual(dual(e12).0, -1)
+    XCTAssertEqual(dual(e12).0, 1)
     XCTAssertEqual(dual(e12).1, e03.1)
-    XCTAssertEqual(dual(e21).0, 1)
+    XCTAssertEqual(dual(e21).0, -1)
     XCTAssertEqual(dual(e21).1, e03.1)
-    XCTAssertEqual(dual(e13).0, 1)
+    XCTAssertEqual(dual(e13).0, -1)
     XCTAssertEqual(dual(e13).1, e02.1)
-    XCTAssertEqual(dual(e31).0, -1)
+    XCTAssertEqual(dual(e31).0, 1)
     XCTAssertEqual(dual(e31).1, e02.1)
-    XCTAssertEqual(dual(e23).0, -1)
+    XCTAssertEqual(dual(e23).0, 1)
     XCTAssertEqual(dual(e23).1, e01.1)
-    XCTAssertEqual(dual(e32).0, 1)
+    XCTAssertEqual(dual(e32).0, -1)
     XCTAssertEqual(dual(e32).1, e01.1)
   }
   
@@ -55,6 +55,5 @@ final class dualOperationTests: XCTestCase {
     XCTAssertEqual(dual(e321).0, 1)
     XCTAssertEqual(dual(e321).1, [e(0)])
   }
-  
 }
-*/
+

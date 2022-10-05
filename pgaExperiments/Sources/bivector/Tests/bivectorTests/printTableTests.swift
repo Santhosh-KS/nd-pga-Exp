@@ -92,4 +92,14 @@ final class printTableTests: XCTestCase {
     XCTAssertEqual(result, const_result)
   }
   
+  func testDualTable() {
+    let result = printDualTalbe()
+    let const_result = """
+      ||e0|e1|e2|e3|e01|e02|e03|e12|e31|e23|e021|e013|e032|e123|e0123|
+      :---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+      |Dual|1.0*e123 | -1.0*e023 | 1.0*e013 | -1.0*e012 | 1.0*e23 | -1.0*e13 | 1.0*e12 | 1.0*e03 | 1.0*e02 | 1.0*e01 | -1.0*e3 | -1.0*e2 | -1.0*e1 | -1.0*e0 | 1.0|
+      """
+    XCTAssertEqual(result, const_result)
+  }
+  
 }

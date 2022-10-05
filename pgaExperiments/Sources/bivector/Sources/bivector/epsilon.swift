@@ -70,7 +70,7 @@ public func isNullBasis(_ b:e) -> Bool {
 
 public func normalized<A:FloatingPoint> (_ exp:(A, [e])) -> (A, [e]) {
   let sign:(A, [e]) = bubbleSort(exp.1)
-  return (exp.0 * sign.0, sign.1 == [e(0)] ? [] : sign.1)
+  return (exp.0 * sign.0, sign.1)
 }
 
 public func normalized<A:FloatingPoint> (_ exp:(A, e)) -> (A, [e]) {

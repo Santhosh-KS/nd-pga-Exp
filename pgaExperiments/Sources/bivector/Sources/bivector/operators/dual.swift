@@ -1,16 +1,37 @@
 func dual<A:FloatingPoint>(with pseudoScalar:(A,[e]), of input:(A,[e])) -> (A,[e]) {
-  var retVal:(A,[e])
-  if input.1 == [e(0)] || grade(input) == 3 {
-    retVal = (pseudoScalar |*| input)
-  } else {
-    retVal = (input |*| pseudoScalar)
+  var modifiedMulVec = [e]()
+  for elem in pseudoScalar.1 {
+    if !contains(input.1, elem) { modifiedMulVec.append(elem) }
   }
-  return retVal
-//  if retVal.isEmpty  {
-//    return (pseudoScalar.0 * input.0, Array(pseudoScalar.1.dropFirst()))
-//  }
-//  else { return retVal }
+  let nps = (pseudoScalar.0, modifiedMulVec)
+  let retVal = input |*| nps
+  modifiedMulVec.removeAll()
+  for elem in nps.1 {
+    if !contains(input.1, elem) { modifiedMulVec.append(elem)}
+  }
+  return (retVal.0, modifiedMulVec)
+ 
+  
+    //  let g = grade(input)
+    //  if g == 0 { return (input.0, Array(pseudoScalar.1.dropFirst())) }
+    //  else if g == 4 { return (input.0, [])}
+    //  else {
+    //
+    ////    var retVal:(A,[e])
+    //    if contains(input.1, e(0)) {
+    //      let retVal = (pseudoScalar.0, Array(pseudoScalar.1.dropFirst())) |*| input
+    //      return retVal
+    //    }
+    //    retVal = (pseudoScalar |*| input)
+  
+    //    if input.1 == [e(0)] || grade(input) == 3 {
+    //
+    //    } else {
+    //      retVal = (input |*| pseudoScalar)
+    //    }
+    //    return (0,[])
 }
+
 
 func dual<A:FloatingPoint>(_ input:(A,[e])) -> (A, [e]) {
   let pseudoScalar:(A,[e]) = (1, [e(0), e(1), e(2), e(3)])
@@ -47,7 +68,8 @@ public prefix func |!|<A:FloatingPoint>(_ input:(A,e)) -> (A, [e]) {
 }
 
 prefix func |!|<A:FloatingPoint>(_ input:(A,[e])) -> (A, [e]) {
-  input |> dual
+//  input |> dual
+  dual(input)
 }
 
 prefix func |!|<A:FloatingPoint>(_ input:[(A,[e])]) -> [(A, [e])] {
