@@ -42,38 +42,43 @@ func evaluate<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A, [e])) -> (A, [e]) {
 }
 
 func |||<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
-  let lhsGrade = grade(lhs)
-  let rhsGrade = grade(rhs)
-
-  if (lhsGrade == 0 || rhsGrade == 0) { return (0, []) }
-  else if lhsGrade == 1 {
-    if !contains(rhs.1, lhs.1.first!) { return (0, []) }
-    else {
-      return evaluate(lhs, rhs)
+  if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return (0, []) }
+  else if lhs |> isCoefficientZero { return rhs |> normalized }
+  else if rhs |> isCoefficientZero { return lhs |> normalized }
+  else {
+    let lhsGrade = grade(lhs)
+    let rhsGrade = grade(rhs)
+    
+    if (lhsGrade == 0 || rhsGrade == 0) { return (0, []) }
+    else if lhsGrade == 1 {
+      if !contains(rhs.1, lhs.1.first!) { return (0, []) }
+      else {
+        return evaluate(lhs, rhs)
+      }
     }
-  }
-  else if rhsGrade == 1 {
-    if !contains(lhs.1, rhs.1.first!) { return (0, []) }
-    else {
-      return evaluate(lhs, rhs)
-    }
-  } else {
-    if contains(rhs.1, e(0)) && contains(lhs.1, e(0)) {
-      return (0, [])
-      
+    else if rhsGrade == 1 {
+      if !contains(lhs.1, rhs.1.first!) { return (0, []) }
+      else {
+        return evaluate(lhs, rhs)
+      }
     } else {
-      var matchCount = 0
-      for x in 0..<grade(lhs) {
-        if contains(rhs.1, lhs.1[Int(x)]) { matchCount += 1 }
+      if contains(rhs.1, e(0)) && contains(lhs.1, e(0)) {
+        return (0, [])
+        
+      } else {
+        var matchCount = 0
+        for x in 0..<grade(lhs) {
+          if contains(rhs.1, lhs.1[Int(x)]) { matchCount += 1 }
+        }
+        if matchCount == grade(lhs) { return evaluate(lhs, rhs) }
+        
+        matchCount = 0
+        for x in 0..<grade(rhs) {
+          if contains(lhs.1, rhs.1[Int(x)]) { matchCount += 1 }
+        }
+        if matchCount == grade(rhs) { return evaluate(lhs, rhs) }
+        else { return (0, []) }
       }
-      if matchCount == grade(lhs) { return evaluate(lhs, rhs) }
-      
-      matchCount = 0
-      for x in 0..<grade(rhs) {
-        if contains(lhs.1, rhs.1[Int(x)]) { matchCount += 1 }
-      }
-      if matchCount == grade(rhs) { return evaluate(lhs, rhs) }
-      else { return (0, []) }
     }
   }
 }

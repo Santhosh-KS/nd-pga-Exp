@@ -43,6 +43,7 @@
 //print(printInnerProductTable())
 //print(printOuterProductTable())
 //print(printRegressiveProductTable())
+print(printSandwichProductTable())
 //
 ////let tmp:(Double,[e]) = e012
 ////print(|~|e321)
@@ -202,14 +203,14 @@
 //print("E = ", getPoint(x: -0.8, y: -1, z: 0.8))
 ////var A=point(0,.8,0), B=point(.8,-1,-.8), C=point(-.8,-1,-.8), D=point(.8,-1,.8), E=point(-.8,-1,.8);
 //print("E <&*> 7C = " , stringify(E |&*| C))
-let a = e0
-
-print("grade = ", grade(a))
-let rev_a = |!|a
-print("rev_a = ", rev_a)
+//let a = e0
+//
+//print("grade = ", grade(a))
+//let rev_a = |!|a
+//print("rev_a = ", rev_a)
 
 //print(printReverseTable())
-print(printDualTalbe())
+//print(printDualTalbe())
 //let wedge_ab = a |^| b
 //print("a^b = ", wedge_ab)
 //let gp_ab = a |*| b

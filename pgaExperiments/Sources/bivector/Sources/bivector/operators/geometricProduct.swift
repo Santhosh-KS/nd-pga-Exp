@@ -43,15 +43,18 @@ func |*|<A:FloatingPoint>(_ lhs:(A,e), _ rhs:(A,e)) -> (A, [e]) {
 }
 
 func evaluateResidual<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A, [e])) -> (A, [e]) {
-  var retVal:(A, [e]) = normalized((lhs.0|*|rhs.0, (lhs.1 + rhs.1)))
+  var retVal:(A, [e]) = (lhs.0|*|rhs.0, (lhs.1 + rhs.1)) |> normalized
   retVal.1 = (retVal.1 |> removeDuplicates)
   return retVal
 }
 
 func |*|<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
-  if contains(lhs.1, e(0)) && contains(rhs.1, e(0)) { return (0, []) }
+  if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return (0, []) }
+  else if lhs |> isCoefficientZero { return rhs |> normalized }
+  else if rhs |> isCoefficientZero { return lhs |> normalized }
+  else if ((lhs.1, e(0)) |> contains) && ((rhs.1, e(0)) |> contains) { return (0, []) }
   else {
-    return evaluateResidual(lhs, rhs)
+    return (lhs, rhs) |> evaluateResidual
   }
 }
 

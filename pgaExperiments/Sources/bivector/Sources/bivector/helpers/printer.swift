@@ -38,6 +38,11 @@ func printRegressiveProductTable() -> String {
   return tabulate(table, with: |^*|).joined(separator: "\n")
 }
 
+func printSandwichProductTable() -> String {
+  let table:[(Double, [e])] = getTable()
+  return tabulate(table, with: |<*>|).joined(separator: "\n")
+}
+
 func shorthand(_ xs:[e]) -> String {
   xs.map { val in "\(val.index)" }.joined(separator: "")
 }

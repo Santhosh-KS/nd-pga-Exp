@@ -55,9 +55,9 @@ public func |+|<A:FloatingPoint> (_ lhs:e, _ rhs:[e]) -> [(A,[e])] {
 }
 
 public func |+|<A:FloatingPoint> (_ lhs:(A, [e]), _ rhs:(A, [e]))  -> [(A,[e])] {
-  if lhs.0 == 0 && rhs.0 == 0 { return [] }
-  if lhs.0 == 0 { return [rhs] }
-  if rhs.0 == 0 { return [lhs] }
+  if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return [] }
+  if lhs |> isCoefficientZero { return [rhs] }
+  if rhs |> isCoefficientZero { return [lhs] }
   if lhs.1.sorted() == rhs.1.sorted() {
     let le = lhs |> normalized
     let re = rhs |> normalized

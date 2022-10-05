@@ -6,12 +6,12 @@ precedencegroup RegressiveProductProcessingOrder {
 
 infix operator |^*|:RegressiveProductProcessingOrder
 
-public func |^*|<A:FloatingPoint>(_ lhs:A, _ rhs:A) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+public func |^*|<A:FloatingPoint>(_ lhs:A, _ rhs:A) -> A {
+  lhs * rhs
 }
 
-public func |^*|<A:FloatingPoint>(_ lhs:[A], _ rhs:[A]) -> (A, [e]) {
-  dual(dual(rhs.reduce(1,*)) |^| dual(lhs.reduce(1, *)))
+public func |^*|<A:FloatingPoint>(_ lhs:[A], _ rhs:[A]) -> A {
+  lhs.reduce(1, |^*|) |^*| rhs.reduce(1, |^*|)
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:A, _ rhs:e) -> (A, [e]) {

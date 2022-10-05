@@ -34,12 +34,32 @@ public func |^|<A:FloatingPoint> (_ lhs:e, _ rhs:e) -> (A, [e]) {
   (lhs |> unitVector) |^| (rhs |> unitVector)
 }
 
+public func isCoefficientZero<A:Numeric>(_ coeff:A ) -> Bool {
+  coeff == A.zero
+}
+
+public func isCoefficientZero<A:Numeric>(_ vec:(A, [e]) ) -> Bool {
+  vec.0 |> isCoefficientZero
+}
+
+public func isCoefficientZero<A:Numeric>(_ vec:(A, e) ) -> Bool {
+  vec.0 |> isCoefficientZero
+}
+
 public func |^|<A:FloatingPoint> (_ lhs:(A,[e]), _ rhs:(A, [e])) -> (A, [e]) {
-  if  lhs.1.sorted() == rhs.1.sorted() { return (0, []) }
-  for re in rhs.1 {
-    if contains(lhs.1, re) { return (0, []) }
+  
+  if (lhs.1.sorted() == rhs.1.sorted()) { return (0, []) }
+  else {
+    if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return (0, []) }
+    else if lhs |> isCoefficientZero { return rhs |> normalized }
+    else if rhs |> isCoefficientZero { return lhs |> normalized }
+    else {
+      for re in rhs.1 {
+        if (lhs.1, re) |> contains { return (0, []) }
+      }
+      return (lhs.0 * rhs.0, lhs.1 + rhs.1) |> normalized
+    }
   }
-  return normalized((lhs.0*rhs.0, lhs.1 + rhs.1))
 }
 
 func |^|<A:FloatingPoint>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
