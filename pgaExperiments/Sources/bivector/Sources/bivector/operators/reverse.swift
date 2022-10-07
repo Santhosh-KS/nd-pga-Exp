@@ -3,7 +3,7 @@ import Foundation
 prefix operator |~|
 
 public prefix func |~|<A:FloatingPoint>(_ item:(A,[e])) -> (A,[e]) {
-  if item |> isCoefficientZero { return (0, []) }
+  if item |> isCoefficientZero { return zeroVector() }
   else {
     // This Normalization is important.
     // more dtails in this discussion thread. https://discourse.bivector.net/t/why-there-is-no-inverse-operator-defined-in-bivector-net/608

@@ -100,6 +100,22 @@ public func unitVector<A:Numeric,B>(_ x:B) -> (A, B) {
   (1, x)
 }
 
+public func vectorize<A:Numeric>(_ x:A) -> (A, [e]) {
+  (x, [])
+}
+
+public func zeroVector<A:Numeric>() -> (A, [e]) {
+  A.zero |> vectorize
+}
+
+public func flipSign<A:Numeric,B>(_ vec:(A,B)) -> (A,B) {
+  (vec.0 * -1, vec.1)
+}
+
+public func pseudoScalar<A:Numeric>() -> (A,[e]) {
+  (1, [e(0), e(1), e(2), e(3)])
+}
+
 public func arrayfy<A:Numeric, B>(_ x:B) -> (A,[B]) {
   x |> unitVector >>> arrayfySecond
 }

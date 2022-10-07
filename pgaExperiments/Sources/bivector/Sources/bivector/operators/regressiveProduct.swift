@@ -91,7 +91,7 @@ public func |^*| <A:FloatingPoint>(_ lhs: (A, [e]), _ rhs: A) -> (A, [e]) {
 }
 
 public func |^*| <A:FloatingPoint>(_ lhs: [A], _ rhs: e) -> (A, [e]) {
-  dual(rhs) |^| dual(lhs.reduce(1, *))
+  dual(dual(rhs) |^| dual(lhs.reduce(1, *)))
 }
 
 public func |^*| <A:FloatingPoint>(_ lhs: e, _ rhs: [A]) -> (A, [e]) {

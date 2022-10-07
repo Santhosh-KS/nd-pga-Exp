@@ -16,7 +16,7 @@ public func |+|<A:FloatingPoint> (_ lhs:[A], _ rhs:[A])  -> A {
 }
 
 public func |+|<A:FloatingPoint> (_ lhs:A, _ rhs:e)  -> [(A,[e])] {
-  [(lhs, []), (rhs |> unitVector >>> arrayfySecond)]
+  [ lhs |> vectorize , (rhs |> unitVector >>> arrayfySecond)]
 }
 
 public func |+|<A:FloatingPoint> (_ lhs:e, _ rhs:A)  -> [(A,[e])] {
@@ -24,7 +24,7 @@ public func |+|<A:FloatingPoint> (_ lhs:e, _ rhs:A)  -> [(A,[e])] {
 }
 
 public func |+|<A:FloatingPoint> (_ lhs:[A], _ rhs:e)  -> [(A,[e])] {
-  [(lhs.reduce(0, |+|), []), (rhs |> unitVector >>> arrayfySecond)]
+  [lhs.reduce(0, |+|) |> vectorize, rhs |> unitVector >>> arrayfySecond]
 }
 
 public func |+|<A:FloatingPoint> (_ lhs:e, _ rhs:[A])  -> [(A,[e])] {

@@ -1,5 +1,5 @@
 func dual<A:FloatingPoint>(with pseudoScalar:(A,[e]), of input:(A,[e])) -> (A,[e]) {
-  if input |> isCoefficientZero { return (0, []) }
+  if input |> isCoefficientZero { return zeroVector() }
   else {
     var modifiedMulVec = [e]()
     for elem in pseudoScalar.1 {
@@ -16,9 +16,7 @@ func dual<A:FloatingPoint>(with pseudoScalar:(A,[e]), of input:(A,[e])) -> (A,[e
 }
 
 func dual<A:FloatingPoint>(_ input:(A,[e])) -> (A, [e]) {
-  let pseudoScalar:(A,[e]) = (1, [e(0), e(1), e(2), e(3)])
-//  return (pseudoScalar, input) |> dual(with:of:)
-  return dual(with: pseudoScalar, of: input)
+  return (pseudoScalar(), input) |> dual(with:of:)
 }
 
 func dual<A:FloatingPoint>(_ input:[(A,[e])]) -> [(A, [e])] {

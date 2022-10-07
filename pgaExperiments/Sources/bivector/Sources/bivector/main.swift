@@ -238,3 +238,10 @@ print(printSandwichProductTable())
 //print("wedge = ", wedge)
 //print( dot |+| wedge)
 
+//let a = e1
+//let gp = e1 |*| e1
+//print("GP = ", gp)
+//let rev = |~|e1
+//print("rev = ", rev)
+//let sp = a |<*>| a
+//print("Sandwich = ", sp)

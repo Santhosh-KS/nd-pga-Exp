@@ -42,28 +42,28 @@ func evaluate<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A, [e])) -> (A, [e]) {
 }
 
 func |||<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
-  if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return (0, []) }
+  if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return zeroVector() }
   else if lhs |> isCoefficientZero { return rhs |> normalized }
   else if rhs |> isCoefficientZero { return lhs |> normalized }
   else {
-    let lhsGrade = grade(lhs)
-    let rhsGrade = grade(rhs)
+    let lhsGrade = lhs |> grade
+    let rhsGrade = rhs |> grade
     
-    if (lhsGrade == 0 || rhsGrade == 0) { return (0, []) }
+    if (lhsGrade == 0 || rhsGrade == 0) { return zeroVector() }
     else if lhsGrade == 1 {
-      if !contains(rhs.1, lhs.1.first!) { return (0, []) }
+      if !contains(rhs.1, lhs.1.first!) { return zeroVector() }
       else {
-        return evaluate(lhs, rhs)
+        return (lhs, rhs) |> evaluate
       }
     }
     else if rhsGrade == 1 {
-      if !contains(lhs.1, rhs.1.first!) { return (0, []) }
+      if !contains(lhs.1, rhs.1.first!) { return zeroVector() }
       else {
-        return evaluate(lhs, rhs)
+        return (lhs, rhs) |> evaluate
       }
     } else {
       if contains(rhs.1, e(0)) && contains(lhs.1, e(0)) {
-        return (0, [])
+        return zeroVector()
         
       } else {
         var matchCount = 0
@@ -77,7 +77,7 @@ func |||<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
           if contains(lhs.1, rhs.1[Int(x)]) { matchCount += 1 }
         }
         if matchCount == grade(rhs) { return evaluate(lhs, rhs) }
-        else { return (0, []) }
+        else { return zeroVector() }
       }
     }
   }

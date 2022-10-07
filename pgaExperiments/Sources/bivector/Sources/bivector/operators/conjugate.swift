@@ -5,7 +5,7 @@ public func conjugate<A:FloatingPoint>(_ val:A) -> A {
 }
 
 public func conjugate<A:FloatingPoint>(_ vec:(A,[e])) -> (A,[e]) {
-  vec.1 == [e(0)] ? (vec.0, []) : ((1 |*| vec).1.isEmpty ? (vec.0, []) : (-1*vec.0, vec.1))
+  vec.1 == [e(0)] ? (vec.0 |> vectorize) : ((1 |*| vec).1.isEmpty ? (vec.0 |> vectorize) : (vec |> flipSign ))
 }
 
 public func conjugate<A:FloatingPoint>(_ vec:(A,e)) -> (A,[e]) {

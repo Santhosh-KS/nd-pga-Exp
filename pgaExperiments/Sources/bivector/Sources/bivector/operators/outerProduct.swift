@@ -48,14 +48,14 @@ public func isCoefficientZero<A:Numeric>(_ vec:(A, e) ) -> Bool {
 
 public func |^|<A:FloatingPoint> (_ lhs:(A,[e]), _ rhs:(A, [e])) -> (A, [e]) {
   
-  if (lhs.1.sorted() == rhs.1.sorted()) { return (0, []) }
+  if (lhs.1.sorted() == rhs.1.sorted()) { return zeroVector() }
   else {
-    if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return (0, []) }
+    if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return zeroVector() }
     else if lhs |> isCoefficientZero { return rhs |> normalized }
     else if rhs |> isCoefficientZero { return lhs |> normalized }
     else {
       for re in rhs.1 {
-        if (lhs.1, re) |> contains { return (0, []) }
+        if (lhs.1, re) |> contains { return zeroVector() }
       }
       return (lhs.0 * rhs.0, lhs.1 + rhs.1) |> normalized
     }

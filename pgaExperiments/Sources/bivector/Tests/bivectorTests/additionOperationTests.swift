@@ -5,10 +5,6 @@ final class additionOperationTests: XCTestCase {
     let a:Float = 10
     let b:Float = 15
     XCTAssertEqual(a |+| b, a+b)
-    
-//    let c:[Float] = [1,2,3,4]
-//    let d:[Float] = [5,6,7,8,9]
-//    XCTAssertEqual(c |+| d, (c+d).reduce(0, +))
   }
   
   func testScalarAddGrade1() {

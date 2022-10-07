@@ -1,8 +1,5 @@
 import Foundation
 
-internal func wedge0<A:FloatingPoint>() -> (A,[e]) { (A.zero, []) }
-
-
 internal func getBaseVectors<A:FloatingPoint>(_ mulVecs:[(A,[e])]) -> [[e]] {
   mulVecs.map { pairs in
     pairs.1.sorted(by: <)
@@ -109,7 +106,7 @@ internal func flipSign(withRef bv:[e], on target:[e]) -> Bool  {
 internal func swap<A:FloatingPoint>(_ mulvec:(A, [e])) -> (A, [e]) {
   // TODO: This swap works only multivector with 2 vectors [[e1,e2], [e2,e3]] etc
   // and doesn't work for multivectors for > 2 vectors [[e1,e2,e3], [e2,e3,e1]]
-  if mulvec.1.isEmpty { return wedge0() }
+  if mulvec.1.isEmpty { return zeroVector() }
   var first = mulvec.1.first!
   var res = mulvec
   for (idx, val) in zip(1..., res.1.dropFirst()){
@@ -142,10 +139,6 @@ internal func reduce<A:FloatingPoint>(toMultivector xs: [(A, [e])]) -> [(A, [e])
   compactResult.append(previousPairs)
   return compactResult
 }
-
-//func reduce(_ xs:[[e]]) -> [e] {
-//  
-//}
 
 //[[(A, [e])]]
 func reduce<A:FloatingPoint>(with f:@escaping (A,A) -> A,
@@ -213,23 +206,6 @@ internal func reduce<A:FloatingPoint>(_ xs:[(A,e)]) -> [(A,e)] {
   }
   return result
 }
-//
-//internal func removeDuplicates(_ xs:[e]) -> [e] {
-//  var retVal = [e]()
-//  for x in xs {
-//    if retVal.contains(where: { $0 == x }) {
-//      return []
-//    } else {
-//      retVal.append(x)
-//    }
-//  }
-//  return retVal
-//}
-
-//func grade(_ mulVecs:[e]) -> UInt8 {
-//  if mulVecs.isEmpty { return 0 }
-//  return UInt8(mulVecs.count)
-//}
 
 func complement(_ vec:[e]) -> [e] {
   // NOTE: curryently focusing only on 3D
@@ -250,13 +226,3 @@ public func antiCommutativity<A:FloatingPoint>(_ es:[e]) -> (A, [e]) {
   }
   return (A.zero - 1, es.reversed()) // --> this is one way to anticommute
 }
-
-//[(A, [e])]
-
-//public func compactMap<A:FloatingPoint>(_ xs:[(A, [e])]) -> [(A, [e])] {
-//  var retVal = [(A, [e])]()
-//  for (val, xes) in xs {
-//    if val != 0 && !xes.isEmpty { retVal.append((val,xes)) }
-//  }
-//  return retVal
-//}

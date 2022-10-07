@@ -7,7 +7,7 @@ precedencegroup SandwichProductProcessingOrder {
 infix operator |<*>|:SandwichProductProcessingOrder
 
 public func |<*>|<A:FloatingPoint>(_ lhs:A, _ rhs:A) -> A {
-  lhs |*| rhs |*| |~|lhs
+  lhs * rhs * lhs
 }
 
 public func |<*>|<A:FloatingPoint>(_ lhs:[A], _ rhs:[A]) -> A {
@@ -15,31 +15,32 @@ public func |<*>|<A:FloatingPoint>(_ lhs:[A], _ rhs:[A]) -> A {
 }
 
 public func |<*>|<A:FloatingPoint>(_ lhs:(A,e), _ rhs:(A,e)) -> (A, [e]) {
-  lhs |*| rhs |*| |~|lhs
+  (lhs |> arrayfySecond) |<*>| (rhs |> arrayfySecond)
 }
 
 public func |<*>|<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
-  lhs |*| rhs |*| |~|lhs
+  if lhs.1 == [e(0)] || rhs.1 == [e(0)] { return zeroVector() }
+  else { return (lhs |*| rhs |*| |~|lhs) |> flipSign }
 }
 
 public func |<*>|<A:FloatingPoint>(_ lhs:A, _ rhs:e) -> (A,[e]){
-  lhs |*| rhs |*| |~|lhs
+  (lhs |*| rhs |*| |~|lhs) |> flipSign
 }
 
 // (A,[e]) as return is expected.  Here 'lhs' is a vector and 'rhs' is a scalar
 // so e |*| ~e returns [e]
 public func |<*>|<A:FloatingPoint>(_ lhs:e, _ rhs:A) -> (A,[e]){
-  (lhs |> unitVector) |*| rhs |*| |~|lhs
+  ((lhs |> unitVector) |*| rhs |*| |~|(lhs |> unitVector)) |> flipSign
 }
 
 // (A,[e]) as return is expected. Here 'lhs' is a vector and 'rhs' is a scalar
 // so (A, e) |*| ~(A, e) returns (A, [e])
 public func |<*>|<A:FloatingPoint>(_ lhs:(A,e), _ rhs:A) -> (A, [e]) {
-  lhs |*| rhs |*| |~|lhs
+  (lhs |*| rhs |*| |~|lhs) |> flipSign
 }
 
 public func |<*>|<A:FloatingPoint>(_ lhs:A, _ rhs:(A,e)) -> (A, e) {
-  lhs |*| rhs |*| |~|lhs
+  (lhs |*| rhs |*| |~|lhs) |> flipSign
 }
 
 public func |<*>|<A:FloatingPoint>(_ lhs:e, _ rhs:e) -> (A, [e]) {
@@ -67,11 +68,11 @@ public func |<*>|<A:FloatingPoint>(_ lhs:[e], _ rhs: [e]) -> (A, [e]) {
 }
 
 public func |<*>|<A:FloatingPoint>(_ lhs:A, _ rhs:(A,[e])) -> (A, [e]) {
-  (lhs, []) |<*>| rhs
+  (lhs |> vectorize) |<*>| rhs
 }
 
 public func |<*>|<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:A) -> (A, [e]) {
-  lhs |<*>| (rhs, [])
+  lhs |<*>| (rhs |> vectorize)
 }
 
 public func |<*>|<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:e) -> (A, [e]) {
@@ -81,4 +82,5 @@ public func |<*>|<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:e) -> (A, [e]) {
 public func |<*>|<A:FloatingPoint>(_ lhs:e, _ rhs: (A,[e])) -> (A, [e]) {
   (lhs |> unitVector >>> arrayfySecond) |<*>| rhs
 }
+
 

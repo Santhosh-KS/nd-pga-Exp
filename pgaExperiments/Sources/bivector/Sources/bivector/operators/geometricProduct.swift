@@ -19,7 +19,7 @@ func |*|<A:FloatingPoint>(_ lhs:[A], _ rhs:[A]) -> A {
 }
 
 func |*|<A:FloatingPoint>(_ lhs:A, _ rhs:e) -> (A, [e]) {
-  (lhs, []) |*| (rhs |> unitVector >>> arrayfySecond)
+  (lhs |> vectorize) |*| (rhs |> unitVector >>> arrayfySecond)
 }
 
 func |*|<A:FloatingPoint>(_ lhs:e, _ rhs:A) -> (A, [e]) {
@@ -27,11 +27,11 @@ func |*|<A:FloatingPoint>(_ lhs:e, _ rhs:A) -> (A, [e]) {
 }
 
 func |*|<A:FloatingPoint>(_ lhs:[A], _ rhs:e) -> (A, [e]) {
-  (lhs.reduce(1, *), []) |*| (rhs |> unitVector >>> arrayfySecond)
+  (lhs.reduce(1, *) |> vectorize ) |*| (rhs |> unitVector >>> arrayfySecond)
 }
 
 func |*|<A:FloatingPoint>(_ lhs:e, _ rhs:[A]) -> (A, [e]) {
-  (lhs |> unitVector >>> arrayfySecond) |*| (rhs.reduce(1, *), [])
+  (lhs |> unitVector >>> arrayfySecond) |*| (rhs.reduce(1, *) |> vectorize )
 }
 
 func |*|<A:FloatingPoint>(_ lhs:e, _ rhs:e) -> (A, [e]) {
@@ -49,11 +49,12 @@ func evaluateResidual<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A, [e])) -> (A, [e]
 }
 
 func |*|<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
-  if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return (0, []) }
+  if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return zeroVector() }
   else if lhs |> isCoefficientZero { return rhs |> normalized }
   else if rhs |> isCoefficientZero { return lhs |> normalized }
-  else if ((lhs.1, e(0)) |> contains) && ((rhs.1, e(0)) |> contains) { return (0, []) }
-  else {
+  else if ((lhs.1, e(0)) |> contains) && ((rhs.1, e(0)) |> contains) {
+    return zeroVector()
+  } else {
     return (lhs, rhs) |> evaluateResidual
   }
 }
