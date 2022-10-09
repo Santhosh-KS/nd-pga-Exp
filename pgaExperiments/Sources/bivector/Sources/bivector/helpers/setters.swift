@@ -116,6 +116,10 @@ public func pseudoScalar<A:Numeric>() -> (A,[e]) {
   (1, [e(0), e(1), e(2), e(3)])
 }
 
+public func arrayfy<A:Numeric, B>(_ x:(A, B)) -> [(A,B)] {
+  [x]
+}
+
 public func arrayfy<A:Numeric, B>(_ x:B) -> (A,[B]) {
   x |> unitVector >>> arrayfySecond
 }

@@ -118,7 +118,7 @@ func printReverseTable() -> String {
   return hedr + "|Reverse|" + table.map{ |~|$0 }.map(stringify).joined(separator: " | ") + "|"
 }
 
-func printDualTalbe() -> String {
+func printDualTable() -> String {
   let table = getTable()
   let hedr = header(table.map{ val in  val.1 }) + "|\n"
   return hedr + "|Dual|" + table.map{ |!|$0 }.map(stringify).joined(separator: " | ") + "|"

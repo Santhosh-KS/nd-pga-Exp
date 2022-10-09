@@ -5,13 +5,9 @@ prefix operator |~|
 public prefix func |~|<A:FloatingPoint>(_ item:(A,[e])) -> (A,[e]) {
   if item |> isCoefficientZero { return zeroVector() }
   else {
-    // This Normalization is important.
-    // more dtails in this discussion thread. https://discourse.bivector.net/t/why-there-is-no-inverse-operator-defined-in-bivector-net/608
     let itemGrade = item |> grade
     let val = normalized(item)
-    if (itemGrade == 0 || itemGrade == 1 || itemGrade == 2 ) {
-      return (val.0 * -1,  val.1  )
-    }
+    if itemGrade < 3 { return val |> flipSign }
     else { return val }
   }
 }
@@ -29,7 +25,7 @@ public prefix func |~|<A:FloatingPoint>(_ items:[(A,e)]) -> [(A,[e])] {
 }
 
 public prefix func |~|<A:FloatingPoint>(_ item:e) -> (A,[e]) {
-  |~|(item |> unitVector |> arrayfySecond )
+  |~|(item |> unitVector >>> arrayfySecond )
 }
 
 public prefix func |~|<A:FloatingPoint>(_ item:[e]) -> (A,[e]) {

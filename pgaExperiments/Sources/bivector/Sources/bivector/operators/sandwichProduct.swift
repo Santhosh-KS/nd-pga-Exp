@@ -39,7 +39,7 @@ public func |<*>|<A:FloatingPoint>(_ lhs:(A,e), _ rhs:A) -> (A, [e]) {
   (lhs |*| rhs |*| |~|lhs) |> flipSign
 }
 
-public func |<*>|<A:FloatingPoint>(_ lhs:A, _ rhs:(A,e)) -> (A, e) {
+public func |<*>|<A:FloatingPoint>(_ lhs:A, _ rhs:(A,e)) -> (A, [e]) {
   (lhs |*| rhs |*| |~|lhs) |> flipSign
 }
 

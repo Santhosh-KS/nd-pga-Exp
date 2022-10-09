@@ -11,10 +11,7 @@ public struct Point<A:FloatingPoint> {
 //P = xe032 + ye013 + ze021 + e123
 public extension Point where A == Double {
   static var `default`:() -> Point<Double> = {
-    Point(x: (1, [e(0), e(3), e(2)]),
-          y: (1, [e(0), e(1), e(3)]),
-          z: (1, [e(0), e(2), e(1)]),
-          c: (1, [e(1), e(2), e(3)]))
+    Point(x: e032,y: e013, z: e021, c: e123)
   }
 }
 
@@ -88,9 +85,16 @@ public func plane<A:FloatingPoint>(_ p:Plane<A>) -> [(A, [e])] {
 let p = Plane<Double>.default()
 public let defaultPlane = p
 
-public func getPoint<A:FloatingPoint>(x:A,y:A,z:A,c:A=1) -> Point<Double> {
-  P |> set(^\.x.0, x as! Double)
-  |> set(^\.y.0, y as! Double)
-  |> set(^\.z.0, z as! Double)
-  |> set(^\.c.0, c as! Double)
+public func getPoint(x:Double,y:Double,z:Double,c:Double=1) -> Point<Double> {
+  P |> set(^\.x.0, x)
+  |> set(^\.y.0, y)
+  |> set(^\.z.0, z)
+  |> set(^\.c.0, c)
+}
+
+public func getPoint(x:Float,y:Float,z:Float,c:Float=1) -> Point<Float> {
+  Point<Float>.default() |> set(^\.x.0, x)
+  |> set(^\.y.0, y)
+  |> set(^\.z.0, z)
+  |> set(^\.c.0, c)
 }

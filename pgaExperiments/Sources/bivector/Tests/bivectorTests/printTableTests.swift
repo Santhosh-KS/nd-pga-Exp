@@ -145,7 +145,7 @@ final class printTableTests: XCTestCase {
   }
   
   func testDualTable() {
-    let result = printDualTalbe()
+    let result = printDualTable()
     let const_result = """
       ||e0|e1|e2|e3|e01|e02|e03|e12|e31|e23|e021|e013|e032|e123|e0123|
       :---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|

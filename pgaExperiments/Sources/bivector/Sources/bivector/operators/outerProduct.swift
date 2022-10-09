@@ -99,12 +99,12 @@ public func |^|<A:FloatingPoint> (_ lhs:[e], _ rhs: (A,[e])) -> (A, [e]) {
 public func |^|<A:FloatingPoint> (_ lhs:[e], _ rhs: [e]) -> (A, [e]) {
   (lhs |> unitVector) |^| (rhs |> unitVector)
 }
-public func |^|<A:FloatingPoint> (_ lhs:A, _ rhs:(A, e)) -> (A,e) {
-  (lhs*rhs.0, rhs.1)
+public func |^|<A:FloatingPoint> (_ lhs:A, _ rhs:(A, e)) -> (A,[e]) {
+  (lhs*rhs.0, rhs.1) |> arrayfySecond
 }
 
-public func |^|<A:FloatingPoint> (_ lhs:(A,e), _ rhs:A) -> (A, e) {
-  (lhs.0*rhs, lhs.1)
+public func |^|<A:FloatingPoint> (_ lhs:(A,e), _ rhs:A) -> (A, [e]) {
+  (lhs.0*rhs, lhs.1) |> arrayfySecond
 }
 
 public func |^|<A:FloatingPoint> (_ lhs:A, _ rhs:(A, [e])) -> (A,[e]) {

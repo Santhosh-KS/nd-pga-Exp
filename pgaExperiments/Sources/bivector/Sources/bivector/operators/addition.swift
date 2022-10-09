@@ -36,7 +36,10 @@ public func |+|<A:FloatingPoint> (_ lhs:e, _ rhs:e)  -> [(A,e)] {
 }
 
 public func |+|<A:FloatingPoint> (_ lhs:(A, e), _ rhs:(A, e))  -> [(A,e)] {
-  if isEqualBasis(lhs.1, rhs.1) {
+  if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return [] }
+  else if lhs |> isCoefficientZero { return rhs |> arrayfy }
+  else if rhs |> isCoefficientZero { return lhs |> arrayfy }
+  else if isEqualBasis(lhs.1, rhs.1) {
     return [(lhs.0 |+| rhs.0, lhs.1)]
   }
   return [lhs, rhs]
@@ -56,12 +59,12 @@ public func |+|<A:FloatingPoint> (_ lhs:e, _ rhs:[e]) -> [(A,[e])] {
 
 public func |+|<A:FloatingPoint> (_ lhs:(A, [e]), _ rhs:(A, [e]))  -> [(A,[e])] {
   if (lhs |> isCoefficientZero) && (rhs |> isCoefficientZero) { return [] }
-  if lhs |> isCoefficientZero { return [rhs] }
-  if rhs |> isCoefficientZero { return [lhs] }
+  if lhs |> isCoefficientZero { return rhs |> arrayfy }
+  if rhs |> isCoefficientZero { return lhs |> arrayfy }
   if lhs.1.sorted() == rhs.1.sorted() {
     let le = lhs |> normalized
     let re = rhs |> normalized
-    return [(le.0 + re.0, lhs.1.sorted())]
+    return (le.0 + re.0, lhs.1.sorted()) |> arrayfy
   }
   return [lhs, rhs].sorted { pair1, pair2 in
     pair1.1.count < pair2.1.count

@@ -42,8 +42,10 @@
 //print(e0_e1)
 //print(printInnerProductTable())
 //print(printOuterProductTable())
-//print(printRegressiveProductTable())
-print(printSandwichProductTable())
+print(printRegressiveProductTable())
+//print(printSandwichProductTable())
+//print(printReverseTable())
+//print(printDualTalbe())
 //
 ////let tmp:(Double,[e]) = e012
 ////print(|~|e321)
@@ -185,7 +187,7 @@ print(printSandwichProductTable())
 //
 //print("defaultPoint = ",defaultPoint)
 //print("defaultPlane = ",defaultPlane)
-//
+// A=point(0,.8,0), B=point(.8,-1,-.8), C=point(-.8,-1,-.8)
 //let A = getPoint(x: 0, y: 0.8, z: 0) |> point
 //let B = getPoint(x: 0.8, y: -1, z: -0.8) |> point
 //let C = getPoint(x: -0.8, y: -1, z: -0.8) |> point
@@ -201,6 +203,9 @@ print(printSandwichProductTable())
 //print("D = ", getPoint(x: 0.8, y: -1, z: 0.8))
 //print("E = ", stringify(E))
 //print("E = ", getPoint(x: -0.8, y: -1, z: 0.8))
+//
+//let a_b_c_reg = (A |^*| B |^*| C) |^*| 0.1
+//print(a_b_c_reg.map(stringify).joined(separator: " + "))
 ////var A=point(0,.8,0), B=point(.8,-1,-.8), C=point(-.8,-1,-.8), D=point(.8,-1,.8), E=point(-.8,-1,.8);
 //print("E <&*> 7C = " , stringify(E |&*| C))
 //let a = e0
@@ -209,8 +214,7 @@ print(printSandwichProductTable())
 //let rev_a = |!|a
 //print("rev_a = ", rev_a)
 
-//print(printReverseTable())
-//print(printDualTalbe())
+
 //let wedge_ab = a |^| b
 //print("a^b = ", wedge_ab)
 //let gp_ab = a |*| b

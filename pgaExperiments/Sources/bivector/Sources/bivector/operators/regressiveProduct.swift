@@ -15,55 +15,62 @@ public func |^*|<A:FloatingPoint>(_ lhs:[A], _ rhs:[A]) -> A {
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:A, _ rhs:e) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:e, _ rhs:A) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:A, _ rhs:(A,e)) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:(A,e), _ rhs:A) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:(A,e), _ rhs:e) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:e, _ rhs:(A,e)) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:(A,e), _ rhs:(A,e)) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A,[e])) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:(A,e), _ rhs:(A,[e])) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:(A,[e]), _ rhs:(A,e)) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*|<A:FloatingPoint>(_ lhs:[(A,[e])], _ rhs:[(A,[e])]) -> [(A, [e])] {
-  dual(reduce(with: |+|, dual(rhs) |^| dual(lhs)))
+  dual(reduce(with: |+|, dual(lhs) |^| dual(rhs)))
+}
+
+public func |^*|<A:FloatingPoint>(_ lhs:[(A,[e])], _ rhs:A) -> [(A, [e])] {
+  lhs.map { pairs in (pairs.0 * rhs, pairs.1)  }
+}
+public func |^*|<A:FloatingPoint>(_ lhs:A, _ rhs:[(A,[e])]) -> [(A, [e])] {
+  rhs |^*| lhs
 }
       
 public func |^*| <A:FloatingPoint>(_ lhs: e, _ rhs: e) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*| <A:FloatingPoint>(_ lhs: (A, [e]), _ rhs: e) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
                           
 public func |^*| <A:FloatingPoint>(_ lhs: e, _ rhs: (A, [e])) -> (A, [e]) {
@@ -71,30 +78,30 @@ public func |^*| <A:FloatingPoint>(_ lhs: e, _ rhs: (A, [e])) -> (A, [e]) {
 }
                             
 public func |^*| <A:FloatingPoint>(_ lhs: (A, [e]), _ rhs: [e]) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
                               
 public func |^*| <A:FloatingPoint>(_ lhs: [e], _ rhs: (A, [e])) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
                                 
 public func |^*| <A:FloatingPoint>(_ lhs: [e], _ rhs: [e]) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
                                   
 public func |^*| <A:FloatingPoint>(_ lhs: A, _ rhs: (A, [e])) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
                                     
 public func |^*| <A:FloatingPoint>(_ lhs: (A, [e]), _ rhs: A) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs))
+  dual(dual(lhs) |^| dual(rhs))
 }
 
 public func |^*| <A:FloatingPoint>(_ lhs: [A], _ rhs: e) -> (A, [e]) {
-  dual(dual(rhs) |^| dual(lhs.reduce(1, *)))
+  dual(dual(lhs.reduce(1, *)) |^| dual(rhs))
 }
 
 public func |^*| <A:FloatingPoint>(_ lhs: e, _ rhs: [A]) -> (A, [e]) {
-  dual(rhs.reduce(1, *)) |^| dual(lhs)
+  dual(lhs) |^| dual(rhs.reduce(1, *))
 }
 
